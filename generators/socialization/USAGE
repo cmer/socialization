@@ -1,0 +1,1 @@
+Generates both the Follow model class and the migration to create its table.

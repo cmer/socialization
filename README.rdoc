@@ -1,0 +1,126 @@
+= Socialization
+
+Socialization is a Ruby Gem that allow any model to Follow and/or Like any other model. This is accomplished through a double polymorphic relationship on the Follow and Like models. But you don't need to know that since all the complexity is hidden from you.
+
+== Installation
+
+=== Rails 3 Support
+
+Add the gem to the gemfile:
+  gem "socialization"
+
+Run the generator:
+  rails generate socialization
+
+This will generate two migration files and two models named Follow and Like. You may delete the Follow or Like model and migration if you don't need that functionality in your application.
+
+=== Rails 2.3.x Support
+
+I haven't tested it nor do I care much about Rails 2.3.x. Sorry!
+
+== Usage
+
+=== Setup
+
+Allow a model to be followed:
+  class Celebrity < ActiveRecord::Base
+    ...
+    acts_as_followable
+    ...
+  end
+
+Allow a model to be a follower:
+  class User < ActiveRecord::Base
+    ...
+    acts_as_follower
+    ...
+  end
+
+
+Allow a model to be liked:
+  class Movie < ActiveRecord::Base
+    ...
+    acts_as_likeable
+    ...
+  end
+
+Allow a model to like:
+  class User < ActiveRecord::Base
+    ...
+    acts_as_liker
+    ...
+  end
+
+Or a more complex case where users can like and follow each other:
+  class User < ActiveRecord::Base
+    ...
+    acts_as_follower
+    acts_as_followable
+    acts_as_liker
+    acts_as_likeable
+    ...
+  end
+
+---
+
+=== acts_as_follower Methods
+
+Follow something
+  user.follow!(celebrity)
+
+Stop following
+  user.unfollow!(celebrity)
+
+Is following?
+  user.follows?(celebrity)
+
+---
+
+=== acts_as_followable Methods
+
+Find out if an objects follows
+  celebrity.followed_by?(user)
+
+All followers
+  celebrity.followers
+
+---
+
+=== acts_as_liker Methods
+
+Like something
+  user.like!(movie)
+
+Stop liking
+  user.unlike!(movie)
+
+Likes?
+  user.likes?(movie)
+
+---
+
+=== acts_as_likeable Methods
+
+Find out if an objects likes
+  movie.liked_by?(user)
+
+All likers
+  movie.likers
+
+
+== Note on Patches/Pull Requests
+
+* Fork the project.
+* Make your feature addition or bug fix.
+* Add tests for it. This is important so I don't break it in a future version unintentionally.
+* Send me a pull request. Bonus points for topic branches.
+
+== Similar Projects
+
+acts_as_follower[https://github.com/tcocca/acts_as_follower] is a similar project that I only discovered when I was 95% finished writing the first version of Socialization. I initially intended to name this project acts_as_follower only to find out the name was taken. You might want to check it out as well so see which one suits your needs better. Socialization is simpler, supports "Likes" and easilly extendable; acts_as_follower has more "Follow" features.
+
+
+== Copyright
+
+Copyright (c) 2012 Carl Mercier --  Released under the MIT license.
+
