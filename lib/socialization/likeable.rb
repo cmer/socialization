@@ -11,7 +11,7 @@ module Socialization
 
         def liked_by?(liker)
           raise ArgumentError, "#{liker} is not a liker!" unless liker.respond_to?(:is_liker?) && liker.is_liker?
-          !self.likings.where(:liker_type => liker.class.to_s, :liker_id => liker.id).pluck("1").empty?
+          !self.likings.where(:liker_type => liker.class.to_s, :liker_id => liker.id).empty?
         end
 
         def likers

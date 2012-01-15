@@ -11,7 +11,7 @@ module Socialization
 
         def followed_by?(follower)
           raise ArgumentError, "#{follower} is not a follower!" unless follower.respond_to?(:is_follower?) && follower.is_follower?
-          !self.followings.where(:follower_type => follower.class.to_s, :follower_id => follower.id).pluck("1").empty?
+          !self.followings.where(:follower_type => follower.class.to_s, :follower_id => follower.id).empty?
         end
 
         def followers

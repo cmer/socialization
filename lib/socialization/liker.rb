@@ -22,7 +22,7 @@ module Socialization
 
         def likes?(likeable)
           raise ArgumentError, "#{likeable} is not likeable!" unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
-          !self.likes.where(:likeable_type => likeable.class.to_s, :likeable_id => likeable.id).pluck("1").empty?
+          !self.likes.where(:likeable_type => likeable.class.to_s, :likeable_id => likeable.id).empty?
         end
 
       end

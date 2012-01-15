@@ -22,7 +22,7 @@ module Socialization
 
         def follows?(followable)
           raise ArgumentError, "#{followable} is not followable!" unless followable.respond_to?(:is_followable?) && followable.is_followable?
-          !self.follows.where(:followable_type => followable.class.to_s, :followable_id => followable.id).pluck("1").empty?
+          !self.follows.where(:followable_type => followable.class.to_s, :followable_id => followable.id).empty?
         end
 
       end
