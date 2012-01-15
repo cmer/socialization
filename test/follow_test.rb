@@ -2,11 +2,11 @@ require File.dirname(__FILE__)+'/test_helper'
 
 class FollowTest < Test::Unit::TestCase
   def setup
-    @u_john  = User.create name: 'John Doe'
-    @u_jane  = User.create name: 'Jane Doe'
-    @c_chuck = Celebrity.create name: 'Chuck Norris'
-    @c_uma   = Celebrity.create name: 'Uma Thurman'
-    @c_rick  = Celebrity.create name: 'Rick Astley'
+    @u_john  = User.create :name => 'John Doe'
+    @u_jane  = User.create :name => 'Jane Doe'
+    @c_chuck = Celebrity.create :name => 'Chuck Norris'
+    @c_uma   = Celebrity.create :name => 'Uma Thurman'
+    @c_rick  = Celebrity.create :name => 'Rick Astley'
   end
 
   def test_the_world

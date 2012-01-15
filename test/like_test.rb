@@ -2,11 +2,11 @@ require File.dirname(__FILE__)+'/test_helper'
 
 class LikeTest < Test::Unit::TestCase
   def setup
-    @u_john  = User.create name: 'John Doe'
-    @u_jane  = User.create name: 'Jane Doe'
-    @m_seven = Movie.create name: 'Seven'
-    @m_pulp  = Movie.create name: 'Pulp Fiction'
-    @m_tub   = Movie.create name: 'Hot Tub Time Machine'
+    @u_john  = User.create :name => 'John Doe'
+    @u_jane  = User.create :name => 'Jane Doe'
+    @m_seven = Movie.create :name => 'Seven'
+    @m_pulp  = Movie.create :name => 'Pulp Fiction'
+    @m_tub   = Movie.create :name => 'Hot Tub Time Machine'
   end
 
   def test_the_world

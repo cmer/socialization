@@ -11,7 +11,7 @@ module Socialization
 
         def like!(likeable)
           raise ArgumentError, "#{likeable} is not likeable!" unless likeable.respond_to?(:is_likeable?)
-          Like.create! liker: self, likeable: likeable
+          Like.create! :liker => self, :likeable => likeable
         end
 
         def unlike!(likeable)
