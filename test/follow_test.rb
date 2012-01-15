@@ -22,6 +22,20 @@ class FollowTest < Test::Unit::TestCase
       assert @follower1.unfollow!(@followable1)
       assert_equal false, @follower1.follows?(@followable1)
     end
+
+    should "not be able to follow the same thing twice" do
+      assert @follower1.follow!(@followable1)
+
+      assert_raise ActiveRecord::RecordInvalid do
+        @follower1.follow!(@followable1)
+      end
+    end
+
+    should "not be able to unfollow something that is not followed" do
+      assert_raise ActiveRecord::RecordNotFound do
+        @follower1.unfollow!(@followable1)
+      end
+    end
   end
 
   context "a Followable" do

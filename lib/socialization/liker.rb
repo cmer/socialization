@@ -16,8 +16,11 @@ module Socialization
         end
 
         def unlike!(likeable)
-          likeable.likings.where(:liker_type => self.class.to_s, :liker_id => self.id).each do |l|
-            l.destroy
+          ll = likeable.likings.where(:liker_type => self.class.to_s, :liker_id => self.id)
+          unless ll.empty?
+            ll.each { |l| l.destroy }
+          else
+            raise ActiveRecord::RecordNotFound
           end
         end
 

@@ -22,6 +22,20 @@ class LikeTest < Test::Unit::TestCase
       assert @liker1.unlike!(@likeable1)
       assert_equal false, @liker1.likes?(@likeable1)
     end
+
+    should "not be able to like the same thing twice" do
+      assert @liker1.like!(@likeable1)
+
+      assert_raise ActiveRecord::RecordInvalid do
+        @liker1.like!(@likeable1)
+      end
+    end
+
+    should "not be able to unlike something that is not liked" do
+      assert_raise ActiveRecord::RecordNotFound do
+        @liker1.unlike!(@likeable1)
+      end
+    end
   end
 
   context "a Likeable" do

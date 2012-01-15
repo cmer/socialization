@@ -16,8 +16,11 @@ module Socialization
         end
 
         def unfollow!(followable)
-          followable.followings.where(:follower_type => self.class.to_s, :follower_id => self.id).each do |f|
-            f.destroy
+          ff = followable.followings.where(:follower_type => self.class.to_s, :follower_id => self.id)
+          unless ff.empty?
+            ff.each { |f| f.destroy }
+          else
+            raise ActiveRecord::RecordNotFound
           end
         end
 
