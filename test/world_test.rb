@@ -49,6 +49,14 @@ class WorldTest < Test::Unit::TestCase
       assert_raise ArgumentError do
         john.follow!(killbill) # Can't follow a movie
       end
+
+      assert_raise ArgumentError do
+        john.follow!(john) # Can't follow yourself, duh!
+      end
+
+      assert_raise ArgumentError do
+        john.like!(john) # Can't like yourself, duh!
+      end
     end
   end
 

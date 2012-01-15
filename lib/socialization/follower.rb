@@ -11,6 +11,7 @@ module Socialization
 
         def follow!(followable)
           raise ArgumentError, "#{followable} is not followable!" unless followable.respond_to?(:is_followable?)
+          raise ArgumentError, "#{self} cannot follow itself!" unless self != followable
           Follow.create! :follower => self, :followable => followable
         end
 
