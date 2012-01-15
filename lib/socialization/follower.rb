@@ -15,7 +15,7 @@ module Socialization
         end
 
         def unfollow!(followable)
-          followable.followers.where(:follower => self).each do |f|
+          followable.followings.where(:follower_type => self.class.to_s, :follower_id => self.id).each do |f|
             f.destroy
           end
         end

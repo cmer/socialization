@@ -36,6 +36,9 @@ class LikeTest < Test::Unit::TestCase
     assert_raise ActiveRecord::RecordInvalid do
       @u_john.like!(@m_seven)
     end
+
+    assert @u_john.unlike!(@m_seven)
+    assert_equal false, @m_seven.liked_by?(@u_john)
   end
 
   def test_user_liking_another_user

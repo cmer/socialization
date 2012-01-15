@@ -27,6 +27,9 @@ class FollowTest < Test::Unit::TestCase
     assert_raise ActiveRecord::RecordInvalid do
       @u_john.follow!(@c_rick)
     end
+
+    assert @u_john.unfollow!(@c_rick)
+    assert_equal false, @c_rick.followed_by?(@u_john)
   end
 
   def test_user_following_user

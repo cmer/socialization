@@ -15,7 +15,7 @@ module Socialization
         end
 
         def unlike!(likeable)
-          likeable.likers.where(:liker => self).each do |l|
+          likeable.likings.where(:liker_type => self.class.to_s, :liker_id => self.id).each do |l|
             l.destroy
           end
         end
