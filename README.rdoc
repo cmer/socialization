@@ -1,6 +1,6 @@
 = Socialization
 
-Socialization is a Ruby Gem that allow any model to Follow and/or Like any other model. This is accomplished through a double polymorphic relationship on the Follow and Like models. But you don't need to know that since all the complexity is hidden from you.
+Socialization is a Ruby Gem that allows any model to Follow and/or Like any other model. This is accomplished through a double polymorphic relationship on the Follow and Like models. But you don't need to know that since all the complexity is hidden from you.
 
 == Installation
 
