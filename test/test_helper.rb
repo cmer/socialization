@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'active_record'
 require 'mocha'
+require 'shoulda'
 require 'test/unit'
 require 'logger'
 
@@ -41,6 +42,22 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer :likeable_id
     t.datetime :created_at
   end
+
+  create_table :im_a_followers do |t|
+    t.timestamps
+  end
+
+  create_table :im_a_followables do |t|
+    t.timestamps
+  end
+
+  create_table :im_a_likers do |t|
+    t.timestamps
+  end
+
+  create_table :im_a_likeables do |t|
+    t.timestamps
+  end
 end
 
 class Celebrity < ActiveRecord::Base
@@ -64,4 +81,20 @@ end
 
 class Like < ActiveRecord::Base
   acts_as_like_store
+end
+
+class ImAFollower < ActiveRecord::Base
+  acts_as_follower
+end
+
+class ImAFollowable < ActiveRecord::Base
+  acts_as_followable
+end
+
+class ImALiker < ActiveRecord::Base
+  acts_as_liker
+end
+
+class ImALikeable < ActiveRecord::Base
+  acts_as_likeable
 end

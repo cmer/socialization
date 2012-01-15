@@ -1,49 +1,86 @@
 require File.dirname(__FILE__)+'/test_helper'
 
 class LikeTest < Test::Unit::TestCase
-  def setup
-    @u_john  = User.create :name => 'John Doe'
-    @u_jane  = User.create :name => 'Jane Doe'
-    @m_seven = Movie.create :name => 'Seven'
-    @m_pulp  = Movie.create :name => 'Pulp Fiction'
-    @m_tub   = Movie.create :name => 'Hot Tub Time Machine'
-  end
-
-  def test_the_world
-    assert @u_john.is_liker?
-    assert @u_john.is_likeable?
-    assert @m_seven.is_likeable?
-
-    assert @u_john.like!(@m_seven)
-    assert @u_john.like!(@m_pulp)
-    assert @u_jane.like!(@m_seven)
-
-    assert_raise ArgumentError do
-      @u_jane.follow!(@m_seven) # movie is not followable
+  context "a Liker" do
+    setup do
+      seed
     end
 
-    assert_equal true, @u_john.likes?(@m_seven)
-    assert_equal true, @u_john.likes?(@m_pulp)
-    assert_equal true, @u_jane.likes?(@m_seven)
-    assert_equal false, @u_jane.likes?(@m_pulp)
-
-    assert_equal true, @m_seven.liked_by?(@u_john)
-    assert_equal false, @m_pulp.liked_by?(@u_jane)
-
-    assert @m_tub.likers.empty?
-
-    # can't have duplicate a like
-    assert_raise ActiveRecord::RecordInvalid do
-      @u_john.like!(@m_seven)
+    should "respond to is_liker?" do
+      assert_equal true, @liker1.respond_to?(:is_liker?)
+      assert_equal true, @liker1.is_liker?
     end
 
-    assert @u_john.unlike!(@m_seven)
-    assert_equal false, @m_seven.liked_by?(@u_john)
+    should "be able to like a Likeable" do
+      assert @liker1.like!(@likeable1)
+      assert_equal true, @liker1.likes?(@likeable1)
+      assert_equal false, @liker2.likes?(@likeable1)
+    end
+
+    should "be able to unlike a Likeable" do
+      Like.create :liker => @liker1, :likeable => @likeable1
+      assert @liker1.unlike!(@likeable1)
+      assert_equal false, @liker1.likes?(@likeable1)
+    end
   end
 
-  def test_user_liking_another_user
-    @u_john.like!(@u_jane)
-    assert_equal true,  @u_john.likes?(@u_jane)
-    assert_equal false, @u_jane.likes?(@u_john)
+  context "a Likeable" do
+    setup do
+      seed
+    end
+
+    should "respond to is_likeable?" do
+      assert_equal true, @likeable1.respond_to?(:is_likeable?)
+      assert_equal true, @likeable1.is_likeable?
+    end
+
+    should "be able to determine who likes it" do
+      Like.create :liker => @liker1, :likeable => @likeable1
+      assert_equal true, @likeable1.liked_by?(@liker1)
+      assert_equal false, @likeable1.liked_by?(@liker2)
+    end
+
+    should "expose a list of its likers" do
+      Like.create :liker => @liker1, :likeable => @likeable1
+      assert_equal [@liker1], @likeable1.likers
+    end
+
+    should "expose likings" do
+      Like.create :liker => @liker1, :likeable => @likeable1
+      likings = @likeable1.likings
+      assert_equal 1, likings.size
+      assert likings.first.is_a?(Like)
+    end
+  end
+
+  context "Deleting a Liker" do
+    setup do
+      seed
+      @liker1.like!(@likeable1)
+    end
+
+    should "delete its Like records" do
+      @liker1.destroy
+      assert_equal false, @likeable1.liked_by?(@liker1)
+    end
+  end
+
+  context "Deleting a Likeable" do
+    setup do
+      seed
+      @liker1.like!(@likeable1)
+    end
+
+    should "delete its Like records" do
+      @likeable1.destroy
+      assert_equal false, @liker1.likes?(@likeable1)
+    end
+  end
+
+  def seed
+    @liker1 = ImALiker.create
+    @liker2 = ImALiker.create
+    @likeable1 = ImALikeable.create
+    @likeable2 = ImALikeable.create
   end
 end
