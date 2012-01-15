@@ -1,1 +1,1 @@
-Generates both the Follow model class and the migration to create its table.
+Generates the Follow and Like models as well as their migrations.
