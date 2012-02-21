@@ -57,7 +57,7 @@ class WorldTest < Test::Unit::TestCase
         john.like!(john) # Can't like yourself, duh!
       end
 
-      comment = john.comments.create(body: "I think Tami and Carl would like this movie!", movie_id: pulp.id)
+      comment = john.comments.create(:body => "I think Tami and Carl would like this movie!", :movie_id => pulp.id)
       comment.mention!(tami)
       comment.mention!(carl)
       assert comment.mentions?(carl)
