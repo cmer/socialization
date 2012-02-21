@@ -1,1 +1,1 @@
-Generates the Follow and Like models as well as their migrations.
+Generates the Follow, Like and Mention models as well as their migrations.

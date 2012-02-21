@@ -27,6 +27,12 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string :name
   end
 
+  create_table :comments do |t|
+    t.integer :user_id
+    t.integer :movie_id
+    t.string :body
+  end
+
   create_table :follows do |t|
     t.string  :follower_type
     t.integer :follower_id
@@ -40,6 +46,14 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer :liker_id
     t.string  :likeable_type
     t.integer :likeable_id
+    t.datetime :created_at
+  end
+
+  create_table :mentions do |t|
+    t.string  :mentionner_type
+    t.integer :mentionner_id
+    t.string  :mentionable_type
+    t.integer :mentionable_id
     t.datetime :created_at
   end
 
@@ -59,6 +73,14 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
 
+  create_table :im_a_mentionners do |t|
+    t.timestamps
+  end
+
+  create_table :im_a_mentionables do |t|
+    t.timestamps
+  end
+
   create_table :vanillas do |t|
     t.timestamps
   end
@@ -66,6 +88,7 @@ end
 
 class Celebrity < ActiveRecord::Base
   acts_as_followable
+  acts_as_mentionable
 end
 
 class User < ActiveRecord::Base
@@ -73,10 +96,20 @@ class User < ActiveRecord::Base
   acts_as_followable
   acts_as_liker
   acts_as_likeable
+  acts_as_mentionable
+
+  has_many :comments
+end
+
+class Comment < ActiveRecord::Base
+  acts_as_mentionner
+  belongs_to :user
+  belongs_to :movie
 end
 
 class Movie < ActiveRecord::Base
   acts_as_likeable
+  has_many :comments
 end
 
 class Follow < ActiveRecord::Base
@@ -85,6 +118,10 @@ end
 
 class Like < ActiveRecord::Base
   acts_as_like_store
+end
+
+class Mention < ActiveRecord::Base
+  acts_as_mention_store
 end
 
 class ImAFollower < ActiveRecord::Base
@@ -101,6 +138,14 @@ end
 
 class ImALikeable < ActiveRecord::Base
   acts_as_likeable
+end
+
+class ImAMentionner < ActiveRecord::Base
+  acts_as_mentionner
+end
+
+class ImAMentionable < ActiveRecord::Base
+  acts_as_mentionable
 end
 
 class Vanilla < ActiveRecord::Base

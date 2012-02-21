@@ -18,7 +18,7 @@ This will generate two migration files and two models named Follow and Like. You
 
 === Rails 2.3.x Support
 
-I haven't tested it nor do I care much about Rails 2.3.x. Sorry!
+This gem requires Rails 3 or better. Sorry!
 
 == Usage
 
