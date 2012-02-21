@@ -1,3 +1,11 @@
+module ActiveRecord
+  class Base
+    def is_liker?
+      false
+    end
+  end
+end
+
 module Socialization
   module Liker
     def self.included(base)
@@ -10,7 +18,7 @@ module Socialization
         end
 
         def like!(likeable)
-          raise ArgumentError, "#{likeable} is not likeable!" unless likeable.respond_to?(:is_likeable?)
+          ensure_likeable!(likeable)
           raise ArgumentError, "#{self} cannot like itself!" unless self != likeable
           Like.create! :liker => self, :likeable => likeable
         end
@@ -25,10 +33,14 @@ module Socialization
         end
 
         def likes?(likeable)
-          raise ArgumentError, "#{likeable} is not likeable!" unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
+          ensure_likeable!(likeable)
           !self.likes.where(:likeable_type => likeable.class.to_s, :likeable_id => likeable.id).empty?
         end
 
+        private
+          def ensure_likeable!(likeable)
+            raise ArgumentError, "#{likeable} is not likeable!" unless likeable.is_likeable?
+          end
       end
     end
   end

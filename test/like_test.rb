@@ -6,8 +6,7 @@ class LikeTest < Test::Unit::TestCase
       seed
     end
 
-    should "respond to is_liker?" do
-      assert_equal true, @liker1.respond_to?(:is_liker?)
+    should "be liker" do
       assert_equal true, @liker1.is_liker?
     end
 
@@ -43,8 +42,7 @@ class LikeTest < Test::Unit::TestCase
       seed
     end
 
-    should "respond to is_likeable?" do
-      assert_equal true, @likeable1.respond_to?(:is_likeable?)
+    should "be likeable" do
       assert_equal true, @likeable1.is_likeable?
     end
 
@@ -88,6 +86,20 @@ class LikeTest < Test::Unit::TestCase
     should "delete its Like records" do
       @likeable1.destroy
       assert_equal false, @liker1.likes?(@likeable1)
+    end
+  end
+
+  context "Virgin ActiveRecord::Base objects" do
+    setup do
+      @foo = Vanilla.new
+    end
+
+    should "not be liker" do
+      assert_equal false, @foo.is_liker?
+    end
+
+    should "not be likeable" do
+      assert_equal false, @foo.is_likeable?
     end
   end
 

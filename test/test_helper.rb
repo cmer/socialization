@@ -58,6 +58,10 @@ ActiveRecord::Schema.define(:version => 0) do
   create_table :im_a_likeables do |t|
     t.timestamps
   end
+
+  create_table :vanillas do |t|
+    t.timestamps
+  end
 end
 
 class Celebrity < ActiveRecord::Base
@@ -97,4 +101,7 @@ end
 
 class ImALikeable < ActiveRecord::Base
   acts_as_likeable
+end
+
+class Vanilla < ActiveRecord::Base
 end

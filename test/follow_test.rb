@@ -6,8 +6,7 @@ class FollowTest < Test::Unit::TestCase
       seed
     end
 
-    should "respond to is_follower?" do
-      assert_equal true, @follower1.respond_to?(:is_follower?)
+    should "be follower" do
       assert_equal true, @follower1.is_follower?
     end
 
@@ -43,8 +42,7 @@ class FollowTest < Test::Unit::TestCase
       seed
     end
 
-    should "respond to is_followable?" do
-      assert_equal true, @followable1.respond_to?(:is_followable?)
+    should "be followable" do
       assert_equal true, @followable1.is_followable?
     end
 
@@ -88,6 +86,20 @@ class FollowTest < Test::Unit::TestCase
     should "delete its Follow records" do
       @followable1.destroy
       assert_equal false, @follower1.follows?(@followable1)
+    end
+  end
+
+  context "Virgin ActiveRecord::Base objects" do
+    setup do
+      @foo = Vanilla.new
+    end
+
+    should "not be follower" do
+      assert_equal false, @foo.is_follower?
+    end
+
+    should "not be followable" do
+      assert_equal false, @foo.is_followable?
     end
   end
 
