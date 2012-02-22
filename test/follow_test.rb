@@ -54,7 +54,11 @@ class FollowTest < Test::Unit::TestCase
 
     should "expose a list of its followers" do
       Follow.create :follower => @follower1, :followable => @followable1
-      assert_equal [@follower1], @followable1.followers
+      assert @followable1.followers(ImAFollower).is_a?(ActiveRecord::Relation)
+      assert_equal [@follower1], @followable1.followers(ImAFollower).all
+
+      assert_equal @followable1.followers(ImAFollower), @followable1.followers(:im_a_followers)
+      assert_equal @followable1.followers(ImAFollower), @followable1.followers("im_a_follower")
     end
 
     should "expose followings" do

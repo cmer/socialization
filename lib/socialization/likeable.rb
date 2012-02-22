@@ -22,8 +22,11 @@ module Socialization
           !self.likings.where(:liker_type => liker.class.to_s, :liker_id => liker.id).empty?
         end
 
-        def likers
-          self.likings.map { |l| l.liker }
+        def likers(klass)
+          klass = klass.to_s.singularize.camelize.constantize unless klass.is_a?(Class)
+          klass.joins("INNER JOIN likes ON likes.liker_id = #{klass.to_s.tableize}.id AND likes.liker_type = '#{klass.to_s}'").
+                where("likes.likeable_type = '#{self.class.to_s}'").
+                where("likes.likeable_id   =  #{self.id}")
         end
       end
     end

@@ -24,12 +24,12 @@ class WorldTest < Test::Unit::TestCase
 
       carl.like!(pulp)
       camilo.like!(pulp)
-      assert_equal 3, pulp.likers.size
+      assert_equal 3, pulp.likers(User).size
 
-      assert pulp.likers.include?(carl)
-      assert pulp.likers.include?(john)
-      assert pulp.likers.include?(camilo)
-      assert !pulp.likers.include?(mat)
+      assert pulp.likers(User).include?(carl)
+      assert pulp.likers(User).include?(john)
+      assert pulp.likers(User).include?(camilo)
+      assert !pulp.likers(User).include?(mat)
 
       carl.follow!(mat)
       mat.follow!(carl)
