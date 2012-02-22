@@ -35,6 +35,10 @@ class MentionTest < Test::Unit::TestCase
         @mentionner1.unmention!(@mentionable1)
       end
     end
+
+    should "be able to mention itself" do
+      @mentionner_and_mentionable.mention!(@mentionner_and_mentionable)
+    end
   end
 
   context "a Mentionable" do
@@ -94,5 +98,6 @@ class MentionTest < Test::Unit::TestCase
     @mentionner2 = ImAMentionner.create
     @mentionable1 = ImAMentionable.create
     @mentionable2 = ImAMentionable.create
+    @mentionner_and_mentionable = ImAMentionnerAndMentionable.create
   end
 end

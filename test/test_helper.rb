@@ -81,6 +81,10 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
 
+  create_table :im_a_mentionner_and_mentionables do |t|
+    t.timestamps
+  end
+
   create_table :vanillas do |t|
     t.timestamps
   end
@@ -145,6 +149,11 @@ class ImAMentionner < ActiveRecord::Base
 end
 
 class ImAMentionable < ActiveRecord::Base
+  acts_as_mentionable
+end
+
+class ImAMentionnerAndMentionable < ActiveRecord::Base
+  acts_as_mentionner
   acts_as_mentionable
 end
 
