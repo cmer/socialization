@@ -20,7 +20,7 @@ module Socialization
         def like!(likeable)
           ensure_likeable!(likeable)
           raise ArgumentError, "#{self} cannot like itself!" unless self != likeable
-          Like.create! :liker => self, :likeable => likeable
+          Like.create!({ :liker => self, :likeable => likeable }, :without_protection => true)
         end
 
         def unlike!(likeable)
