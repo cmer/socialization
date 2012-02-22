@@ -58,7 +58,11 @@ class MentionTest < Test::Unit::TestCase
 
     should "expose a list of its mentionners" do
       Mention.create :mentionner => @mentionner1, :mentionable => @mentionable1
-      assert_equal [@mentionner1], @mentionable1.mentionners
+      assert @mentionable1.mentionners(ImAMentionner).is_a?(ActiveRecord::Relation)
+      assert_equal [@mentionner1], @mentionable1.mentionners(ImAMentionner).all
+
+      assert_equal @mentionable1.mentionners(ImAMentionner), @mentionable1.mentionners(:im_a_mentionners)
+      assert_equal @mentionable1.mentionners(ImAMentionner), @mentionable1.mentionners("im_a_mentionner")
     end
 
     should "expose mentionings" do

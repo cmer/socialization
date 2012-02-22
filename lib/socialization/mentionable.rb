@@ -23,8 +23,11 @@ module Socialization
           !self.mentionings.where(:mentionner_type => mentionner.class.to_s, :mentionner_id => mentionner.id).empty?
         end
 
-        def mentionners
-          self.mentionings.map { |f| f.mentionner }
+        def mentionners(klass)
+          klass = klass.to_s.singularize.camelize.constantize unless klass.is_a?(Class)
+          klass.joins("INNER JOIN mentions ON mentions.mentionner_id = #{klass.to_s.tableize}.id AND mentions.mentionner_type = '#{klass.to_s}'").
+                where("mentions.mentionable_type = '#{self.class.to_s}'").
+                where("mentions.mentionable_id   =  #{self.id}")
         end
       end
     end
