@@ -20,7 +20,7 @@ module Socialization
         def mention!(mentionable)
           ensure_mentionable!(mentionable)
           # raise ArgumentError, "#{self} cannot mention itself!" unless self != mentionable
-          Mention.create! :mentionner => self, :mentionable => mentionable
+          Mention.create!({ :mentionner => self, :mentionable => mentionable }, :without_protection => true)
         end
 
         def unmention!(mentionable)
