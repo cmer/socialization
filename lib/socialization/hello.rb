@@ -1,12 +1,12 @@
+require 'active_support/concern'
+
 %w{followable follower follow_store likeable liker like_store}.each do |f|
   require "#{File.dirname(__FILE__)}/#{f}"
 end
 
 module Socialization
   module Hello
-    def self.included(klass)
-      klass.send(:extend, ClassMethods)
-    end
+    extend ActiveSupport::Concern
 
     module ClassMethods
       def acts_as_follower(opts = nil)
