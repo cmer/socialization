@@ -12,3 +12,6 @@ Celebrity.create :name => 'Uma Thurman'
 Celebrity.create :name => 'John Travlota'
 Celebrity.create :name => 'Samuel L. Jackson'
 Celebrity.create :name => 'Bruce Willis'
+
+c = Comment.create :user_id => 1, :movie_id => 1, :body => 'Awesome movie. Vincent Vega is awesome in it!'
+c.mention!(User.find_by_name("Vincent Vega"))

@@ -14,10 +14,14 @@ class SocializationGenerator < Rails::Generators::Base
   end
 
   def create_migration_file
-    copy_file 'model_follow.rb', 'app/models/follow.rb'
-    copy_file 'model_like.rb', 'app/models/like.rb'
-    migration_template 'migration_follows.rb', 'db/migrate/create_follows.rb'
+    copy_file 'model_follow.rb',  'app/models/follow.rb'
+    copy_file 'model_like.rb',    'app/models/like.rb'
+    copy_file 'model_mention.rb', 'app/models/mention.rb'
+
+    migration_template 'migration_follows.rb',  'db/migrate/create_follows.rb'
     sleep 1 # wait a second to have a unique migration timestamp
-    migration_template 'migration_likes.rb', 'db/migrate/create_likes.rb'
+    migration_template 'migration_likes.rb',    'db/migrate/create_likes.rb'
+    sleep 1 # wait a second to have a unique migration timestamp
+    migration_template 'migration_mentions.rb', 'db/migrate/create_mentions.rb'
   end
 end

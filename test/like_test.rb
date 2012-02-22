@@ -54,7 +54,11 @@ class LikeTest < Test::Unit::TestCase
 
     should "expose a list of its likers" do
       Like.create :liker => @liker1, :likeable => @likeable1
-      assert_equal [@liker1], @likeable1.likers
+      assert @likeable1.likers(ImALiker).is_a?(ActiveRecord::Relation)
+      assert_equal [@liker1], @likeable1.likers(ImALiker).all
+
+      assert_equal @likeable1.likers(ImALiker), @likeable1.likers(:im_a_likers)
+      assert_equal @likeable1.likers(ImALiker), @likeable1.likers("im_a_liker")
     end
 
     should "expose likings" do

@@ -11,12 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120115054647) do
+ActiveRecord::Schema.define(:version => 20120221202703) do
 
   create_table "celebrities", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "comments", :force => true do |t|
+    t.integer "user_id"
+    t.integer "movie_id"
+    t.string  "body"
   end
 
   create_table "follows", :force => true do |t|
@@ -40,6 +46,17 @@ ActiveRecord::Schema.define(:version => 20120115054647) do
 
   add_index "likes", ["likeable_id", "likeable_type"], :name => "fk_likeables"
   add_index "likes", ["liker_id", "liker_type"], :name => "fk_likes"
+
+  create_table "mentions", :force => true do |t|
+    t.string   "mentionner_type"
+    t.integer  "mentionner_id"
+    t.string   "mentionable_type"
+    t.integer  "mentionable_id"
+    t.datetime "created_at"
+  end
+
+  add_index "mentions", ["mentionable_id", "mentionable_type"], :name => "fk_mentionables"
+  add_index "mentions", ["mentionner_id", "mentionner_type"], :name => "fk_mentions"
 
   create_table "movies", :force => true do |t|
     t.string   "name"
