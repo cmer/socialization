@@ -105,7 +105,7 @@ Find out if an objects follows
   celebrity.followed_by?(user)
 
 All followers
-  celebrity.followers
+  celebrity.followers(User)
 
 ---
 
@@ -128,7 +128,7 @@ Find out if an objects likes
   movie.liked_by?(user)
 
 All likers
-  movie.likers
+  movie.likers(User)
 
 === acts_as_mentionner Methods
 
@@ -151,7 +151,7 @@ Find out if an objects mentions
   user.mentioned_by?(comment)
 
 All mentionners
-  user.mentionners
+  user.mentionners(Comment)
 
 ---
 
