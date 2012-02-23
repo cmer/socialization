@@ -35,6 +35,15 @@ class FollowTest < Test::Unit::TestCase
         @follower1.unfollow!(@followable1)
       end
     end
+
+    should "expose a list of its followees" do
+      Follow.create :follower => @follower1, :followable => @followable1
+      assert @follower1.followees(ImAFollowable).is_a?(ActiveRecord::Relation)
+      assert_equal [@followable1], @follower1.followees(ImAFollowable).all
+
+      assert_equal @follower1.followees(ImAFollowable), @follower1.followees(:im_a_followables)
+      assert_equal @follower1.followees(ImAFollowable), @follower1.followees("im_a_followable")
+    end
   end
 
   context "a Followable" do
