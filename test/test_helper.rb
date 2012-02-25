@@ -50,8 +50,8 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   create_table :mentions do |t|
-    t.string  :mentionner_type
-    t.integer :mentionner_id
+    t.string  :mentioner_type
+    t.integer :mentioner_id
     t.string  :mentionable_type
     t.integer :mentionable_id
     t.datetime :created_at
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
 
-  create_table :im_a_mentionners do |t|
+  create_table :im_a_mentioners do |t|
     t.timestamps
   end
 
@@ -81,7 +81,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
 
-  create_table :im_a_mentionner_and_mentionables do |t|
+  create_table :im_a_mentioner_and_mentionables do |t|
     t.timestamps
   end
 
@@ -106,7 +106,7 @@ class User < ActiveRecord::Base
 end
 
 class Comment < ActiveRecord::Base
-  acts_as_mentionner
+  acts_as_mentioner
   belongs_to :user
   belongs_to :movie
 end
@@ -144,16 +144,16 @@ class ImALikeable < ActiveRecord::Base
   acts_as_likeable
 end
 
-class ImAMentionner < ActiveRecord::Base
-  acts_as_mentionner
+class ImAMentioner < ActiveRecord::Base
+  acts_as_mentioner
 end
 
 class ImAMentionable < ActiveRecord::Base
   acts_as_mentionable
 end
 
-class ImAMentionnerAndMentionable < ActiveRecord::Base
-  acts_as_mentionner
+class ImAMentionerAndMentionable < ActiveRecord::Base
+  acts_as_mentioner
   acts_as_mentionable
 end
 

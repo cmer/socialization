@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~> 3.2.1'
-gem 'socialization', :git => "git://github.com/cmer/socialization.git", :branch => "mentions"
+gem 'socialization'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 

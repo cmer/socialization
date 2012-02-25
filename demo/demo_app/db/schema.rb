@@ -48,15 +48,15 @@ ActiveRecord::Schema.define(:version => 20120221202703) do
   add_index "likes", ["liker_id", "liker_type"], :name => "fk_likes"
 
   create_table "mentions", :force => true do |t|
-    t.string   "mentionner_type"
-    t.integer  "mentionner_id"
+    t.string   "mentioner_type"
+    t.integer  "mentioner_id"
     t.string   "mentionable_type"
     t.integer  "mentionable_id"
     t.datetime "created_at"
   end
 
   add_index "mentions", ["mentionable_id", "mentionable_type"], :name => "fk_mentionables"
-  add_index "mentions", ["mentionner_id", "mentionner_type"], :name => "fk_mentions"
+  add_index "mentions", ["mentioner_id", "mentioner_type"], :name => "fk_mentions"
 
   create_table "movies", :force => true do |t|
     t.string   "name"

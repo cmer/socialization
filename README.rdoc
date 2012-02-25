@@ -69,7 +69,7 @@ Allow a model to be mentioned:
 Allow a model to mention:
   class Comment < ActiveRecord::Base
     ...
-    acts_as_mentionner
+    acts_as_mentioner
     ...
   end
 
@@ -130,9 +130,9 @@ Find out if an objects likes
 All likers
   movie.likers(User)
 
-=== acts_as_mentionner Methods
+=== acts_as_mentioner Methods
 
-<b>Note that a "mentionner" is the object containing the mention and not necessarily the actor. For example, John mentions Jane in a comment. The mentionner is the comment object, NOT John.</b>
+<b>Note that a "mentioner" is the object containing the mention and not necessarily the actor. For example, John mentions Jane in a comment. The mentioner is the comment object, NOT John.</b>
 
 Mention something
   comment.mention!(user)
@@ -150,8 +150,8 @@ Mentions?
 Find out if an objects mentions
   user.mentioned_by?(comment)
 
-All mentionners
-  user.mentionners(Comment)
+All mentioners
+  user.mentioners(Comment)
 
 ---
 

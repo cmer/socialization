@@ -1,6 +1,6 @@
 require 'active_support/concern'
 
-%w{followable follower follow_store likeable liker like_store mentionable mentionner mention_store}.each do |f|
+%w{followable follower follow_store likeable liker like_store mentionable mentioner mention_store}.each do |f|
   require "#{File.dirname(__FILE__)}/#{f}"
 end
 
@@ -36,8 +36,8 @@ module Socialization
       end
 
       ## Mention
-      def acts_as_mentionner(opts = nil)
-        include Socialization::Mentionner
+      def acts_as_mentioner(opts = nil)
+        include Socialization::Mentioner
       end
 
       def acts_as_mentionable(opts = nil)
