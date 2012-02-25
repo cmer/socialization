@@ -39,6 +39,15 @@ class MentionTest < Test::Unit::TestCase
     should "be able to mention itself" do
       @mentionner_and_mentionable.mention!(@mentionner_and_mentionable)
     end
+
+    should "expose a list of its mentionees" do
+      Mention.create :mentionner => @mentionner1, :mentionable => @mentionable1
+      assert @mentionner1.mentionees(ImAMentionner).is_a?(ActiveRecord::Relation)
+      assert_equal [@mentionable1], @mentionner1.mentionees(ImAMentionable).all
+
+      assert_equal @mentionner1.mentionees(ImAMentionable), @mentionner1.mentionees(:im_a_mentionables)
+      assert_equal @mentionner1.mentionees(ImAMentionable), @mentionner1.mentionees("im_a_mentionable")
+    end
   end
 
   context "a Mentionable" do
