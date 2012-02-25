@@ -37,6 +37,13 @@ module Socialization
         !self.mentions.where(:mentionable_type => mentionable.class.to_s, :mentionable_id => mentionable.id).empty?
       end
 
+      def mentionees(klass)
+        klass = klass.to_s.singularize.camelize.constantize unless klass.is_a?(Class)
+        klass.joins("INNER JOIN mentions ON mentions.mentionable_id = #{klass.to_s.tableize}.id AND mentions.mentionable_type = '#{klass.to_s}'").
+              where("mentions.mentionner_type = '#{self.class.to_s}'").
+              where("mentions.mentionner_id   =  #{self.id}")
+      end
+
       private
         def ensure_mentionable!(mentionable)
           raise ArgumentError, "#{mentionable} is not mentionable!" unless mentionable.is_mentionable?

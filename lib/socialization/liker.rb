@@ -38,6 +38,13 @@ module Socialization
         !self.likes.where(:likeable_type => likeable.class.to_s, :likeable_id => likeable.id).empty?
       end
 
+      def likees(klass)
+        klass = klass.to_s.singularize.camelize.constantize unless klass.is_a?(Class)
+        klass.joins("INNER JOIN likes ON likes.likeable_id = #{klass.to_s.tableize}.id AND likes.likeable_type = '#{klass.to_s}'").
+              where("likes.liker_type = '#{self.class.to_s}'").
+              where("likes.liker_id   =  #{self.id}")
+      end
+
       private
         def ensure_likeable!(likeable)
           raise ArgumentError, "#{likeable} is not likeable!" unless likeable.is_likeable?

@@ -38,6 +38,13 @@ module Socialization
         !self.follows.where(:followable_type => followable.class.to_s, :followable_id => followable.id).empty?
       end
 
+      def followees(klass)
+        klass = klass.to_s.singularize.camelize.constantize unless klass.is_a?(Class)
+        klass.joins("INNER JOIN follows ON follows.followable_id = #{klass.to_s.tableize}.id AND follows.followable_type = '#{klass.to_s}'").
+              where("follows.follower_type = '#{self.class.to_s}'").
+              where("follows.follower_id   =  #{self.id}")
+
+      end
     end
   end
 end

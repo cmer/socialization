@@ -35,6 +35,15 @@ class LikeTest < Test::Unit::TestCase
         @liker1.unlike!(@likeable1)
       end
     end
+
+    should "expose a list of its likes" do
+      Like.create :liker => @liker1, :likeable => @likeable1
+      assert @liker1.likees(ImALikeable).is_a?(ActiveRecord::Relation)
+      assert_equal [@likeable1], @liker1.likees(ImALikeable).all
+
+      assert_equal @liker1.likees(ImALikeable), @liker1.likees(:im_a_likeables)
+      assert_equal @liker1.likees(ImALikeable), @liker1.likees("im_a_likeable")
+    end
   end
 
   context "a Likeable" do
