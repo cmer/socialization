@@ -5,7 +5,7 @@ require 'active_support/concern'
 end
 
 module Socialization
-  module Hello
+  module ActsAsHelpers
     extend ActiveSupport::Concern
 
     module ClassMethods
