@@ -45,13 +45,25 @@ module Socialization
         true
       end
 
+      # Toggles a {FollowStore follow} relationship.
+      #
+      # @param [Followable] followable the object to follow/unfollow.
+      # @return [Boolean]
+      def toggle_follow!(followable)
+        if follows?(followable)
+          unfollow!(followable)
+        else
+          follow!(followable)
+        end
+      end
+
       # Specifies if self follows a {Followable} object.
       #
       # @param [Followable] followable the {Followable} object to test against.
       # @return [Boolean]
       def follows?(followable)
         raise ArgumentError, "#{followable} is not followable!" unless followable.is_followable?
-        !self.follows.where(:followable_type => followable.class.to_s, :followable_id => followable.id).empty?
+        !self.follows.where(:followable_type => followable.class.table_name.classify, :followable_id => followable.id).empty?
       end
 
       # Returns a scope of the {Followable}s followed by self.

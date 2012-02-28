@@ -36,6 +36,15 @@ class LikeTest < Test::Unit::TestCase
       end
     end
 
+    should "be able to toggle likes on/off" do
+      @liker1.toggle_like!(@likeable1)
+      assert_equal true, @liker1.likes?(@likeable1)
+      @liker1.toggle_like!(@likeable1)
+      assert_equal false, @liker1.likes?(@likeable1)
+      @liker1.toggle_like!(@likeable1)
+      assert_equal true, @liker1.likes?(@likeable1)
+    end
+
     should "expose a list of its likes" do
       Like.create :liker => @liker1, :likeable => @likeable1
       assert @liker1.likees(ImALikeable).is_a?(ActiveRecord::Relation)
@@ -113,6 +122,18 @@ class LikeTest < Test::Unit::TestCase
 
     should "not be likeable" do
       assert_equal false, @foo.is_likeable?
+    end
+  end
+
+  context "Single Table Inheritance" do
+    setup do
+      @liker = ImALiker.create
+      @likeable_child = ImALikeableChild.create
+    end
+
+    should "be able to like a model inheriting from a Likeable" do
+      assert @liker.like!(@likeable_child)
+      assert_equal true, @liker.likes?(@likeable_child)
     end
   end
 

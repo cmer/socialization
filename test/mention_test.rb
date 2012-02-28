@@ -40,6 +40,15 @@ class MentionTest < Test::Unit::TestCase
       @mentioner_and_mentionable.mention!(@mentioner_and_mentionable)
     end
 
+    should "be able to toggle mentions on/off" do
+      @mentioner1.toggle_mention!(@mentionable1)
+      assert_equal true, @mentioner1.mentions?(@mentionable1)
+      @mentioner1.toggle_mention!(@mentionable1)
+      assert_equal false, @mentioner1.mentions?(@mentionable1)
+      @mentioner1.toggle_mention!(@mentionable1)
+      assert_equal true, @mentioner1.mentions?(@mentionable1)
+    end
+
     should "expose a list of its mentionees" do
       Mention.create :mentioner => @mentioner1, :mentionable => @mentionable1
       assert @mentioner1.mentionees(ImAMentioner).is_a?(ActiveRecord::Relation)
@@ -103,6 +112,18 @@ class MentionTest < Test::Unit::TestCase
     should "delete its Mention records" do
       @mentionable1.destroy
       assert_equal false, @mentioner1.mentions?(@mentionable1)
+    end
+  end
+
+  context "Single Table Inheritance" do
+    setup do
+      @mentioner = ImAMentioner.create
+      @mentionable_child = ImAMentionableChild.create
+    end
+
+    should "be able to mention a model inheriting from mentionable" do
+      assert @mentioner.mention!(@mentionable_child)
+      assert_equal true, @mentioner.mentions?(@mentionable_child)
     end
   end
 

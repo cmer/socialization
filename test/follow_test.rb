@@ -36,6 +36,15 @@ class FollowTest < Test::Unit::TestCase
       end
     end
 
+    should "be able to toggle following on/off" do
+      @follower1.toggle_follow!(@followable1)
+      assert_equal true, @follower1.follows?(@followable1)
+      @follower1.toggle_follow!(@followable1)
+      assert_equal false, @follower1.follows?(@followable1)
+      @follower1.toggle_follow!(@followable1)
+      assert_equal true, @follower1.follows?(@followable1)
+    end
+
     should "expose a list of its followees" do
       Follow.create :follower => @follower1, :followable => @followable1
       assert @follower1.followees(ImAFollowable).is_a?(ActiveRecord::Relation)
@@ -113,6 +122,18 @@ class FollowTest < Test::Unit::TestCase
 
     should "not be followable" do
       assert_equal false, @foo.is_followable?
+    end
+  end
+
+  context "Single Table Inheritance" do
+    setup do
+      @follower = ImAFollower.create
+      @followable_child = ImAFollowableChild.create
+    end
+
+    should "be able to follow a model inheriting from Followable" do
+      assert @follower.follow!(@followable_child)
+      assert_equal true, @follower.follows?(@followable_child)
     end
   end
 
