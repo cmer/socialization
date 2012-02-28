@@ -125,6 +125,18 @@ class FollowTest < Test::Unit::TestCase
     end
   end
 
+  context "Single Table Inheritance" do
+    setup do
+      @follower = ImAFollower.create
+      @followable_child = ImAFollowableChild.create
+    end
+
+    should "be able to follow a model inheriting from Followable" do
+      assert @follower.follow!(@followable_child)
+      assert_equal true, @follower.follows?(@followable_child)
+    end
+  end
+
   def seed
     @follower1 = ImAFollower.create
     @follower2 = ImAFollower.create

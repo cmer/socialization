@@ -63,7 +63,7 @@ module Socialization
       # @return [Boolean]
       def follows?(followable)
         raise ArgumentError, "#{followable} is not followable!" unless followable.is_followable?
-        !self.follows.where(:followable_type => followable.class.to_s, :followable_id => followable.id).empty?
+        !self.follows.where(:followable_type => followable.class.table_name.classify, :followable_id => followable.id).empty?
       end
 
       # Returns a scope of the {Followable}s followed by self.

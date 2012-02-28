@@ -61,7 +61,7 @@ module Socialization
       # @return [Boolean]
       def mentions?(mentionable)
         ensure_mentionable!(mentionable)
-        !self.mentions.where(:mentionable_type => mentionable.class.to_s, :mentionable_id => mentionable.id).empty?
+        !self.mentions.where(:mentionable_type => mentionable.class.table_name.classify, :mentionable_id => mentionable.id).empty?
       end
 
       # Returns a scope of the {Mentionable}s mentioned by self.

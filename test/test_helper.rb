@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   create_table :im_a_followables do |t|
+    t.string :type
     t.timestamps
   end
 
@@ -70,6 +71,7 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   create_table :im_a_likeables do |t|
+    t.string :type
     t.timestamps
   end
 
@@ -78,6 +80,7 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   create_table :im_a_mentionables do |t|
+    t.string :type
     t.timestamps
   end
 
@@ -136,6 +139,9 @@ class ImAFollowable < ActiveRecord::Base
   acts_as_followable
 end
 
+class ImAFollowableChild < ImAFollowable
+end
+
 class ImALiker < ActiveRecord::Base
   acts_as_liker
 end
@@ -144,12 +150,18 @@ class ImALikeable < ActiveRecord::Base
   acts_as_likeable
 end
 
+class ImALikeableChild < ImALikeable
+end
+
 class ImAMentioner < ActiveRecord::Base
   acts_as_mentioner
 end
 
 class ImAMentionable < ActiveRecord::Base
   acts_as_mentionable
+end
+
+class ImAMentionableChild < ImAMentionable
 end
 
 class ImAMentionerAndMentionable < ActiveRecord::Base
