@@ -42,6 +42,18 @@ module Socialization
           raise ActiveRecord::RecordNotFound
         end
       end
+      #
+      # Toggles a {MentionStore mention} relationship.
+      #
+      # @param [Mentionable] mentionable the object to mention/unmention.
+      # @return [Boolean]
+      def toggle_mention!(mentionable)
+        if mentions?(mentionable)
+          unmention!(mentionable)
+        else
+          mention!(mentionable)
+        end
+      end
 
       # Specifies if self mentions a {Mentionable} object.
       #

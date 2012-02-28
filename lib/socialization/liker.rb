@@ -44,6 +44,18 @@ module Socialization
         end
       end
 
+      # Toggles a {LikeStore like} relationship.
+      #
+      # @param [Likeable] likeable the object to like/unlike.
+      # @return [Boolean]
+      def toggle_like!(likeable)
+        if likes?(likeable)
+          unlike!(likeable)
+        else
+          like!(likeable)
+        end
+      end
+
       # Specifies if self likes a {Likeable} object.
       #
       # @param [Likeable] likeable the {Likeable} object to test against.

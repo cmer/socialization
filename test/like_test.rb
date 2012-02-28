@@ -36,6 +36,15 @@ class LikeTest < Test::Unit::TestCase
       end
     end
 
+    should "be able to toggle likes on/off" do
+      @liker1.toggle_like!(@likeable1)
+      assert_equal true, @liker1.likes?(@likeable1)
+      @liker1.toggle_like!(@likeable1)
+      assert_equal false, @liker1.likes?(@likeable1)
+      @liker1.toggle_like!(@likeable1)
+      assert_equal true, @liker1.likes?(@likeable1)
+    end
+
     should "expose a list of its likes" do
       Like.create :liker => @liker1, :likeable => @likeable1
       assert @liker1.likees(ImALikeable).is_a?(ActiveRecord::Relation)

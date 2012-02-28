@@ -40,6 +40,15 @@ class MentionTest < Test::Unit::TestCase
       @mentioner_and_mentionable.mention!(@mentioner_and_mentionable)
     end
 
+    should "be able to toggle mentions on/off" do
+      @mentioner1.toggle_mention!(@mentionable1)
+      assert_equal true, @mentioner1.mentions?(@mentionable1)
+      @mentioner1.toggle_mention!(@mentionable1)
+      assert_equal false, @mentioner1.mentions?(@mentionable1)
+      @mentioner1.toggle_mention!(@mentionable1)
+      assert_equal true, @mentioner1.mentions?(@mentionable1)
+    end
+
     should "expose a list of its mentionees" do
       Mention.create :mentioner => @mentioner1, :mentionable => @mentionable1
       assert @mentioner1.mentionees(ImAMentioner).is_a?(ActiveRecord::Relation)
