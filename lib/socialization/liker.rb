@@ -64,7 +64,7 @@ module Socialization
       # @return [Boolean]
       def likes?(likeable)
         ensure_likeable!(likeable)
-        !self.likes.where(:likeable_type => likeable.class.to_s, :likeable_id => likeable.id).empty?
+        !self.likes.where(:likeable_type => likeable.class.table_name.classify, :likeable_id => likeable.id).empty?
       end
 
       # Returns a scope of the {Likeable}s followed by self.
