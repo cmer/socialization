@@ -137,6 +137,25 @@ class FollowTest < Test::Unit::TestCase
     end
   end
 
+  context "Inherited models" do
+    setup do
+      @follower         = ImAFollower.create
+      @followable       = ImAFollowable.create
+      @follower_child   = ImAFollowerChild.create
+      @followable_child = ImAFollowableChild.create
+    end
+
+    should "be able to follow a model inheriting from followable" do
+      assert @follower.follow!(@followable_child)
+      assert_true @follower.follows?(@followable_child)
+    end
+
+    should "be able to be followed by a model inheriting from follower" do
+      assert @follower_child.follow!(@followable)
+      assert_true @follower_child.follows?(@followable)
+    end
+  end
+
   def seed
     @follower1 = ImAFollower.create
     @follower2 = ImAFollower.create

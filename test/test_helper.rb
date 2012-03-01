@@ -141,35 +141,32 @@ end
 class ImAFollower < ActiveRecord::Base
   acts_as_follower
 end
+class ImAFollowerChild < ImAFollower; end
 
 class ImAFollowable < ActiveRecord::Base
   acts_as_followable
 end
-
-class ImAFollowableChild < ImAFollowable
-end
+class ImAFollowableChild < ImAFollowable; end
 
 class ImALiker < ActiveRecord::Base
   acts_as_liker
 end
+class ImALikerChild < ImALiker; end
 
 class ImALikeable < ActiveRecord::Base
   acts_as_likeable
 end
-
-class ImALikeableChild < ImALikeable
-end
+class ImALikeableChild < ImALikeable; end
 
 class ImAMentioner < ActiveRecord::Base
   acts_as_mentioner
 end
+class ImAMentionerChild < ImAMentioner; end
 
 class ImAMentionable < ActiveRecord::Base
   acts_as_mentionable
 end
-
-class ImAMentionableChild < ImAMentionable
-end
+class ImAMentionableChild < ImAMentionable; end
 
 class ImAMentionerAndMentionable < ActiveRecord::Base
   acts_as_mentioner

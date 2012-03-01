@@ -137,15 +137,22 @@ class LikeTest < Test::Unit::TestCase
     end
   end
 
-  context "Single Table Inheritance" do
+  context "Inherited models" do
     setup do
-      @liker = ImALiker.create
+      @liker          = ImALiker.create
+      @likeable       = ImALikeable.create
+      @liker_child    = ImALikerChild.create
       @likeable_child = ImALikeableChild.create
     end
 
     should "be able to like a model inheriting from a Likeable" do
       assert @liker.like!(@likeable_child)
-      assert_true  @liker.likes?(@likeable_child)
+      assert_true @liker.likes?(@likeable_child)
+    end
+
+    should "be able to be liked by a model inheriting from liker" do
+      assert @liker_child.like!(@likeable)
+      assert_true @liker_child.likes?(@likeable)
     end
   end
 

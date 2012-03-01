@@ -143,13 +143,20 @@ class MentionTest < Test::Unit::TestCase
 
   context "Single Table Inheritance" do
     setup do
-      @mentioner = ImAMentioner.create
+      @mentioner         = ImAMentioner.create
+      @mentioner_child   = ImAMentionerChild.create
+      @mentionable       = ImAMentionable.create
       @mentionable_child = ImAMentionableChild.create
     end
 
     should "be able to mention a model inheriting from mentionable" do
       assert @mentioner.mention!(@mentionable_child)
-      assert_true  @mentioner.mentions?(@mentionable_child)
+      assert_true @mentioner.mentions?(@mentionable_child)
+    end
+
+    should "be able to be mentioned by a model inheriting from mentioner" do
+      assert @mentioner_child.mention!(@mentionable)
+      assert_true @mentioner_child.mentions?(@mentionable)
     end
   end
 
