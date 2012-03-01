@@ -7,19 +7,19 @@ class FollowTest < Test::Unit::TestCase
     end
 
     should "be follower" do
-      assert_equal true, @follower1.is_follower?
+      assert_true  @follower1.is_follower?
     end
 
     should "be able to follow a Followable" do
       assert @follower1.follow!(@followable1)
-      assert_equal true, @follower1.follows?(@followable1)
-      assert_equal false, @follower2.follows?(@followable1)
+      assert_true  @follower1.follows?(@followable1)
+      assert_false @follower2.follows?(@followable1)
     end
 
     should "be able to unfollow a Followable" do
       Follow.create :follower => @follower1, :followable => @followable1
       assert @follower1.unfollow!(@followable1)
-      assert_equal false, @follower1.follows?(@followable1)
+      assert_false @follower1.follows?(@followable1)
     end
 
     should "not be able to follow the same thing twice" do
@@ -62,13 +62,13 @@ class FollowTest < Test::Unit::TestCase
     end
 
     should "be followable" do
-      assert_equal true, @followable1.is_followable?
+      assert_true  @followable1.is_followable?
     end
 
     should "be able to determine who follows it" do
       Follow.create :follower => @follower1, :followable => @followable1
-      assert_equal true, @followable1.followed_by?(@follower1)
-      assert_equal false, @followable1.followed_by?(@follower2)
+      assert_true  @followable1.followed_by?(@follower1)
+      assert_false @followable1.followed_by?(@follower2)
     end
 
     should "expose a list of its followers" do
@@ -96,7 +96,7 @@ class FollowTest < Test::Unit::TestCase
 
     should "delete its Follow records" do
       @follower1.destroy
-      assert_equal false, @followable1.followed_by?(@follower1)
+      assert_false @followable1.followed_by?(@follower1)
     end
   end
 
@@ -108,7 +108,7 @@ class FollowTest < Test::Unit::TestCase
 
     should "delete its Follow records" do
       @followable1.destroy
-      assert_equal false, @follower1.follows?(@followable1)
+      assert_false @follower1.follows?(@followable1)
     end
   end
 
@@ -118,23 +118,11 @@ class FollowTest < Test::Unit::TestCase
     end
 
     should "not be follower" do
-      assert_equal false, @foo.is_follower?
+      assert_false @foo.is_follower?
     end
 
     should "not be followable" do
-      assert_equal false, @foo.is_followable?
-    end
-  end
-
-  context "Single Table Inheritance" do
-    setup do
-      @follower = ImAFollower.create
-      @followable_child = ImAFollowableChild.create
-    end
-
-    should "be able to follow a model inheriting from Followable" do
-      assert @follower.follow!(@followable_child)
-      assert_equal true, @follower.follows?(@followable_child)
+      assert_false @foo.is_followable?
     end
   end
 

@@ -7,19 +7,19 @@ class LikeTest < Test::Unit::TestCase
     end
 
     should "be liker" do
-      assert_equal true, @liker1.is_liker?
+      assert_true  @liker1.is_liker?
     end
 
     should "be able to like a Likeable" do
       assert @liker1.like!(@likeable1)
-      assert_equal true, @liker1.likes?(@likeable1)
-      assert_equal false, @liker2.likes?(@likeable1)
+      assert_true  @liker1.likes?(@likeable1)
+      assert_false @liker2.likes?(@likeable1)
     end
 
     should "be able to unlike a Likeable" do
       Like.create :liker => @liker1, :likeable => @likeable1
       assert @liker1.unlike!(@likeable1)
-      assert_equal false, @liker1.likes?(@likeable1)
+      assert_false @liker1.likes?(@likeable1)
     end
 
     should "not be able to like the same thing twice" do
@@ -62,13 +62,13 @@ class LikeTest < Test::Unit::TestCase
     end
 
     should "be likeable" do
-      assert_equal true, @likeable1.is_likeable?
+      assert_true  @likeable1.is_likeable?
     end
 
     should "be able to determine who likes it" do
       Like.create :liker => @liker1, :likeable => @likeable1
-      assert_equal true, @likeable1.liked_by?(@liker1)
-      assert_equal false, @likeable1.liked_by?(@liker2)
+      assert_true  @likeable1.liked_by?(@liker1)
+      assert_false @likeable1.liked_by?(@liker2)
     end
 
     should "expose a list of its likers" do
@@ -96,7 +96,7 @@ class LikeTest < Test::Unit::TestCase
 
     should "delete its Like records" do
       @liker1.destroy
-      assert_equal false, @likeable1.liked_by?(@liker1)
+      assert_false @likeable1.liked_by?(@liker1)
     end
   end
 
@@ -108,7 +108,7 @@ class LikeTest < Test::Unit::TestCase
 
     should "delete its Like records" do
       @likeable1.destroy
-      assert_equal false, @liker1.likes?(@likeable1)
+      assert_false @liker1.likes?(@likeable1)
     end
   end
 
@@ -118,11 +118,11 @@ class LikeTest < Test::Unit::TestCase
     end
 
     should "not be liker" do
-      assert_equal false, @foo.is_liker?
+      assert_false @foo.is_liker?
     end
 
     should "not be likeable" do
-      assert_equal false, @foo.is_likeable?
+      assert_false @foo.is_likeable?
     end
   end
 
@@ -134,7 +134,7 @@ class LikeTest < Test::Unit::TestCase
 
     should "be able to like a model inheriting from a Likeable" do
       assert @liker.like!(@likeable_child)
-      assert_equal true, @liker.likes?(@likeable_child)
+      assert_true  @liker.likes?(@likeable_child)
     end
   end
 

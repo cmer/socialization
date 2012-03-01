@@ -7,19 +7,19 @@ class MentionTest < Test::Unit::TestCase
     end
 
     should "be mentioner" do
-      assert_equal true, @mentioner1.is_mentioner?
+      assert_true  @mentioner1.is_mentioner?
     end
 
     should "be able to mention a Mentionable" do
       assert @mentioner1.mention!(@mentionable1)
-      assert_equal true, @mentioner1.mentions?(@mentionable1)
-      assert_equal false, @mentioner2.mentions?(@mentionable1)
+      assert_true  @mentioner1.mentions?(@mentionable1)
+      assert_false @mentioner2.mentions?(@mentionable1)
     end
 
     should "be able to unmention a Mentionable" do
       Mention.create :mentioner => @mentioner1, :mentionable => @mentionable1
       assert @mentioner1.unmention!(@mentionable1)
-      assert_equal false, @mentioner1.mentions?(@mentionable1)
+      assert_false @mentioner1.mentions?(@mentionable1)
     end
 
     should "not be able to mention the same thing twice" do
@@ -66,13 +66,13 @@ class MentionTest < Test::Unit::TestCase
     end
 
     should "be mentionable" do
-      assert_equal true, @mentionable1.is_mentionable?
+      assert_true  @mentionable1.is_mentionable?
     end
 
     should "be able to determine who mentions it" do
       Mention.create :mentioner => @mentioner1, :mentionable => @mentionable1
-      assert_equal true, @mentionable1.mentioned_by?(@mentioner1)
-      assert_equal false, @mentionable1.mentioned_by?(@mentioner2)
+      assert_true  @mentionable1.mentioned_by?(@mentioner1)
+      assert_false @mentionable1.mentioned_by?(@mentioner2)
     end
 
     should "expose a list of its mentioners" do
@@ -100,7 +100,7 @@ class MentionTest < Test::Unit::TestCase
 
     should "delete its Mention records" do
       @mentioner1.destroy
-      assert_equal false, @mentionable1.mentioned_by?(@mentioner1)
+      assert_false @mentionable1.mentioned_by?(@mentioner1)
     end
   end
 
@@ -112,7 +112,7 @@ class MentionTest < Test::Unit::TestCase
 
     should "delete its Mention records" do
       @mentionable1.destroy
-      assert_equal false, @mentioner1.mentions?(@mentionable1)
+      assert_false @mentioner1.mentions?(@mentionable1)
     end
   end
 
@@ -124,7 +124,7 @@ class MentionTest < Test::Unit::TestCase
 
     should "be able to mention a model inheriting from mentionable" do
       assert @mentioner.mention!(@mentionable_child)
-      assert_equal true, @mentioner.mentions?(@mentionable_child)
+      assert_true  @mentioner.mentions?(@mentionable_child)
     end
   end
 
