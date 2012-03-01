@@ -130,6 +130,17 @@ class MentionTest < Test::Unit::TestCase
     end
   end
 
+  context "acts_as_mention_store" do
+    should "touch associated record when touch_mentioner and/or touch_mentionable are set" do
+      class Foo < ActiveRecord::Base
+        self.table_name = 'mentions'; acts_as_mention_store touch_mentioner: true, touch_mentionable: true
+      end
+      f = Foo.new
+      assert f.methods.include?(:belongs_to_touch_after_save_or_destroy_for_mentionable)
+      assert f.methods.include?(:belongs_to_touch_after_save_or_destroy_for_mentioner)
+    end
+  end
+
   context "Single Table Inheritance" do
     setup do
       @mentioner = ImAMentioner.create
