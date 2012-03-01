@@ -94,6 +94,9 @@ Follow something
 Stop following
   user.unfollow!(celebrity)
 
+Toggle
+  user.toggle_follow!(celebrity)
+
 Is following?
   user.follows?(celebrity)
 
@@ -117,6 +120,9 @@ Like something
 Stop liking
   user.unlike!(movie)
 
+Toggle
+  user.toggle_like!(celebrity)
+
 Likes?
   user.likes?(movie)
 
@@ -139,6 +145,9 @@ Mention something
 
 Remove mention
   comment.unmention!(user)
+
+Toggle
+  user.toggle_mention!(celebrity)
 
 Mentions?
   comment.mentions?(user)
