@@ -72,7 +72,6 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   create_table :im_a_followables do |t|
-    t.string :type
     t.timestamps
   end
 
@@ -81,7 +80,6 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   create_table :im_a_likeables do |t|
-    t.string :type
     t.timestamps
   end
 
@@ -90,7 +88,6 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   create_table :im_a_mentionables do |t|
-    t.string :type
     t.timestamps
   end
 
