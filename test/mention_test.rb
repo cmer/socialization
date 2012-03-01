@@ -41,12 +41,13 @@ class MentionTest < Test::Unit::TestCase
     end
 
     should "be able to toggle mentions on/off" do
-      @mentioner1.toggle_mention!(@mentionable1)
-      assert_equal true, @mentioner1.mentions?(@mentionable1)
-      @mentioner1.toggle_mention!(@mentionable1)
-      assert_equal false, @mentioner1.mentions?(@mentionable1)
-      @mentioner1.toggle_mention!(@mentionable1)
-      assert_equal true, @mentioner1.mentions?(@mentionable1)
+      assert_false @mentioner1.mentions?(@mentionable1)
+      assert_true  @mentioner1.toggle_mention!(@mentionable1)
+      assert_true  @mentioner1.mentions?(@mentionable1)
+      assert_false @mentioner1.toggle_mention!(@mentionable1)
+      assert_false @mentioner1.mentions?(@mentionable1)
+      assert_true  @mentioner1.toggle_mention!(@mentionable1)
+      assert_true  @mentioner1.mentions?(@mentionable1)
     end
 
     should "expose a list of its mentionees" do

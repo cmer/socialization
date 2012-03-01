@@ -51,8 +51,10 @@ module Socialization
       def toggle_like!(likeable)
         if likes?(likeable)
           unlike!(likeable)
+          false
         else
           like!(likeable)
+          true
         end
       end
 

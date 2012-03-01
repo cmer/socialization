@@ -52,8 +52,10 @@ module Socialization
       def toggle_follow!(followable)
         if follows?(followable)
           unfollow!(followable)
+          false
         else
           follow!(followable)
+          true
         end
       end
 

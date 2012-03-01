@@ -8,6 +8,16 @@ require 'logger'
 $:.push File.expand_path("../lib", __FILE__)
 require "socialization"
 
+module Test::Unit::Assertions
+  def assert_true(object, message="")
+    assert_equal(true, object, message)
+  end
+
+  def assert_false(object, message="")
+    assert_equal(false, object, message)
+  end
+end
+
 ActiveRecord::Base.configurations = {'sqlite3' => {:adapter => 'sqlite3', :database => ':memory:'}}
 ActiveRecord::Base.establish_connection('sqlite3')
 

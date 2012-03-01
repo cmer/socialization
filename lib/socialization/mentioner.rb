@@ -50,8 +50,10 @@ module Socialization
       def toggle_mention!(mentionable)
         if mentions?(mentionable)
           unmention!(mentionable)
+          false
         else
           mention!(mentionable)
+          true
         end
       end
 

@@ -37,12 +37,13 @@ class FollowTest < Test::Unit::TestCase
     end
 
     should "be able to toggle following on/off" do
-      @follower1.toggle_follow!(@followable1)
-      assert_equal true, @follower1.follows?(@followable1)
-      @follower1.toggle_follow!(@followable1)
-      assert_equal false, @follower1.follows?(@followable1)
-      @follower1.toggle_follow!(@followable1)
-      assert_equal true, @follower1.follows?(@followable1)
+      assert_false @follower1.follows?(@followable1)
+      assert_true  @follower1.toggle_follow!(@followable1)
+      assert_true  @follower1.follows?(@followable1)
+      assert_false @follower1.toggle_follow!(@followable1)
+      assert_false @follower1.follows?(@followable1)
+      assert_true  @follower1.toggle_follow!(@followable1)
+      assert_true  @follower1.follows?(@followable1)
     end
 
     should "expose a list of its followees" do

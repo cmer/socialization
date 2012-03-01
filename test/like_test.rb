@@ -37,12 +37,13 @@ class LikeTest < Test::Unit::TestCase
     end
 
     should "be able to toggle likes on/off" do
-      @liker1.toggle_like!(@likeable1)
-      assert_equal true, @liker1.likes?(@likeable1)
-      @liker1.toggle_like!(@likeable1)
-      assert_equal false, @liker1.likes?(@likeable1)
-      @liker1.toggle_like!(@likeable1)
-      assert_equal true, @liker1.likes?(@likeable1)
+      assert_false @liker1.likes?(@likeable1)
+      assert_true  @liker1.toggle_like!(@likeable1)
+      assert_true  @liker1.likes?(@likeable1)
+      assert_false @liker1.toggle_like!(@likeable1)
+      assert_false @liker1.likes?(@likeable1)
+      assert_true  @liker1.toggle_like!(@likeable1)
+      assert_true  @liker1.likes?(@likeable1)
     end
 
     should "expose a list of its likes" do
