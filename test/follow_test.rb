@@ -129,11 +129,11 @@ class FollowTest < Test::Unit::TestCase
   context "acts_as_follow_store" do
     should "touch associated record when touch_follower and/or touch_followable are set" do
       class Foo < ActiveRecord::Base
-        self.table_name = 'follows'; acts_as_follow_store touch_follower: true, touch_followable: true
+        self.table_name = 'follows'; acts_as_follow_store :touch_follower => true, :touch_followable => true
       end
       f = Foo.new
-      assert f.methods.include?(:belongs_to_touch_after_save_or_destroy_for_followable)
-      assert f.methods.include?(:belongs_to_touch_after_save_or_destroy_for_follower)
+      assert f.methods.map {|x| x.to_s}.include?('belongs_to_touch_after_save_or_destroy_for_followable')
+      assert f.methods.map {|x| x.to_s}.include?('belongs_to_touch_after_save_or_destroy_for_follower')
     end
   end
 

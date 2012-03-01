@@ -129,11 +129,11 @@ class LikeTest < Test::Unit::TestCase
   context "acts_as_like_store" do
     should "touch associated record when touch_liker and/or touch_likeable are set" do
       class Foo < ActiveRecord::Base
-        self.table_name = 'likes'; acts_as_like_store touch_liker: true, touch_likeable: true
+        self.table_name = 'likes'; acts_as_like_store :touch_liker => true, :touch_likeable => true
       end
       f = Foo.new
-      assert f.methods.include?(:belongs_to_touch_after_save_or_destroy_for_likeable)
-      assert f.methods.include?(:belongs_to_touch_after_save_or_destroy_for_liker)
+      assert f.methods.map {|x| x.to_s}.include?('belongs_to_touch_after_save_or_destroy_for_likeable')
+      assert f.methods.map {|x| x.to_s}.include?('belongs_to_touch_after_save_or_destroy_for_liker')
     end
   end
 
