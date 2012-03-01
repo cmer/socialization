@@ -116,6 +116,20 @@ class MentionTest < Test::Unit::TestCase
     end
   end
 
+  context "Virgin ActiveRecord::Base objects" do
+    setup do
+      @foo = Vanilla.new
+    end
+
+    should "not be mentioner" do
+      assert_false @foo.is_mentioner?
+    end
+
+    should "not be mentionable" do
+      assert_false @foo.is_mentionable?
+    end
+  end
+
   context "Single Table Inheritance" do
     setup do
       @mentioner = ImAMentioner.create
