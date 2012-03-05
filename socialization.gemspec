@@ -16,9 +16,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.has_rdoc = true
-  s.extra_rdoc_files = ["README.rdoc"]
-  s.rdoc_options = ["--charset=UTF-8"]
+  s.has_rdoc = false
 
   s.add_runtime_dependency "activerecord"
 
