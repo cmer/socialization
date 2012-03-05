@@ -202,6 +202,14 @@ All mentioners
 ***
 
 
+## Documentation
+
+You can find the compiled YARD documentation at http://rubydoc.info/github/cmer/socialization/frames. Documentation for methods inside `include` blocks is not currently generated although it exists in the code. A custom YARD filter needs to be written for YARD to pick those up.
+
+
+***
+
+
 ## Demo App
 
 For your convenience, I have added a demo app in demo/demo_app. It does not have a web UI, but you can play with Socialization in the Rails console. It should also help you figure out hown to use Socialization in the Real World.
