@@ -46,13 +46,20 @@ class LikeTest < Test::Unit::TestCase
       assert_true  @liker1.likes?(@likeable1)
     end
 
-    should "expose a list of its likes" do
+    should "expose a list of its likees" do
       Like.create :liker => @liker1, :likeable => @likeable1
       assert @liker1.likees(ImALikeable).is_a?(ActiveRecord::Relation)
       assert_equal [@likeable1], @liker1.likees(ImALikeable).all
 
       assert_equal @liker1.likees(ImALikeable), @liker1.likees(:im_a_likeables)
       assert_equal @liker1.likees(ImALikeable), @liker1.likees("im_a_likeable")
+    end
+
+    should "expose a shortcut method for its likees" do
+      Like.create :liker => @liker1, :likeable => @likeable1
+
+      assert @liker1.respond_to?(:im_a_likeable_likees)
+      assert_equal @liker1.likees(ImALikeable), @liker1.im_a_likeable_likees
     end
   end
 
@@ -78,6 +85,13 @@ class LikeTest < Test::Unit::TestCase
 
       assert_equal @likeable1.likers(ImALiker), @likeable1.likers(:im_a_likers)
       assert_equal @likeable1.likers(ImALiker), @likeable1.likers("im_a_liker")
+    end
+
+    should "expose a shortcut method for its likers" do
+      Like.create :liker => @liker1, :likeable => @likeable1
+
+      assert @likeable1.respond_to?(:im_a_liker_likers)
+      assert_equal @likeable1.likers(ImALiker), @likeable1.im_a_liker_likers
     end
 
     should "expose likings" do

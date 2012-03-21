@@ -77,6 +77,25 @@ module Socialization
               where("mentions.mentioner_id   =  #{self.id}")
       end
 
+      # Add a shortcut for the +mentionees+ method combined with the name of the class.
+      # This allows you to ask for <tt>user_mentionees</tt> instead of <tt>mentionees(User)</tt>.
+      def method_missing(method, *arguments, &block)
+        if method.to_s =~ /(.*)_mentionees$/
+          mentionees($1)
+        else
+          super
+        end
+      end
+
+      # Assert that this class responds to the dynamic mentionees-method.
+      def respond_to?(method)
+        if method.to_s =~ /(.*)_mentionees$/
+          true
+        else
+          super
+        end
+      end
+
       private
         def ensure_mentionable!(mentionable)
           raise ArgumentError, "#{mentionable} is not mentionable!" unless mentionable.is_mentionable?

@@ -39,6 +39,25 @@ module Socialization
               where("likes.likeable_type = '#{self.class.to_s}'").
               where("likes.likeable_id   =  #{self.id}")
       end
+
+      # Add a shortcut for the +likers+ method combined with the name of the class.
+      # This allows you to ask for <tt>user_likers</tt> instead of <tt>likers(User)</tt>.
+      def method_missing(method, *arguments, &block)
+        if method.to_s =~ /(.*)_likers$/
+          likers($1)
+        else
+          super
+        end
+      end
+
+      # Assert that this class responds to the dynamic likers-method.
+      def respond_to?(method)
+        if method.to_s =~ /(.*)_likers$/
+          true
+        else
+          super
+        end
+      end
     end
   end
 end

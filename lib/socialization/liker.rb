@@ -78,6 +78,25 @@ module Socialization
               where("likes.liker_id   =  #{self.id}")
       end
 
+      # Add a shortcut for the +likees+ method combined with the name of the class.
+      # This allows you to ask for <tt>user_likees</tt> instead of <tt>likees(User)</tt>.
+      def method_missing(method, *arguments, &block)
+        if method.to_s =~ /(.*)_likees$/
+          likees($1)
+        else
+          super
+        end
+      end
+
+       # Assert that this class responds to the dynamic likees-method.
+      def respond_to?(method)
+        if method.to_s =~ /(.*)_likees$/
+          true
+        else
+          super
+        end
+      end
+
       private
         def ensure_likeable!(likeable)
           raise ArgumentError, "#{likeable} is not likeable!" unless likeable.is_likeable?

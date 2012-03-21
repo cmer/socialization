@@ -79,6 +79,25 @@ module Socialization
               where("follows.follower_id   =  #{self.id}")
 
       end
+
+      # Add a shortcut method for the +followees+ method combined with the name of the class.
+      # This allows you to ask for <tt>user_followees</tt> instead of <tt>followees(User)</tt>.
+      def method_missing(method, *arguments, &block)
+        if method.to_s =~ /(.*)_followees$/
+          followees($1)
+        else
+          super
+        end
+      end
+
+      # Assert that this class responds to the dynamic followees-method.
+      def respond_to?(method)
+        if method.to_s =~ /(.*)_followees$/
+          true
+        else
+          super
+        end
+      end
     end
   end
 end

@@ -58,6 +58,13 @@ class MentionTest < Test::Unit::TestCase
       assert_equal @mentioner1.mentionees(ImAMentionable), @mentioner1.mentionees(:im_a_mentionables)
       assert_equal @mentioner1.mentionees(ImAMentionable), @mentioner1.mentionees("im_a_mentionable")
     end
+
+    should "expose a shortcut method for its mentionees" do
+      Mention.create :mentioner => @mentioner1, :mentionable => @mentionable1
+
+      assert @mentioner1.respond_to?(:im_a_mentionable_mentionees)
+      assert_equal @mentioner1.mentionees(ImAMentionable), @mentioner1.im_a_mentionable_mentionees
+    end
   end
 
   context "a Mentionable" do
@@ -82,6 +89,13 @@ class MentionTest < Test::Unit::TestCase
 
       assert_equal @mentionable1.mentioners(ImAMentioner), @mentionable1.mentioners(:im_a_mentioners)
       assert_equal @mentionable1.mentioners(ImAMentioner), @mentionable1.mentioners("im_a_mentioner")
+    end
+
+    should "expose a shortcut method for its mentioners" do
+      Mention.create :mentioner => @mentioner1, :mentionable => @mentionable1
+
+      assert @mentionable1.respond_to?(:im_a_mentioner_mentioners)
+      assert_equal @mentionable1.mentioners(ImAMentioner), @mentionable1.im_a_mentioner_mentioners
     end
 
     should "expose mentionings" do
