@@ -54,6 +54,13 @@ class FollowTest < Test::Unit::TestCase
       assert_equal @follower1.followees(ImAFollowable), @follower1.followees(:im_a_followables)
       assert_equal @follower1.followees(ImAFollowable), @follower1.followees("im_a_followable")
     end
+
+    should "expose a shortcut method for its followees" do
+      Follow.create :follower => @follower1, :followable => @followable1
+
+      assert @follower1.respond_to?(:im_a_followable_followees)
+      assert_equal @follower1.followees(ImAFollowable), @follower1.im_a_followable_followees
+    end
   end
 
   context "a Followable" do
@@ -78,6 +85,13 @@ class FollowTest < Test::Unit::TestCase
 
       assert_equal @followable1.followers(ImAFollower), @followable1.followers(:im_a_followers)
       assert_equal @followable1.followers(ImAFollower), @followable1.followers("im_a_follower")
+    end
+
+    should "expose a shortcut method for its followers" do
+      Follow.create :follower => @follower1, :followable => @followable1
+
+      assert @followable1.respond_to?(:im_a_follower_followers)
+      assert_equal @followable1.followers(ImAFollower), @followable1.im_a_follower_followers
     end
 
     should "expose followings" do
