@@ -28,7 +28,10 @@ module Socialization
       def follow!(followable)
         raise ArgumentError, "#{followable} is not followable!" unless followable.is_followable?
         raise ArgumentError, "#{self} cannot follow itself!" unless self != followable
-        Follow.create!({ :follower => self, :followable => followable }, :without_protection => true)
+        Follow.create! do |follow|
+          follow.follower = self
+          follow.followable = followable
+        end
       end
 
       # Delete a {FollowStore follow} relationship.
