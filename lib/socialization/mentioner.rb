@@ -27,7 +27,10 @@ module Socialization
       # @return [MentionStore] the newly created {MentionStore mention} record.
       def mention!(mentionable)
         ensure_mentionable!(mentionable)
-        Mention.create!({ :mentioner => self, :mentionable => mentionable }, :without_protection => true)
+        Mention.create! do |mention|
+          mention.mentioner = self
+          mention.mentionable = mentionable
+        end
       end
 
       # Delete a {MentionStore mention} relationship.
