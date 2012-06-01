@@ -24,6 +24,7 @@ ActiveRecord::Base.establish_connection('sqlite3')
 ActiveRecord::Base.logger = Logger.new(STDERR)
 ActiveRecord::Base.logger.level = Logger::WARN
 
+ActiveRecord::Migration.verbose = false
 ActiveRecord::Schema.define(:version => 0) do
   create_table :users do |t|
     t.string :name
