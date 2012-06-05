@@ -209,6 +209,9 @@ You can find the compiled YARD documentation at http://rubydoc.info/github/cmer/
 
 ***
 
+## Changelog
+
+Here it is: https://github.com/cmer/socialization/blob/master/CHANGELOG.md
 
 ## Demo App
 

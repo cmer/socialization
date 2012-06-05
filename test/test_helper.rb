@@ -1,9 +1,9 @@
 require 'rubygems'
 require 'active_record'
-require 'mocha'
 require 'shoulda'
 require 'test/unit'
 require 'logger'
+require 'mocha' # mocha always needs to be loaded last! http://stackoverflow.com/questions/3118866/mocha-mock-carries-to-another-test/4375296#4375296
 
 $:.push File.expand_path("../lib", __FILE__)
 require "socialization"
@@ -127,17 +127,9 @@ class Movie < ActiveRecord::Base
   has_many :comments
 end
 
-class Follow < ActiveRecord::Base
-  acts_as_follow_store
-end
-
-class Like < ActiveRecord::Base
-  acts_as_like_store
-end
-
-class Mention < ActiveRecord::Base
-  acts_as_mention_store
-end
+class Follow < Socialization::ActiveRecordStores::FollowStore; end
+class Like < Socialization::ActiveRecordStores::LikeStore; end
+class Mention < Socialization::ActiveRecordStores::MentionStore; end
 
 class ImAFollower < ActiveRecord::Base
   acts_as_follower

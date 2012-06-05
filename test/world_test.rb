@@ -49,13 +49,9 @@ class WorldTest < Test::Unit::TestCase
         john.follow!(kill_bill) # Can't follow a movie
       end
 
-      assert_raise ArgumentError do
-        john.follow!(john) # Can't follow yourself, duh!
-      end
-
-      assert_raise ArgumentError do
-        john.like!(john) # Can't like yourself, duh!
-      end
+      # You can even follow or like yourself if your ego is that big.
+      assert john.follow!(john)
+      assert john.like!(john)
 
       comment = john.comments.create(:body => "I think Tami and Carl would like this movie!", :movie_id => pulp.id)
       comment.mention!(tami)
