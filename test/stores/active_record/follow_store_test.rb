@@ -1,11 +1,9 @@
 require File.expand_path(File.dirname(__FILE__))+'/../../test_helper'
 
-class ARFollowStores < Socialization::ActiveRecordStores::FollowStore; end
-
 class ActiveRecordFollowStoreTest < Test::Unit::TestCase
   context "ActiveRecordStores::FollowStoreTest" do
     setup do
-      @klass = ARFollowStores
+      @klass = Socialization::ActiveRecordStores::FollowStore
       @klass.touch nil
       @klass.after_follow nil
       @klass.after_unfollow nil

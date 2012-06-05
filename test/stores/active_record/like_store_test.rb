@@ -1,11 +1,9 @@
 require File.expand_path(File.dirname(__FILE__))+'/../../test_helper'
 
-class ARLikeStores < Socialization::ActiveRecordStores::LikeStore; end
-
 class ActiveRecordLikeStoreTest < Test::Unit::TestCase
   context "ActiveRecordStore::LikeStoreTest" do
     setup do
-      @klass = ARLikeStores
+      @klass = Socialization::ActiveRecordStores::LikeStore
       @klass.touch nil
       @klass.after_like nil
       @klass.after_unlike nil

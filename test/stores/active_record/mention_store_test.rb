@@ -1,11 +1,9 @@
 require File.expand_path(File.dirname(__FILE__))+'/../../test_helper'
 
-class ARMentionStores < Socialization::ActiveRecordStores::MentionStore; end
-
 class ActiveRecordMentionStoreTest < Test::Unit::TestCase
   context "ActiveRecordStores::MentionStoreTest" do
     setup do
-      @klass = ARMentionStores
+      @klass = Socialization::ActiveRecordStores::MentionStore
       @klass.touch nil
       @klass.after_mention nil
       @klass.after_unmention nil
