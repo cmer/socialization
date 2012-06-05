@@ -1,3 +1,2 @@
-class Mention < ActiveRecord::Base
-  acts_as_mention_store
+class Mention < Socialization::ActiveRecordStores::MentionStore
 end

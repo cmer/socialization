@@ -1,3 +1,2 @@
-class Like < ActiveRecord::Base
-  acts_as_like_store
+class Like < Socialization::ActiveRecordStores::LikeStore
 end
