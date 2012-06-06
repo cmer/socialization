@@ -26,12 +26,20 @@ module Socialization
         Socialization.follow_model.follows?(follower, self)
       end
 
-      # Returns a scope of the {Follower}s following self.
+      # Returns an array of {Follower}s following self.
       #
-      # @param [Class] klass the {Follower} class to be included in the scope. e.g. `User`
+      # @param [Class] klass the {Follower} class to be included. e.g. `User`
       # @return [Array<Follower, Numeric>] An array of Follower objects or IDs
       def followers(klass, opts = {})
         Socialization.follow_model.followers(self, klass, opts)
+      end
+
+      # Returns a scope of the {Follower}s following self.
+      #
+      # @param [Class] klass the {Follower} class to be included in the scope. e.g. `User`
+      # @return ActiveRecord::Relation
+      def followers_relation(klass, opts = {})
+        Socialization.follow_model.followers_relation(self, klass, opts)
       end
     end
   end

@@ -30,5 +30,12 @@ class LikeableTest < Test::Unit::TestCase
         @likeable.likers(@liker.class, { :foo => :bar })
       end
     end
+
+    context "#likers_relation" do
+      should "call $Like.likers_relation" do
+        $Like.expects(:likers_relation).with(@likeable, @liker.class, { :foo => :bar })
+        @likeable.likers_relation(@liker.class, { :foo => :bar })
+      end
+    end
   end
 end

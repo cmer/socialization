@@ -69,6 +69,14 @@ module Socialization
         Socialization.follow_model.followables(self, klass, opts)
       end
 
+      # Returns a relation for all the followables of a certain type that are followed by self
+      #
+      # @params [Followable] klass the type of {Followable} you want
+      # @params [Hash] opts a hash of options
+      # @return ActiveRecord::Relation
+      def followables_relation(klass, opts = {})
+        Socialization.follow_model.followables_relation(self, klass, opts)
+      end
     end
   end
 end

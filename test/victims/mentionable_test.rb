@@ -25,9 +25,16 @@ class MentionableTest < Test::Unit::TestCase
     end
 
     context "#mentioners" do
-      should "call $Mentionmentioners" do
+      should "call $Mention.mentioners" do
         $Mention.expects(:mentioners).with(@mentionable, @mentioner.class, { :foo => :bar })
         @mentionable.mentioners(@mentioner.class, { :foo => :bar })
+      end
+    end
+
+    context "#mentioners_relation" do
+      should "call $Mention.mentioners" do
+        $Mention.expects(:mentioners_relation).with(@mentionable, @mentioner.class, { :foo => :bar })
+        @mentionable.mentioners_relation(@mentioner.class, { :foo => :bar })
       end
     end
   end

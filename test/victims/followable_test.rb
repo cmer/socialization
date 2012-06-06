@@ -30,5 +30,13 @@ class FollowableTest < Test::Unit::TestCase
         @followable.followers(@follower.class, { :foo => :bar })
       end
     end
+
+    context "#followers_relation" do
+      should "call $Follow.followers_relation" do
+        $Follow.expects(:followers_relation).with(@followable, @follower.class, { :foo => :bar })
+        @followable.followers_relation(@follower.class, { :foo => :bar })
+      end
+    end
+
   end
 end

@@ -69,6 +69,14 @@ module Socialization
         Socialization.mention_model.mentionables(self, klass, opts)
       end
 
+      # Returns a relation for all the mentionables of a certain type that are mentioned by self
+      #
+      # @params [Mentionable] klass the type of {Mentionable} you want
+      # @params [Hash] opts a hash of options
+      # @return ActiveRecord::Relation
+      def mentionables_relation(klass, opts = {})
+        Socialization.mention_model.mentionables_relation(self, klass, opts)
+      end
     end
   end
 end

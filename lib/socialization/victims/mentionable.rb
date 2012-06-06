@@ -26,13 +26,22 @@ module Socialization
         Socialization.mention_model.mentions?(mentioner, self)
       end
 
-      # Returns a scope of the {Mentioner}s mentioning self.
+      # Returns an array of {Mentioner}s mentioning self.
       #
-      # @param [Class] klass the {Mentioner} class to be included in the scope. e.g. `User`.
+      # @param [Class] klass the {Mentioner} class to be included. e.g. `User`
       # @return [Array<Mentioner, Numeric>] An array of Mentioner objects or IDs
       def mentioners(klass, opts = {})
         Socialization.mention_model.mentioners(self, klass, opts)
       end
+
+      # Returns a scope of the {Mentioner}s mentioning self.
+      #
+      # @param [Class] klass the {Mentioner} class to be included in the scope. e.g. `User`
+      # @return ActiveRecord::Relation
+      def mentioners_relation(klass, opts = {})
+        Socialization.mention_model.mentioners_relation(self, klass, opts)
+      end
+
     end
   end
 end

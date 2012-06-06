@@ -69,6 +69,14 @@ module Socialization
         Socialization.like_model.likeables(self, klass, opts)
       end
 
+      # Returns a relation for all the likeables of a certain type that are liked by self
+      #
+      # @params [Likeable] klass the type of {Likeable} you want
+      # @params [Hash] opts a hash of options
+      # @return ActiveRecord::Relation
+      def likeables_relation(klass, opts = {})
+        Socialization.like_model.likeables_relation(self, klass, opts)
+      end
     end
   end
 end
