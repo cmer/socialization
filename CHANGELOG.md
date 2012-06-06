@@ -3,7 +3,8 @@
 ## 0.5.0.beta (June 6, 2012)
 
 * **MAJOR REFACTORING:** Your Like, Follow and Mention models should now inherit the Socialization store base class instead of using the acts_as helper. (e.g.: class Follow < Socialization::ActiveRecordStores::FollowStore). See demo app for an example. Your code should be mostly unaffected.
-* Changed: The persistence logic has now been moved to the Socialization::ActiveRecordStores namespace. More stores such as Redis or MongoDB can be easily added.
+* Changed: The persistence logic has now been moved to the Socialization::ActiveRecordStores namespace. More stores can be easily added.
+* Added: Data can now be stored in Redis.
 * Changed: `like!`, `follow!`, and `mention!` now return a boolean. True when the action was successful, false when it wasn't (e.g.: the relationship already exists).
 * Changed: `unlike!`, `unfollow!` and `unmention!` will now return false if there is no record to destroy rather than raising `ActiveRecord::RecordNotFound`.
 * Changed: Records can now like, follow or mention themselves. If you want to prevent this, it should be enforced directly in your application.
