@@ -1,33 +1,14 @@
+require File.expand_path(File.dirname(__FILE__)) + '/base'
+
 module Socialization
-  module ActiveRecordStores
-    class FollowStore < ActiveRecord::Base
-      belongs_to :follower,   :polymorphic => true
-      belongs_to :followable, :polymorphic => true
-
-      scope :followed_by, lambda { |follower| where(
-        :follower_type   => follower.class.table_name.classify,
-        :follower_id     => follower.id)
-      }
-
-      scope :following,   lambda { |followable| where(
-        :followable_type => followable.class.table_name.classify,
-        :followable_id   => followable.id)
-      }
-
-      @@after_create_hook = nil
-      @@after_destroy_hook = nil
-
+  module RedisStores
+    class FollowStore < Socialization::RedisStores::Base
       class << self
-        def table_name
-          'follows'
-        end
-
         def follow!(follower, followable)
           unless follows?(follower, followable)
-            self.create! do |follow|
-              follow.follower = follower
-              follow.followable = followable
-            end
+            Socialization.redis.sadd generate_followers_key(follower, followable), follower.id
+            Socialization.redis.sadd generate_followables_key(follower, followable), followable.id
+
             call_after_create_hook(follower, followable)
             follower.touch if [:all, :follower].include?(touch) && follower.respond_to?(:touch)
             followable.touch if [:all, :followable].include?(touch) && followable.respond_to?(:touch)
@@ -39,7 +20,9 @@ module Socialization
 
         def unfollow!(follower, followable)
           if follows?(follower, followable)
-            follow_for(follower, followable).destroy_all
+            Socialization.redis.srem generate_followers_key(follower, followable), follower.id
+            Socialization.redis.srem generate_followables_key(follower, followable), followable.id
+
             call_after_destroy_hook(follower, followable)
             follower.touch if [:all, :follower].include?(touch) && follower.respond_to?(:touch)
             followable.touch if [:all, :followable].include?(touch) && followable.respond_to?(:touch)
@@ -50,58 +33,40 @@ module Socialization
         end
 
         def follows?(follower, followable)
-          !follow_for(follower, followable).empty?
+          Socialization.redis.sismember generate_followers_key(follower, followable), follower.id
         end
 
         # Returns an ActiveRecord::Relation of all the followers of a certain type that are following followable
         def followers_relation(followable, klass, opts = {})
-          rel = klass.where(:id =>
-            self.select(:follower_id).
-              where(:follower_type => klass.table_name.classify).
-              where(:followable_type => followable.class.to_s).
-              where(:followable_id => followable.id)
-          )
-
-          if opts[:pluck]
-            rel.pluck(opts[:pluck])
-          else
-            rel
-          end
+          ids = followers(followable, klass, :pluck => :id)
+          klass.where('id IN (?)', ids)
         end
 
         # Returns all the followers of a certain type that are following followable
         def followers(followable, klass, opts = {})
-          rel = followers_relation(followable, klass, opts)
-          if rel.is_a?(ActiveRecord::Relation)
-            rel.all
+          if opts[:pluck]
+            Socialization.redis.smembers(generate_followers_key(klass, followable)).map { |id|
+              id.to_i if id.is_integer?
+            }
           else
-            rel
+            followers_relation(followable, klass, opts).all
           end
         end
 
         # Returns an ActiveRecord::Relation of all the followables of a certain type that are followed by follower
         def followables_relation(follower, klass, opts = {})
-          rel = klass.where(:id =>
-            self.select(:followable_id).
-              where(:followable_type => klass.table_name.classify).
-              where(:follower_type => follower.class.to_s).
-              where(:follower_id => follower.id)
-          )
-
-          if opts[:pluck]
-            rel.pluck(opts[:pluck])
-          else
-            rel
-          end
+          ids = followables(follower, klass, :pluck => :id)
+          klass.where('id IN (?)', ids)
         end
 
         # Returns all the followables of a certain type that are followed by follower
         def followables(follower, klass, opts = {})
-          rel = followables_relation(follower, klass, opts)
-          if rel.is_a?(ActiveRecord::Relation)
-            rel.all
+          if opts[:pluck]
+            Socialization.redis.smembers(generate_followables_key(follower, klass)).map { |id|
+              id.to_i if id.is_integer?
+            }
           else
-            rel
+            followables_relation(follower, klass, opts).all
           end
         end
 
@@ -133,8 +98,26 @@ module Socialization
           self.send(@after_destroy_hook, follower, followable) if @after_destroy_hook
         end
 
-        def follow_for(follower, followable)
-          followed_by(follower).following(followable)
+        def generate_followers_key(follower, followable)
+          raise ArgumentError.new("`followable` needs to be an acts_as_followable objecs, not a class.") if followable.class == Class
+          follower_class = if follower.class == Class
+            follower
+          else
+            follower.class
+          end
+
+          "Followers:#{followable.class}:#{followable.id}:#{follower_class}"
+        end
+
+        def generate_followables_key(follower, followable)
+          raise ArgumentError.new("`follower` needs to be an acts_as_follower object, not a class.") if follower.class == Class
+          followable_class = if followable.class == Class
+            followable
+          else
+            followable.class
+          end
+
+          "Followables:#{follower.class}:#{follower.id}:#{followable_class}"
         end
       end # class << self
 

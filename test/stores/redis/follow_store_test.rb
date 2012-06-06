@@ -1,9 +1,10 @@
 require File.expand_path(File.dirname(__FILE__))+'/../../test_helper'
 
-class ActiveRecordFollowStoreTest < Test::Unit::TestCase
-  context "ActiveRecordStores::FollowStoreTest" do
+class RedisFollowStoreTest < Test::Unit::TestCase
+  context "RedisStores::FollowStoreTest" do
     setup do
-      @klass = Socialization::ActiveRecordStores::FollowStore
+      use_redis_store
+      @klass = Socialization::RedisStores::FollowStore
       @klass.touch nil
       @klass.after_follow nil
       @klass.after_unfollow nil
@@ -11,17 +12,17 @@ class ActiveRecordFollowStoreTest < Test::Unit::TestCase
       @followable = ImAFollowable.create
     end
 
-    context "data store" do
-      should "inherit Socialization::ActiveRecordStores::FollowStore" do
-        assert_equal Socialization::ActiveRecordStores::FollowStore, Socialization.follow_model
+    context "Stores" do
+      should "inherit Socialization::RedisStores::FollowStore" do
+        assert_equal Socialization::RedisStores::FollowStore, Socialization.follow_model
       end
     end
 
     context "#follow!" do
       should "create a Follow record" do
         @klass.follow!(@follower, @followable)
-        assert_match_follower @klass.last, @follower
-        assert_match_followable @klass.last, @followable
+        assert_equal ["#{@follower.id}"], Socialization.redis.smembers(followers_key)
+        assert_equal ["#{@followable.id}"], Socialization.redis.smembers(followables_key)
       end
 
       should "touch follower when instructed" do
@@ -60,10 +61,8 @@ class ActiveRecordFollowStoreTest < Test::Unit::TestCase
 
     context "#follows?" do
       should "return true when follow exists" do
-        @klass.create! do |f|
-          f.follower = @follower
-          f.followable = @followable
-        end
+        Socialization.redis.sadd followers_key, @follower.id
+        Socialization.redis.sadd followables_key, @followable.id
         assert_true @klass.follows?(@follower, @followable)
       end
 
@@ -78,7 +77,7 @@ class ActiveRecordFollowStoreTest < Test::Unit::TestCase
         follower2 = ImAFollower.create
         follower1.follow!(@followable)
         follower2.follow!(@followable)
-        assert_equal [follower1, follower2], @klass.followers(@followable, follower1.class)
+        assert_array_similarity [follower1, follower2], @klass.followers(@followable, follower1.class)
       end
 
       should "return an array of follower ids when plucking" do
@@ -86,25 +85,46 @@ class ActiveRecordFollowStoreTest < Test::Unit::TestCase
         follower2 = ImAFollower.create
         follower1.follow!(@followable)
         follower2.follow!(@followable)
-        assert_equal [follower1.id, follower2.id], @klass.followers(@followable, follower1.class, :pluck => :id)
+        assert_array_similarity [follower1.id, follower2.id], @klass.followers(@followable, follower1.class, :pluck => :id)
       end
     end
 
     context "#followables" do
-      should "return an array of followers" do
+      should "return an array of followables" do
         followable1 = ImAFollowable.create
         followable2 = ImAFollowable.create
         @follower.follow!(followable1)
         @follower.follow!(followable2)
-        assert_equal [followable1, followable2], @klass.followables(@follower, followable1.class)
+
+        assert_array_similarity [followable1, followable2], @klass.followables(@follower, followable1.class)
       end
 
-      should "return an array of follower ids when plucking" do
+      should "return an array of followables ids when plucking" do
         followable1 = ImAFollowable.create
         followable2 = ImAFollowable.create
         @follower.follow!(followable1)
         @follower.follow!(followable2)
-        assert_equal [followable1.id, followable2.id], @klass.followables(@follower, followable1.class, :pluck => :id)
+        assert_array_similarity [followable1.id, followable2.id], @klass.followables(@follower, followable1.class, :pluck => :id)
+      end
+    end
+
+    context "#generate_followers_key" do
+      should "return valid key when passed objects" do
+        assert_equal "Followers:ImAFollowable:#{@followable.id}:ImAFollower", followers_key(@follower, @followable)
+      end
+
+      should "return valid key when follower is a class" do
+        assert_equal "Followers:ImAFollowable:#{@followable.id}:ImAFollower", followers_key(@follower.class, @followable)
+      end
+    end
+
+    context "#generate_followables_key" do
+      should "return valid key when passed objects" do
+        assert_equal "Followables:ImAFollower:#{@follower.id}:ImAFollowable", followables_key(@follower, @followable)
+      end
+
+      should "return valid key when followable is a class" do
+        assert_equal "Followables:ImAFollower:#{@follower.id}:ImAFollowable", followables_key(@follower, @followable.class)
       end
     end
 
@@ -117,5 +137,17 @@ class ActiveRecordFollowStoreTest < Test::Unit::TestCase
 
   def assert_match_followable(follow_record, followable)
     assert follow_record.followable_type ==  followable.class.to_s && follow_record.followable_id == followable.id
+  end
+
+  def followers_key(follower = nil, followable = nil)
+    follower ||= @follower
+    followable ||= @followable
+    @klass.send(:generate_followers_key, follower, followable)
+  end
+
+  def followables_key(follower = nil, followable = nil)
+    follower ||= @follower
+    followable ||= @followable
+    @klass.send(:generate_followables_key, follower, followable)
   end
 end

@@ -1,33 +1,14 @@
+require File.expand_path(File.dirname(__FILE__)) + '/base'
+
 module Socialization
-  module ActiveRecordStores
-    class MentionStore < ActiveRecord::Base
-      belongs_to :mentioner,   :polymorphic => true
-      belongs_to :mentionable, :polymorphic => true
-
-      scope :mentioned_by, lambda { |mentioner| where(
-        :mentioner_type   => mentioner.class.table_name.classify,
-        :mentioner_id     => mentioner.id)
-      }
-
-      scope :mentioning,   lambda { |mentionable| where(
-        :mentionable_type => mentionable.class.table_name.classify,
-        :mentionable_id   => mentionable.id)
-      }
-
-      @@after_create_hook = nil
-      @@after_destroy_hook = nil
-
+  module RedisStores
+    class MentionStore < Socialization::RedisStores::Base
       class << self
-        def table_name
-          'mentions'
-        end
-
         def mention!(mentioner, mentionable)
           unless mentions?(mentioner, mentionable)
-            self.create! do |mention|
-              mention.mentioner = mentioner
-              mention.mentionable = mentionable
-            end
+            Socialization.redis.sadd generate_mentioners_key(mentioner, mentionable), mentioner.id
+            Socialization.redis.sadd generate_mentionables_key(mentioner, mentionable), mentionable.id
+
             call_after_create_hook(mentioner, mentionable)
             mentioner.touch if [:all, :mentioner].include?(touch) && mentioner.respond_to?(:touch)
             mentionable.touch if [:all, :mentionable].include?(touch) && mentionable.respond_to?(:touch)
@@ -39,7 +20,9 @@ module Socialization
 
         def unmention!(mentioner, mentionable)
           if mentions?(mentioner, mentionable)
-            mention_for(mentioner, mentionable).destroy_all
+            Socialization.redis.srem generate_mentioners_key(mentioner, mentionable), mentioner.id
+            Socialization.redis.srem generate_mentionables_key(mentioner, mentionable), mentionable.id
+
             call_after_destroy_hook(mentioner, mentionable)
             mentioner.touch if [:all, :mentioner].include?(touch) && mentioner.respond_to?(:touch)
             mentionable.touch if [:all, :mentionable].include?(touch) && mentionable.respond_to?(:touch)
@@ -50,58 +33,40 @@ module Socialization
         end
 
         def mentions?(mentioner, mentionable)
-          !mention_for(mentioner, mentionable).empty?
+          Socialization.redis.sismember generate_mentioners_key(mentioner, mentionable), mentioner.id
         end
 
         # Returns an ActiveRecord::Relation of all the mentioners of a certain type that are mentioning mentionable
         def mentioners_relation(mentionable, klass, opts = {})
-          rel = klass.where(:id =>
-            self.select(:mentioner_id).
-              where(:mentioner_type => klass.table_name.classify).
-              where(:mentionable_type => mentionable.class.to_s).
-              where(:mentionable_id => mentionable.id)
-          )
-
-          if opts[:pluck]
-            rel.pluck(opts[:pluck])
-          else
-            rel
-          end
+          ids = mentioners(mentionable, klass, :pluck => :id)
+          klass.where('id IN (?)', ids)
         end
 
         # Returns all the mentioners of a certain type that are mentioning mentionable
         def mentioners(mentionable, klass, opts = {})
-          rel = mentioners_relation(mentionable, klass, opts)
-          if rel.is_a?(ActiveRecord::Relation)
-            rel.all
+          if opts[:pluck]
+            Socialization.redis.smembers(generate_mentioners_key(klass, mentionable)).map { |id|
+              id.to_i if id.is_integer?
+            }
           else
-            rel
+            mentioners_relation(mentionable, klass, opts).all
           end
         end
 
         # Returns an ActiveRecord::Relation of all the mentionables of a certain type that are mentioned by mentioner
         def mentionables_relation(mentioner, klass, opts = {})
-          rel = klass.where(:id =>
-            self.select(:mentionable_id).
-              where(:mentionable_type => klass.table_name.classify).
-              where(:mentioner_type => mentioner.class.to_s).
-              where(:mentioner_id => mentioner.id)
-          )
-
-          if opts[:pluck]
-            rel.pluck(opts[:pluck])
-          else
-            rel
-          end
+          ids = mentionables(mentioner, klass, :pluck => :id)
+          klass.where('id IN (?)', ids)
         end
 
         # Returns all the mentionables of a certain type that are mentioned by mentioner
         def mentionables(mentioner, klass, opts = {})
-          rel = mentionables_relation(mentioner, klass, opts)
-          if rel.is_a?(ActiveRecord::Relation)
-            rel.all
+          if opts[:pluck]
+            Socialization.redis.smembers(generate_mentionables_key(mentioner, klass)).map { |id|
+              id.to_i if id.is_integer?
+            }
           else
-            rel
+            mentionables_relation(mentioner, klass, opts).all
           end
         end
 
@@ -133,8 +98,26 @@ module Socialization
           self.send(@after_destroy_hook, mentioner, mentionable) if @after_destroy_hook
         end
 
-        def mention_for(mentioner, mentionable)
-          mentioned_by(mentioner).mentioning(mentionable)
+        def generate_mentioners_key(mentioner, mentionable)
+          raise ArgumentError.new("`mentionable` needs to be an acts_as_mentionable objecs, not a class.") if mentionable.class == Class
+          mentioner_class = if mentioner.class == Class
+            mentioner
+          else
+            mentioner.class
+          end
+
+          "Mentioners:#{mentionable.class}:#{mentionable.id}:#{mentioner_class}"
+        end
+
+        def generate_mentionables_key(mentioner, mentionable)
+          raise ArgumentError.new("`mentioner` needs to be an acts_as_mentioner object, not a class.") if mentioner.class == Class
+          mentionable_class = if mentionable.class == Class
+            mentionable
+          else
+            mentionable.class
+          end
+
+          "Mentionables:#{mentioner.class}:#{mentioner.id}:#{mentionable_class}"
         end
       end # class << self
 

@@ -1,12 +1,20 @@
+$MOCK_REDIS = true
+
 require 'rubygems'
 require 'active_record'
 require 'shoulda'
 require 'test/unit'
 require 'logger'
+require 'mock_redis' if $MOCK_REDIS
+require 'redis' unless $MOCK_REDIS
 require 'mocha' # mocha always needs to be loaded last! http://stackoverflow.com/questions/3118866/mocha-mock-carries-to-another-test/4375296#4375296
 
 $:.push File.expand_path("../lib", __FILE__)
 require "socialization"
+
+silence_warnings do
+  Redis = MockRedis if $MOCK_REDIS # Magic!
+end
 
 module Test::Unit::Assertions
   def assert_true(object, message="")
@@ -15,6 +23,47 @@ module Test::Unit::Assertions
 
   def assert_false(object, message="")
     assert_equal(false, object, message)
+  end
+
+  def assert_array_similarity(expected, actual, message=nil)
+    full_message = build_message(message, "<?> expected but was\n<?>.\n", expected, actual)
+    assert_block(full_message) { (expected.size ==  actual.size) && (expected - actual == []) }
+  end
+end
+
+class Test::Unit::TestCase
+  def setup
+    use_ar_store
+  end
+
+  def teardown
+    clear_redis
+  end
+end
+
+def use_redis_store
+  Socialization.follow_model = Socialization::RedisStores::FollowStore
+  Socialization.mention_model = Socialization::RedisStores::MentionStore
+  Socialization.like_model = Socialization::RedisStores::LikeStore
+  setup_model_shortcuts
+end
+
+def use_ar_store
+  Socialization.follow_model = Socialization::ActiveRecordStores::FollowStore
+  Socialization.mention_model = Socialization::ActiveRecordStores::MentionStore
+  Socialization.like_model = Socialization::ActiveRecordStores::LikeStore
+  setup_model_shortcuts
+end
+
+def setup_model_shortcuts
+  $Follow = Socialization.follow_model
+  $Mention = Socialization.mention_model
+  $Like = Socialization.like_model
+end
+
+def clear_redis
+  Socialization.redis.keys(nil).each do |k|
+    Socialization.redis.del k
   end
 end
 
@@ -127,9 +176,9 @@ class Movie < ActiveRecord::Base
   has_many :comments
 end
 
-class Follow < Socialization::ActiveRecordStores::FollowStore; end
-class Like < Socialization::ActiveRecordStores::LikeStore; end
-class Mention < Socialization::ActiveRecordStores::MentionStore; end
+# class Follow < Socialization::ActiveRecordStores::FollowStore; end
+# class Like < Socialization::ActiveRecordStores::LikeStore; end
+# class Mention < Socialization::ActiveRecordStores::MentionStore; end
 
 class ImAFollower < ActiveRecord::Base
   acts_as_follower

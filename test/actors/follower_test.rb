@@ -18,8 +18,8 @@ class FollowerTest < Test::Unit::TestCase
         assert_raise(ArgumentError) { @follower.follow!(:foo) }
       end
 
-      should "call Follow.follow!" do
-        Follow.expects(:follow!).with(@follower, @followable).once
+      should "call $Follow.follow!" do
+        $Follow.expects(:follow!).with(@follower, @followable).once
         @follower.follow!(@followable)
       end
     end
@@ -29,8 +29,8 @@ class FollowerTest < Test::Unit::TestCase
         assert_raise(ArgumentError) { @follower.unfollow!(:foo) }
       end
 
-      should "call Follow.follow!" do
-        Follow.expects(:unfollow!).with(@follower, @followable).once
+      should "call $Follow.follow!" do
+        $Follow.expects(:unfollow!).with(@follower, @followable).once
         @follower.unfollow!(@followable)
       end
     end
@@ -58,15 +58,15 @@ class FollowerTest < Test::Unit::TestCase
         assert_raise(ArgumentError) { @follower.unfollow!(:foo) }
       end
 
-      should "call Follow.follows?" do
-        Follow.expects(:follows?).with(@follower, @followable).once
+      should "call $Follow.follows?" do
+        $Follow.expects(:follows?).with(@follower, @followable).once
         @follower.follows?(@followable)
       end
     end
 
     context "#followables" do
-      should "call Follow.followables" do
-        Follow.expects(:followables).with(@follower, @followable.class, { :foo => :bar })
+      should "call $Follow.followables" do
+        $Follow.expects(:followables).with(@follower, @followable.class, { :foo => :bar })
         @follower.followables(@followable.class, { :foo => :bar })
       end
     end

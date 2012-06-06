@@ -18,15 +18,15 @@ class FollowableTest < Test::Unit::TestCase
         assert_raise(ArgumentError) { @followable.followed_by?(:foo) }
       end
 
-      should "call Follow.follows?" do
-        Follow.expects(:follows?).with(@follower, @followable).once
+      should "call $Follow.follows?" do
+        $Follow.expects(:follows?).with(@follower, @followable).once
         @followable.followed_by?(@follower)
       end
     end
 
     context "#followers" do
-      should "call Follow.followers" do
-        Follow.expects(:followers).with(@followable, @follower.class, { :foo => :bar })
+      should "call $Follow.followers" do
+        $Follow.expects(:followers).with(@followable, @follower.class, { :foo => :bar })
         @followable.followers(@follower.class, { :foo => :bar })
       end
     end

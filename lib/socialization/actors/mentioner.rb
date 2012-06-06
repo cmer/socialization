@@ -24,7 +24,7 @@ module Socialization
       # @return [Boolean]
       def mention!(mentionable)
         raise ArgumentError, "#{mentionable} is not mentionable!"  unless mentionable.respond_to?(:is_mentionable?) && mentionable.is_mentionable?
-        Mention.mention!(self, mentionable)
+        Socialization.mention_model.mention!(self, mentionable)
       end
 
       # Delete a {MentionStores mention} relationship.
@@ -33,7 +33,7 @@ module Socialization
       # @return [Boolean]
       def unmention!(mentionable)
         raise ArgumentError, "#{mentionable} is not mentionable!" unless mentionable.respond_to?(:is_mentionable?) && mentionable.is_mentionable?
-        Mention.unmention!(self, mentionable)
+        Socialization.mention_model.unmention!(self, mentionable)
       end
 
       # Toggles a {MentionStores mention} relationship.
@@ -57,7 +57,7 @@ module Socialization
       # @return [Boolean]
       def mentions?(mentionable)
         raise ArgumentError, "#{mentionable} is not mentionable!" unless mentionable.respond_to?(:is_mentionable?) && mentionable.is_mentionable?
-        Mention.mentions?(self, mentionable)
+        Socialization.mention_model.mentions?(self, mentionable)
       end
 
       # Returns all the mentionables of a certain type that are mentioned by self
@@ -66,7 +66,7 @@ module Socialization
       # @params [Hash] opts a hash of options
       # @return [Array<Mentionable, Numeric>] An array of Mentionable objects or IDs
       def mentionables(klass, opts = {})
-        Mention.mentionables(self, klass, opts)
+        Socialization.mention_model.mentionables(self, klass, opts)
       end
 
     end

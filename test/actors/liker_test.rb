@@ -18,8 +18,8 @@ class LikerTest < Test::Unit::TestCase
         assert_raise(ArgumentError) { @liker.like!(:foo) }
       end
 
-      should "call Like.like!" do
-        Like.expects(:like!).with(@liker, @likeable).once
+      should "call $Like.like!" do
+        $Like.expects(:like!).with(@liker, @likeable).once
         @liker.like!(@likeable)
       end
     end
@@ -29,8 +29,8 @@ class LikerTest < Test::Unit::TestCase
         assert_raise(ArgumentError) { @liker.unlike!(:foo) }
       end
 
-      should "call Like.like!" do
-        Like.expects(:unlike!).with(@liker, @likeable).once
+      should "call $Like.like!" do
+        $Like.expects(:unlike!).with(@liker, @likeable).once
         @liker.unlike!(@likeable)
       end
     end
@@ -58,15 +58,15 @@ class LikerTest < Test::Unit::TestCase
         assert_raise(ArgumentError) { @liker.unlike!(:foo) }
       end
 
-      should "call Like.likes?" do
-        Like.expects(:likes?).with(@liker, @likeable).once
+      should "call $Like.likes?" do
+        $Like.expects(:likes?).with(@liker, @likeable).once
         @liker.likes?(@likeable)
       end
     end
 
     context "#likeables" do
-      should "call Like.likeables" do
-        Like.expects(:likeables).with(@liker, @likeable.class, { :foo => :bar })
+      should "call $Like.likeables" do
+        $Like.expects(:likeables).with(@liker, @likeable.class, { :foo => :bar })
         @liker.likeables(@likeable.class, { :foo => :bar })
       end
     end

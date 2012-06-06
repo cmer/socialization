@@ -24,7 +24,7 @@ module Socialization
       # @return [Boolean]
       def follow!(followable)
         raise ArgumentError, "#{followable} is not followable!"  unless followable.respond_to?(:is_followable?) && followable.is_followable?
-        Follow.follow!(self, followable)
+        Socialization.follow_model.follow!(self, followable)
       end
 
       # Delete a {FollowStores follow} relationship.
@@ -33,7 +33,7 @@ module Socialization
       # @return [Boolean]
       def unfollow!(followable)
         raise ArgumentError, "#{followable} is not followable!" unless followable.respond_to?(:is_followable?) && followable.is_followable?
-        Follow.unfollow!(self, followable)
+        Socialization.follow_model.unfollow!(self, followable)
       end
 
       # Toggles a {FollowStores follow} relationship.
@@ -57,7 +57,7 @@ module Socialization
       # @return [Boolean]
       def follows?(followable)
         raise ArgumentError, "#{followable} is not followable!" unless followable.respond_to?(:is_followable?) && followable.is_followable?
-        Follow.follows?(self, followable)
+        Socialization.follow_model.follows?(self, followable)
       end
 
       # Returns all the followables of a certain type that are followed by self
@@ -66,7 +66,7 @@ module Socialization
       # @params [Hash] opts a hash of options
       # @return [Array<Followable, Numeric>] An array of Followable objects or IDs
       def followables(klass, opts = {})
-        Follow.followables(self, klass, opts)
+        Socialization.follow_model.followables(self, klass, opts)
       end
 
     end

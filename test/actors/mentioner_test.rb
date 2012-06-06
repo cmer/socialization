@@ -18,8 +18,8 @@ class MentionerTest < Test::Unit::TestCase
         assert_raise(ArgumentError) { @mentioner.mention!(:foo) }
       end
 
-      should "call Mention.mention!" do
-        Mention.expects(:mention!).with(@mentioner, @mentionable).once
+      should "call $Mention.mention!" do
+        $Mention.expects(:mention!).with(@mentioner, @mentionable).once
         @mentioner.mention!(@mentionable)
       end
     end
@@ -29,8 +29,8 @@ class MentionerTest < Test::Unit::TestCase
         assert_raise(ArgumentError) { @mentioner.unmention!(:foo) }
       end
 
-      should "call Mention.mention!" do
-        Mention.expects(:unmention!).with(@mentioner, @mentionable).once
+      should "call $Mention.mention!" do
+        $Mention.expects(:unmention!).with(@mentioner, @mentionable).once
         @mentioner.unmention!(@mentionable)
       end
     end
@@ -58,15 +58,15 @@ class MentionerTest < Test::Unit::TestCase
         assert_raise(ArgumentError) { @mentioner.unmention!(:foo) }
       end
 
-      should "call Mention.mentions?" do
-        Mention.expects(:mentions?).with(@mentioner, @mentionable).once
+      should "call $Mention.mentions?" do
+        $Mention.expects(:mentions?).with(@mentioner, @mentionable).once
         @mentioner.mentions?(@mentionable)
       end
     end
 
     context "#mentionables" do
-      should "call Mention.mentionables" do
-        Mention.expects(:mentionables).with(@mentioner, @mentionable.class, { :foo => :bar })
+      should "call $Mention.mentionables" do
+        $Mention.expects(:mentionables).with(@mentioner, @mentionable.class, { :foo => :bar })
         @mentioner.mentionables(@mentionable.class, { :foo => :bar })
       end
     end

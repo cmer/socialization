@@ -18,15 +18,15 @@ class MentionableTest < Test::Unit::TestCase
         assert_raise(ArgumentError) { @mentionable.mentioned_by?(:foo) }
       end
 
-      should "call Mention.mentions?" do
-        Mention.expects(:mentions?).with(@mentioner, @mentionable).once
+      should "call $Mention.mentions?" do
+        $Mention.expects(:mentions?).with(@mentioner, @mentionable).once
         @mentionable.mentioned_by?(@mentioner)
       end
     end
 
     context "#mentioners" do
-      should "call Mention.mentioners" do
-        Mention.expects(:mentioners).with(@mentionable, @mentioner.class, { :foo => :bar })
+      should "call $Mentionmentioners" do
+        $Mention.expects(:mentioners).with(@mentionable, @mentioner.class, { :foo => :bar })
         @mentionable.mentioners(@mentioner.class, { :foo => :bar })
       end
     end

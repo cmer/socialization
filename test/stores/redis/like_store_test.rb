@@ -1,9 +1,10 @@
 require File.expand_path(File.dirname(__FILE__))+'/../../test_helper'
 
-class ActiveRecordLikeStoreTest < Test::Unit::TestCase
-  context "ActiveRecordStore::LikeStoreTest" do
+class RedisLikeStoreTest < Test::Unit::TestCase
+  context "RedisStores::LikeStoreTest" do
     setup do
-      @klass = Socialization::ActiveRecordStores::LikeStore
+      use_redis_store
+      @klass = Socialization::RedisStores::LikeStore
       @klass.touch nil
       @klass.after_like nil
       @klass.after_unlike nil
@@ -11,17 +12,17 @@ class ActiveRecordLikeStoreTest < Test::Unit::TestCase
       @likeable = ImALikeable.create
     end
 
-    context "data store" do
-      should "inherit Socialization::ActiveRecordStores::LikeStore" do
-        assert_equal Socialization::ActiveRecordStores::LikeStore, Socialization.like_model
+    context "Stores" do
+      should "inherit Socialization::RedisStores::LikeStore" do
+        assert_equal Socialization::RedisStores::LikeStore, Socialization.like_model
       end
     end
 
     context "#like!" do
       should "create a Like record" do
         @klass.like!(@liker, @likeable)
-        assert_match_liker @klass.last, @liker
-        assert_match_likeable @klass.last, @likeable
+        assert_equal ["#{@liker.id}"], Socialization.redis.smembers(likers_key)
+        assert_equal ["#{@likeable.id}"], Socialization.redis.smembers(likeables_key)
       end
 
       should "touch liker when instructed" do
@@ -60,10 +61,8 @@ class ActiveRecordLikeStoreTest < Test::Unit::TestCase
 
     context "#likes?" do
       should "return true when like exists" do
-        @klass.create! do |f|
-          f.liker = @liker
-          f.likeable = @likeable
-        end
+        Socialization.redis.sadd likers_key, @liker.id
+        Socialization.redis.sadd likeables_key, @likeable.id
         assert_true @klass.likes?(@liker, @likeable)
       end
 
@@ -78,7 +77,7 @@ class ActiveRecordLikeStoreTest < Test::Unit::TestCase
         liker2 = ImALiker.create
         liker1.like!(@likeable)
         liker2.like!(@likeable)
-        assert_equal [liker1, liker2], @klass.likers(@likeable, liker1.class)
+        assert_array_similarity [liker1, liker2], @klass.likers(@likeable, liker1.class)
       end
 
       should "return an array of liker ids when plucking" do
@@ -86,25 +85,46 @@ class ActiveRecordLikeStoreTest < Test::Unit::TestCase
         liker2 = ImALiker.create
         liker1.like!(@likeable)
         liker2.like!(@likeable)
-        assert_equal [liker1.id, liker2.id], @klass.likers(@likeable, liker1.class, :pluck => :id)
+        assert_array_similarity [liker1.id, liker2.id], @klass.likers(@likeable, liker1.class, :pluck => :id)
       end
     end
 
     context "#likeables" do
-      should "return an array of likers" do
+      should "return an array of likeables" do
         likeable1 = ImALikeable.create
         likeable2 = ImALikeable.create
         @liker.like!(likeable1)
         @liker.like!(likeable2)
-        assert_equal [likeable1, likeable2], @klass.likeables(@liker, likeable1.class)
+
+        assert_array_similarity [likeable1, likeable2], @klass.likeables(@liker, likeable1.class)
       end
 
-      should "return an array of liker ids when plucking" do
+      should "return an array of likeables ids when plucking" do
         likeable1 = ImALikeable.create
         likeable2 = ImALikeable.create
         @liker.like!(likeable1)
         @liker.like!(likeable2)
-        assert_equal [likeable1.id, likeable2.id], @klass.likeables(@liker, likeable1.class, :pluck => :id)
+        assert_array_similarity [likeable1.id, likeable2.id], @klass.likeables(@liker, likeable1.class, :pluck => :id)
+      end
+    end
+
+    context "#generate_likers_key" do
+      should "return valid key when passed objects" do
+        assert_equal "Likers:ImALikeable:#{@likeable.id}:ImALiker", likers_key(@liker, @likeable)
+      end
+
+      should "return valid key when liker is a class" do
+        assert_equal "Likers:ImALikeable:#{@likeable.id}:ImALiker", likers_key(@liker.class, @likeable)
+      end
+    end
+
+    context "#generate_likeables_key" do
+      should "return valid key when passed objects" do
+        assert_equal "Likeables:ImALiker:#{@liker.id}:ImALikeable", likeables_key(@liker, @likeable)
+      end
+
+      should "return valid key when likeable is a class" do
+        assert_equal "Likeables:ImALiker:#{@liker.id}:ImALikeable", likeables_key(@liker, @likeable.class)
       end
     end
 
@@ -117,5 +137,17 @@ class ActiveRecordLikeStoreTest < Test::Unit::TestCase
 
   def assert_match_likeable(like_record, likeable)
     assert like_record.likeable_type ==  likeable.class.to_s && like_record.likeable_id == likeable.id
+  end
+
+  def likers_key(liker = nil, likeable = nil)
+    liker ||= @liker
+    likeable ||= @likeable
+    @klass.send(:generate_likers_key, liker, likeable)
+  end
+
+  def likeables_key(liker = nil, likeable = nil)
+    liker ||= @liker
+    likeable ||= @likeable
+    @klass.send(:generate_likeables_key, liker, likeable)
   end
 end

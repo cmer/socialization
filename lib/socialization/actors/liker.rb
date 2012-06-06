@@ -24,7 +24,7 @@ module Socialization
       # @return [Boolean]
       def like!(likeable)
         raise ArgumentError, "#{likeable} is not likeable!"  unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
-        Like.like!(self, likeable)
+        Socialization.like_model.like!(self, likeable)
       end
 
       # Delete a {LikeStores like} relationship.
@@ -33,7 +33,7 @@ module Socialization
       # @return [Boolean]
       def unlike!(likeable)
         raise ArgumentError, "#{likeable} is not likeable!" unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
-        Like.unlike!(self, likeable)
+        Socialization.like_model.unlike!(self, likeable)
       end
 
       # Toggles a {LikeStores like} relationship.
@@ -57,7 +57,7 @@ module Socialization
       # @return [Boolean]
       def likes?(likeable)
         raise ArgumentError, "#{likeable} is not likeable!" unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
-        Like.likes?(self, likeable)
+        Socialization.like_model.likes?(self, likeable)
       end
 
       # Returns all the likeables of a certain type that are liked by self
@@ -66,7 +66,7 @@ module Socialization
       # @params [Hash] opts a hash of options
       # @return [Array<Likeable, Numeric>] An array of Likeable objects or IDs
       def likeables(klass, opts = {})
-        Like.likeables(self, klass, opts)
+        Socialization.like_model.likeables(self, klass, opts)
       end
 
     end

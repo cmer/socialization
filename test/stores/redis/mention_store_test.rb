@@ -1,9 +1,10 @@
 require File.expand_path(File.dirname(__FILE__))+'/../../test_helper'
 
-class ActiveRecordMentionStoreTest < Test::Unit::TestCase
-  context "ActiveRecordStores::MentionStoreTest" do
+class RedisMentionStoreTest < Test::Unit::TestCase
+  context "RedisStores::MentionStoreTest" do
     setup do
-      @klass = Socialization::ActiveRecordStores::MentionStore
+      use_redis_store
+      @klass = Socialization::RedisStores::MentionStore
       @klass.touch nil
       @klass.after_mention nil
       @klass.after_unmention nil
@@ -11,17 +12,17 @@ class ActiveRecordMentionStoreTest < Test::Unit::TestCase
       @mentionable = ImAMentionable.create
     end
 
-    context "data store" do
-      should "inherit Socialization::ActiveRecordStores::MentionStore" do
-        assert_equal Socialization::ActiveRecordStores::MentionStore, Socialization.mention_model
+    context "Stores" do
+      should "inherit Socialization::RedisStores::MentionStore" do
+        assert_equal Socialization::RedisStores::MentionStore, Socialization.mention_model
       end
     end
 
     context "#mention!" do
       should "create a Mention record" do
         @klass.mention!(@mentioner, @mentionable)
-        assert_match_mentioner @klass.last, @mentioner
-        assert_match_mentionable @klass.last, @mentionable
+        assert_equal ["#{@mentioner.id}"], Socialization.redis.smembers(mentioners_key)
+        assert_equal ["#{@mentionable.id}"], Socialization.redis.smembers(mentionables_key)
       end
 
       should "touch mentioner when instructed" do
@@ -60,10 +61,8 @@ class ActiveRecordMentionStoreTest < Test::Unit::TestCase
 
     context "#mentions?" do
       should "return true when mention exists" do
-        @klass.create! do |f|
-          f.mentioner = @mentioner
-          f.mentionable = @mentionable
-        end
+        Socialization.redis.sadd mentioners_key, @mentioner.id
+        Socialization.redis.sadd mentionables_key, @mentionable.id
         assert_true @klass.mentions?(@mentioner, @mentionable)
       end
 
@@ -78,7 +77,7 @@ class ActiveRecordMentionStoreTest < Test::Unit::TestCase
         mentioner2 = ImAMentioner.create
         mentioner1.mention!(@mentionable)
         mentioner2.mention!(@mentionable)
-        assert_equal [mentioner1, mentioner2], @klass.mentioners(@mentionable, mentioner1.class)
+        assert_array_similarity [mentioner1, mentioner2], @klass.mentioners(@mentionable, mentioner1.class)
       end
 
       should "return an array of mentioner ids when plucking" do
@@ -86,25 +85,46 @@ class ActiveRecordMentionStoreTest < Test::Unit::TestCase
         mentioner2 = ImAMentioner.create
         mentioner1.mention!(@mentionable)
         mentioner2.mention!(@mentionable)
-        assert_equal [mentioner1.id, mentioner2.id], @klass.mentioners(@mentionable, mentioner1.class, :pluck => :id)
+        assert_array_similarity [mentioner1.id, mentioner2.id], @klass.mentioners(@mentionable, mentioner1.class, :pluck => :id)
       end
     end
 
     context "#mentionables" do
-      should "return an array of mentioners" do
+      should "return an array of mentionables" do
         mentionable1 = ImAMentionable.create
         mentionable2 = ImAMentionable.create
         @mentioner.mention!(mentionable1)
         @mentioner.mention!(mentionable2)
-        assert_equal [mentionable1, mentionable2], @klass.mentionables(@mentioner, mentionable1.class)
+
+        assert_array_similarity [mentionable1, mentionable2], @klass.mentionables(@mentioner, mentionable1.class)
       end
 
-      should "return an array of mentioner ids when plucking" do
+      should "return an array of mentionables ids when plucking" do
         mentionable1 = ImAMentionable.create
         mentionable2 = ImAMentionable.create
         @mentioner.mention!(mentionable1)
         @mentioner.mention!(mentionable2)
-        assert_equal [mentionable1.id, mentionable2.id], @klass.mentionables(@mentioner, mentionable1.class, :pluck => :id)
+        assert_array_similarity [mentionable1.id, mentionable2.id], @klass.mentionables(@mentioner, mentionable1.class, :pluck => :id)
+      end
+    end
+
+    context "#generate_mentioners_key" do
+      should "return valid key when passed objects" do
+        assert_equal "Mentioners:ImAMentionable:#{@mentionable.id}:ImAMentioner", mentioners_key(@mentioner, @mentionable)
+      end
+
+      should "return valid key when mentioner is a class" do
+        assert_equal "Mentioners:ImAMentionable:#{@mentionable.id}:ImAMentioner", mentioners_key(@mentioner.class, @mentionable)
+      end
+    end
+
+    context "#generate_mentionables_key" do
+      should "return valid key when passed objects" do
+        assert_equal "Mentionables:ImAMentioner:#{@mentioner.id}:ImAMentionable", mentionables_key(@mentioner, @mentionable)
+      end
+
+      should "return valid key when mentionable is a class" do
+        assert_equal "Mentionables:ImAMentioner:#{@mentioner.id}:ImAMentionable", mentionables_key(@mentioner, @mentionable.class)
       end
     end
 
@@ -117,5 +137,17 @@ class ActiveRecordMentionStoreTest < Test::Unit::TestCase
 
   def assert_match_mentionable(mention_record, mentionable)
     assert mention_record.mentionable_type ==  mentionable.class.to_s && mention_record.mentionable_id == mentionable.id
+  end
+
+  def mentioners_key(mentioner = nil, mentionable = nil)
+    mentioner ||= @mentioner
+    mentionable ||= @mentionable
+    @klass.send(:generate_mentioners_key, mentioner, mentionable)
+  end
+
+  def mentionables_key(mentioner = nil, mentionable = nil)
+    mentioner ||= @mentioner
+    mentionable ||= @mentionable
+    @klass.send(:generate_mentionables_key, mentioner, mentionable)
   end
 end

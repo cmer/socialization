@@ -1,7 +1,7 @@
 require 'rails/generators'
 require 'rails/generators/migration'
 
-STORES = %w(active_record)
+STORES = %w(active_record redis)
 
 class SocializationGenerator < Rails::Generators::Base
   include Rails::Generators::Migration
