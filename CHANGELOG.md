@@ -1,6 +1,6 @@
 # Changelog
 
-## Master
+## 0.5.0.beta (June 6, 2012)
 
 * **MAJOR REFACTORING:** Your Like, Follow and Mention models should now inherit the Socialization store base class instead of using the acts_as helper. (e.g.: class Follow < Socialization::ActiveRecordStores::FollowStore). See demo app for an example. Your code should be mostly unaffected.
 * Changed: The persistence logic has now been moved to the Socialization::ActiveRecordStores namespace. More stores such as Redis or MongoDB can be easily added.
