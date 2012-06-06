@@ -1,6 +1,6 @@
 # Socialization
 
-Socialization is a Ruby Gem that allows any model to `Follow`, `Like` and/or `Mention` any other model. This is accomplished through double polymorphic relationships, but you don't need to know that since all the complexity is hidden from you.
+Socialization is a Ruby Gem that allows any ActiveRecord model to `Follow`, `Like` and/or `Mention` any other model. ActiveRecord or Redis can be used as a data store.
 
 The Follow feature is similar to Twitter's follow. For example, John follows Jane. Unlike Facebook's "friendship", Follow is a one-way concept. The fact that John follows Jane doesn't mean that Jane follows John.
 
@@ -20,7 +20,10 @@ Add the gem to the gemfile:
 Run the generator:
 `rails generate socialization -s`
 
-This will generate three migration files and three models named Follow, Like and Mention. You may delete the Follow, Like or Mention model and migration if you don't need that functionality in your application.
+Or if you want to use Redis as your data store:
+`rails generate socialization -s --store=redis`
+
+This will generate three migration files (when using ActiveRecord) and three models named Follow, Like and Mention. You may delete any of the Follow, Like or Mention models and migrations if you don't need that functionality in your application.
 
 ### Rails 2.3.x Support
 
