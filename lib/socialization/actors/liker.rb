@@ -18,7 +18,7 @@ module Socialization
         true
       end
 
-      # Create a new {LikeStores like} relationship.
+      # Create a new {LikeStore like} relationship.
       #
       # @param [Likeable] likeable the object to be liked.
       # @return [Boolean]
@@ -27,7 +27,7 @@ module Socialization
         Socialization.like_model.like!(self, likeable)
       end
 
-      # Delete a {LikeStores like} relationship.
+      # Delete a {LikeStore like} relationship.
       #
       # @param [Likeable] likeable the object to unlike.
       # @return [Boolean]
@@ -36,7 +36,7 @@ module Socialization
         Socialization.like_model.unlike!(self, likeable)
       end
 
-      # Toggles a {LikeStores like} relationship.
+      # Toggles a {LikeStore like} relationship.
       #
       # @param [Likeable] likeable the object to like/unlike.
       # @return [Boolean]

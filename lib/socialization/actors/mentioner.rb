@@ -18,7 +18,7 @@ module Socialization
         true
       end
 
-      # Create a new {MentionStores mention} relationship.
+      # Create a new {MentionStore mention} relationship.
       #
       # @param [Mentionable] mentionable the object to be mentioned.
       # @return [Boolean]
@@ -27,7 +27,7 @@ module Socialization
         Socialization.mention_model.mention!(self, mentionable)
       end
 
-      # Delete a {MentionStores mention} relationship.
+      # Delete a {MentionStore mention} relationship.
       #
       # @param [Mentionable] mentionable the object to unmention.
       # @return [Boolean]
@@ -36,7 +36,7 @@ module Socialization
         Socialization.mention_model.unmention!(self, mentionable)
       end
 
-      # Toggles a {MentionStores mention} relationship.
+      # Toggles a {MentionStore mention} relationship.
       #
       # @param [Mentionable] mentionable the object to mention/unmention.
       # @return [Boolean]
