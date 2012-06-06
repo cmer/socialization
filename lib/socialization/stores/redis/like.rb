@@ -1,33 +1,14 @@
+require File.expand_path(File.dirname(__FILE__)) + '/base'
+
 module Socialization
-  module ActiveRecordStores
-    class LikeStore < ActiveRecord::Base
-      belongs_to :liker,    :polymorphic => true
-      belongs_to :likeable, :polymorphic => true
-
-      scope :liked_by, lambda { |liker| where(
-        :liker_type    => liker.class.table_name.classify,
-        :liker_id      => liker.id)
-      }
-
-      scope :liking,   lambda { |likeable| where(
-        :likeable_type => likeable.class.table_name.classify,
-        :likeable_id   => likeable.id)
-      }
-
-      @@after_create_hook = nil
-      @@after_destroy_hook = nil
-
+  module RedisStores
+    class Like < Socialization::RedisStores::Base
       class << self
-        def table_name
-          'likes'
-        end
-
         def like!(liker, likeable)
           unless likes?(liker, likeable)
-            self.create! do |like|
-              like.liker = liker
-              like.likeable = likeable
-            end
+            Socialization.redis.sadd generate_likers_key(liker, likeable), liker.id
+            Socialization.redis.sadd generate_likeables_key(liker, likeable), likeable.id
+
             call_after_create_hook(liker, likeable)
             liker.touch if [:all, :liker].include?(touch) && liker.respond_to?(:touch)
             likeable.touch if [:all, :likeable].include?(touch) && likeable.respond_to?(:touch)
@@ -39,7 +20,9 @@ module Socialization
 
         def unlike!(liker, likeable)
           if likes?(liker, likeable)
-            like_for(liker, likeable).destroy_all
+            Socialization.redis.srem generate_likers_key(liker, likeable), liker.id
+            Socialization.redis.srem generate_likeables_key(liker, likeable), likeable.id
+
             call_after_destroy_hook(liker, likeable)
             liker.touch if [:all, :liker].include?(touch) && liker.respond_to?(:touch)
             likeable.touch if [:all, :likeable].include?(touch) && likeable.respond_to?(:touch)
@@ -50,58 +33,40 @@ module Socialization
         end
 
         def likes?(liker, likeable)
-          !like_for(liker, likeable).empty?
+          Socialization.redis.sismember generate_likers_key(liker, likeable), liker.id
         end
 
-        # Returns an ActiveRecord::Relation of all the likers of a certain type that are liking  likeable
+        # Returns an ActiveRecord::Relation of all the likers of a certain type that are likeing likeable
         def likers_relation(likeable, klass, opts = {})
-          rel = klass.where(:id =>
-            self.select(:liker_id).
-              where(:liker_type => klass.table_name.classify).
-              where(:likeable_type => likeable.class.to_s).
-              where(:likeable_id => likeable.id)
-          )
-
-          if opts[:pluck]
-            rel.pluck(opts[:pluck])
-          else
-            rel
-          end
+          ids = likers(likeable, klass, :pluck => :id)
+          klass.where('id IN (?)', ids)
         end
 
-        # Returns all the likers of a certain type that are liking  likeable
+        # Returns all the likers of a certain type that are likeing likeable
         def likers(likeable, klass, opts = {})
-          rel = likers_relation(likeable, klass, opts)
-          if rel.is_a?(ActiveRecord::Relation)
-            rel.all
+          if opts[:pluck]
+            Socialization.redis.smembers(generate_likers_key(klass, likeable)).map { |id|
+              id.to_i if id.is_integer?
+            }
           else
-            rel
+            likers_relation(likeable, klass, opts).all
           end
         end
 
         # Returns an ActiveRecord::Relation of all the likeables of a certain type that are liked by liker
         def likeables_relation(liker, klass, opts = {})
-          rel = klass.where(:id =>
-            self.select(:likeable_id).
-              where(:likeable_type => klass.table_name.classify).
-              where(:liker_type => liker.class.to_s).
-              where(:liker_id => liker.id)
-          )
-
-          if opts[:pluck]
-            rel.pluck(opts[:pluck])
-          else
-            rel
-          end
+          ids = likeables(liker, klass, :pluck => :id)
+          klass.where('id IN (?)', ids)
         end
 
         # Returns all the likeables of a certain type that are liked by liker
         def likeables(liker, klass, opts = {})
-          rel = likeables_relation(liker, klass, opts)
-          if rel.is_a?(ActiveRecord::Relation)
-            rel.all
+          if opts[:pluck]
+            Socialization.redis.smembers(generate_likeables_key(liker, klass)).map { |id|
+              id.to_i if id.is_integer?
+            }
           else
-            rel
+            likeables_relation(liker, klass, opts).all
           end
         end
 
@@ -133,8 +98,26 @@ module Socialization
           self.send(@after_destroy_hook, liker, likeable) if @after_destroy_hook
         end
 
-        def like_for(liker, likeable)
-          liked_by(liker).liking( likeable)
+        def generate_likers_key(liker, likeable)
+          raise ArgumentError.new("`likeable` needs to be an acts_as_likeable objecs, not a class.") if likeable.class == Class
+          liker_class = if liker.class == Class
+            liker
+          else
+            liker.class
+          end
+
+          "Likers:#{likeable.class}:#{likeable.id}:#{liker_class}"
+        end
+
+        def generate_likeables_key(liker, likeable)
+          raise ArgumentError.new("`liker` needs to be an acts_as_liker object, not a class.") if liker.class == Class
+          likeable_class = if likeable.class == Class
+            likeable
+          else
+            likeable.class
+          end
+
+          "Likeables:#{liker.class}:#{liker.id}:#{likeable_class}"
         end
       end # class << self
 

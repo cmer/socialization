@@ -1,2 +1,2 @@
-class Mention < Socialization::ActiveRecordStores::MentionStore
+class Mention < Socialization::ActiveRecordStores::Mention
 end

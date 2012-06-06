@@ -42,16 +42,16 @@ class Test::Unit::TestCase
 end
 
 def use_redis_store
-  Socialization.follow_model = Socialization::RedisStores::FollowStore
-  Socialization.mention_model = Socialization::RedisStores::MentionStore
-  Socialization.like_model = Socialization::RedisStores::LikeStore
+  Socialization.follow_model = Socialization::RedisStores::Follow
+  Socialization.mention_model = Socialization::RedisStores::Mention
+  Socialization.like_model = Socialization::RedisStores::Like
   setup_model_shortcuts
 end
 
 def use_ar_store
-  Socialization.follow_model = Socialization::ActiveRecordStores::FollowStore
-  Socialization.mention_model = Socialization::ActiveRecordStores::MentionStore
-  Socialization.like_model = Socialization::ActiveRecordStores::LikeStore
+  Socialization.follow_model = Socialization::ActiveRecordStores::Follow
+  Socialization.mention_model = Socialization::ActiveRecordStores::Mention
+  Socialization.like_model = Socialization::ActiveRecordStores::Like
   setup_model_shortcuts
 end
 
@@ -176,9 +176,9 @@ class Movie < ActiveRecord::Base
   has_many :comments
 end
 
-# class Follow < Socialization::ActiveRecordStores::FollowStore; end
-# class Like < Socialization::ActiveRecordStores::LikeStore; end
-# class Mention < Socialization::ActiveRecordStores::MentionStore; end
+# class Follow < Socialization::ActiveRecordStores::Follow; end
+# class Like < Socialization::ActiveRecordStores::Like; end
+# class Mention < Socialization::ActiveRecordStores::Mention; end
 
 class ImAFollower < ActiveRecord::Base
   acts_as_follower

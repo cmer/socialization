@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__))+'/../../test_helper'
 class ActiveRecordLikeStoreTest < Test::Unit::TestCase
   context "ActiveRecordStore::LikeStoreTest" do
     setup do
-      @klass = Socialization::ActiveRecordStores::LikeStore
+      @klass = Socialization::ActiveRecordStores::Like
       @klass.touch nil
       @klass.after_like nil
       @klass.after_unlike nil
@@ -12,8 +12,8 @@ class ActiveRecordLikeStoreTest < Test::Unit::TestCase
     end
 
     context "data store" do
-      should "inherit Socialization::ActiveRecordStores::LikeStore" do
-        assert_equal Socialization::ActiveRecordStores::LikeStore, Socialization.like_model
+      should "inherit Socialization::ActiveRecordStores::Like" do
+        assert_equal Socialization::ActiveRecordStores::Like, Socialization.like_model
       end
     end
 

@@ -4,7 +4,7 @@ class RedisMentionStoreTest < Test::Unit::TestCase
   context "RedisStores::MentionStoreTest" do
     setup do
       use_redis_store
-      @klass = Socialization::RedisStores::MentionStore
+      @klass = Socialization::RedisStores::Mention
       @klass.touch nil
       @klass.after_mention nil
       @klass.after_unmention nil
@@ -13,8 +13,8 @@ class RedisMentionStoreTest < Test::Unit::TestCase
     end
 
     context "Stores" do
-      should "inherit Socialization::RedisStores::MentionStore" do
-        assert_equal Socialization::RedisStores::MentionStore, Socialization.mention_model
+      should "inherit Socialization::RedisStores::Mention" do
+        assert_equal Socialization::RedisStores::Mention, Socialization.mention_model
       end
     end
 

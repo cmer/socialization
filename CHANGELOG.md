@@ -3,7 +3,7 @@
 ## 0.5.0.beta (June 6, 2012)
 
 * **IMPORTANT:** This release includes many changes, some breaking. Make sure to test your code carefully after upgrading.
-* **BREAKING CHANGE:** Your Like, Follow and Mention models should now inherit the Socialization store base class instead of using the acts_as helper. (e.g.: class Follow < Socialization::ActiveRecordStores::FollowStore). See demo app for an example.
+* **BREAKING CHANGE:** Your Like, Follow and Mention models should now inherit the Socialization store base class instead of using the acts_as helper. (e.g.: class Follow < Socialization::ActiveRecordStores::Follow). See demo app for an example.
 * **BREAKING CHANGE:** the `followers`, `followables` etc methods now return an array of objects. Use methods such as `followers_relation` for an ActiveRecord::Relation.
 * Changed: The persistence logic has now been moved to the Socialization::ActiveRecordStores namespace. More stores can be easily added.
 * Changed: `like!`, `follow!`, and `mention!` now return a boolean. True when the action was successful, false when it wasn't (e.g.: the relationship already exists).

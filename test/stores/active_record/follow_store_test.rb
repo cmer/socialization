@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__))+'/../../test_helper'
 class ActiveRecordFollowStoreTest < Test::Unit::TestCase
   context "ActiveRecordStores::FollowStoreTest" do
     setup do
-      @klass = Socialization::ActiveRecordStores::FollowStore
+      @klass = Socialization::ActiveRecordStores::Follow
       @klass.touch nil
       @klass.after_follow nil
       @klass.after_unfollow nil
@@ -12,8 +12,8 @@ class ActiveRecordFollowStoreTest < Test::Unit::TestCase
     end
 
     context "data store" do
-      should "inherit Socialization::ActiveRecordStores::FollowStore" do
-        assert_equal Socialization::ActiveRecordStores::FollowStore, Socialization.follow_model
+      should "inherit Socialization::ActiveRecordStores::Follow" do
+        assert_equal Socialization::ActiveRecordStores::Follow, Socialization.follow_model
       end
     end
 

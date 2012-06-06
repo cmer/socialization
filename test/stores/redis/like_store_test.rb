@@ -4,7 +4,7 @@ class RedisLikeStoreTest < Test::Unit::TestCase
   context "RedisStores::LikeStoreTest" do
     setup do
       use_redis_store
-      @klass = Socialization::RedisStores::LikeStore
+      @klass = Socialization::RedisStores::Like
       @klass.touch nil
       @klass.after_like nil
       @klass.after_unlike nil
@@ -13,8 +13,8 @@ class RedisLikeStoreTest < Test::Unit::TestCase
     end
 
     context "Stores" do
-      should "inherit Socialization::RedisStores::LikeStore" do
-        assert_equal Socialization::RedisStores::LikeStore, Socialization.like_model
+      should "inherit Socialization::RedisStores::Like" do
+        assert_equal Socialization::RedisStores::Like, Socialization.like_model
       end
     end
 

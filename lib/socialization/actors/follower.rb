@@ -18,7 +18,7 @@ module Socialization
         true
       end
 
-      # Create a new {FollowStore follow} relationship.
+      # Create a new {Follow follow} relationship.
       #
       # @param [Followable] followable the object to be followed.
       # @return [Boolean]
@@ -27,7 +27,7 @@ module Socialization
         Socialization.follow_model.follow!(self, followable)
       end
 
-      # Delete a {FollowStore follow} relationship.
+      # Delete a {Follow follow} relationship.
       #
       # @param [Followable] followable the object to unfollow.
       # @return [Boolean]
@@ -36,7 +36,7 @@ module Socialization
         Socialization.follow_model.unfollow!(self, followable)
       end
 
-      # Toggles a {FollowStore follow} relationship.
+      # Toggles a {Follow follow} relationship.
       #
       # @param [Followable] followable the object to follow/unfollow.
       # @return [Boolean]

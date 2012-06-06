@@ -1,2 +1,2 @@
-class Mention < Socialization::RedisStores::MentionStore
+class Mention < Socialization::RedisStores::Mention
 end

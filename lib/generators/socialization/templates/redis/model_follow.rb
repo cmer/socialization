@@ -1,2 +1,2 @@
-class Follow < Socialization::RedisStores::FollowStore
+class Follow < Socialization::RedisStores::Follow
 end

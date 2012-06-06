@@ -1,2 +1,2 @@
-class Like < Socialization::RedisStores::LikeStore
+class Like < Socialization::RedisStores::Like
 end

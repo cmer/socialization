@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__))+'/../../test_helper'
 class ActiveRecordMentionStoreTest < Test::Unit::TestCase
   context "ActiveRecordStores::MentionStoreTest" do
     setup do
-      @klass = Socialization::ActiveRecordStores::MentionStore
+      @klass = Socialization::ActiveRecordStores::Mention
       @klass.touch nil
       @klass.after_mention nil
       @klass.after_unmention nil
@@ -12,8 +12,8 @@ class ActiveRecordMentionStoreTest < Test::Unit::TestCase
     end
 
     context "data store" do
-      should "inherit Socialization::ActiveRecordStores::MentionStore" do
-        assert_equal Socialization::ActiveRecordStores::MentionStore, Socialization.mention_model
+      should "inherit Socialization::ActiveRecordStores::Mention" do
+        assert_equal Socialization::ActiveRecordStores::Mention, Socialization.mention_model
       end
     end
 

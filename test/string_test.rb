@@ -5,7 +5,7 @@ class StringTest < Test::Unit::TestCase
     should "return a class" do
       assert_equal Socialization, "Socialization".deep_const_get
       assert_equal Socialization::ActiveRecordStores, "Socialization::ActiveRecordStores".deep_const_get
-      assert_equal Socialization::ActiveRecordStores::FollowStore, "Socialization::ActiveRecordStores::FollowStore".deep_const_get
+      assert_equal Socialization::ActiveRecordStores::Follow, "Socialization::ActiveRecordStores::Follow".deep_const_get
 
       assert_raise(NameError) { "Foo::Bar".deep_const_get }
     end
