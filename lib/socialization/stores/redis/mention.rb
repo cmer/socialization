@@ -1,8 +1,11 @@
-require File.expand_path(File.dirname(__FILE__)) + '/base'
+# require File.expand_path(File.dirname(__FILE__)) + '/base'
 
 module Socialization
   module RedisStores
     class Mention < Socialization::RedisStores::Base
+      include Socialization::RedisStores::Mixins::Base
+      include Socialization::Stores::Mixins::Mention
+
       class << self
         def mention!(mentioner, mentionable)
           unless mentions?(mentioner, mentionable)

@@ -1,6 +1,9 @@
 module Socialization
   module ActiveRecordStores
     class Mention < ActiveRecord::Base
+      include Socialization::ActiveRecordStores::Mixins::Base
+      include Socialization::Stores::Mixins::Mention
+
       belongs_to :mentioner,   :polymorphic => true
       belongs_to :mentionable, :polymorphic => true
 
@@ -13,9 +16,6 @@ module Socialization
         :mentionable_type => mentionable.class.table_name.classify,
         :mentionable_id   => mentionable.id)
       }
-
-      @@after_create_hook = nil
-      @@after_destroy_hook = nil
 
       class << self
         def mention!(mentioner, mentionable)

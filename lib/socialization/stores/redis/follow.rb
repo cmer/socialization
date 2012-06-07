@@ -1,8 +1,11 @@
-require File.expand_path(File.dirname(__FILE__)) + '/base'
+# require File.expand_path(File.dirname(__FILE__)) + '/base'
 
 module Socialization
   module RedisStores
     class Follow < Socialization::RedisStores::Base
+      include Socialization::RedisStores::Mixins::Base
+      include Socialization::Stores::Mixins::Follow
+
       class << self
         def follow!(follower, followable)
           unless follows?(follower, followable)

@@ -1,9 +1,5 @@
 require 'active_support/concern'
 
-%w(helpers stores actors victims).each do |path|
-  Dir["#{File.dirname(__FILE__)}/#{path}/**/*.rb"].each { |f| require(f) }
-end
-
 module Socialization
   module ActsAsHelpers
     extend ActiveSupport::Concern

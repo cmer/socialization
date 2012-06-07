@@ -1,6 +1,9 @@
 module Socialization
   module ActiveRecordStores
     class Follow < ActiveRecord::Base
+      include Socialization::ActiveRecordStores::Mixins::Base
+      include Socialization::Stores::Mixins::Follow
+
       belongs_to :follower,   :polymorphic => true
       belongs_to :followable, :polymorphic => true
 
@@ -13,9 +16,6 @@ module Socialization
         :followable_type => followable.class.table_name.classify,
         :followable_id   => followable.id)
       }
-
-      @@after_create_hook = nil
-      @@after_destroy_hook = nil
 
       class << self
         def follow!(follower, followable)

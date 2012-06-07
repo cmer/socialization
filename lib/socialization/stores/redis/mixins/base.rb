@@ -1,6 +1,8 @@
 module Socialization
   module RedisStores
-    class Base
+    module Mixins
+      module Base
+      end
     end
   end
 end

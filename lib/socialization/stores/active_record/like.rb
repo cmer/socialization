@@ -1,6 +1,9 @@
 module Socialization
   module ActiveRecordStores
     class Like < ActiveRecord::Base
+      include Socialization::ActiveRecordStores::Mixins::Base
+      include Socialization::Stores::Mixins::Like
+
       belongs_to :liker,    :polymorphic => true
       belongs_to :likeable, :polymorphic => true
 
@@ -13,9 +16,6 @@ module Socialization
         :likeable_type => likeable.class.table_name.classify,
         :likeable_id   => likeable.id)
       }
-
-      @@after_create_hook = nil
-      @@after_destroy_hook = nil
 
       class << self
         def like!(liker, likeable)
