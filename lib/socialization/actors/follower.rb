@@ -68,6 +68,7 @@ module Socialization
       def followables(klass, opts = {})
         Socialization.follow_model.followables(self, klass, opts)
       end
+      alias :followees :followables
 
       # Returns a relation for all the followables of a certain type that are followed by self
       #
@@ -77,6 +78,7 @@ module Socialization
       def followables_relation(klass, opts = {})
         Socialization.follow_model.followables_relation(self, klass, opts)
       end
+      alias :followees_relation :followables_relation
     end
   end
 end

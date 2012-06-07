@@ -68,6 +68,7 @@ module Socialization
       def mentionables(klass, opts = {})
         Socialization.mention_model.mentionables(self, klass, opts)
       end
+      alias :mentionees :mentionables
 
       # Returns a relation for all the mentionables of a certain type that are mentioned by self
       #
@@ -77,6 +78,7 @@ module Socialization
       def mentionables_relation(klass, opts = {})
         Socialization.mention_model.mentionables_relation(self, klass, opts)
       end
+      alias :mentionees_relation :mentionables_relation
     end
   end
 end

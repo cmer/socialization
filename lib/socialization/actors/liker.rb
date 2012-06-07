@@ -68,6 +68,7 @@ module Socialization
       def likeables(klass, opts = {})
         Socialization.like_model.likeables(self, klass, opts)
       end
+      alias :likees :likeables
 
       # Returns a relation for all the likeables of a certain type that are liked by self
       #
@@ -77,6 +78,7 @@ module Socialization
       def likeables_relation(klass, opts = {})
         Socialization.like_model.likeables_relation(self, klass, opts)
       end
+      alias :likees_relation :likeables_relation
     end
   end
 end
