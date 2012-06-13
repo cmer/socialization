@@ -3,6 +3,7 @@ module ActiveRecord
     def is_mentionable?
       false
     end
+    alias mentionable? is_mentionable?
   end
 end
 
@@ -17,6 +18,7 @@ module Socialization
       def is_mentionable?
         true
       end
+      alias mentionable? is_mentionable?
 
       # Specifies if self is mentioned by a {Mentioner} object.
       #

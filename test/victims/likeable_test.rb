@@ -7,9 +7,15 @@ class LikeableTest < Test::Unit::TestCase
       @likeable = ImALikeable.create
     end
 
-    context "#is_likeable" do
+    context "#is_likeable?" do
       should "return true" do
         assert_true @likeable.is_likeable?
+      end
+    end
+
+    context "#likeable?" do
+      should "return true" do
+        assert_true @likeable.likeable?
       end
     end
 

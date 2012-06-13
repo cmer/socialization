@@ -7,9 +7,15 @@ class FollowerTest < Test::Unit::TestCase
       @followable = ImAFollowable.create
     end
 
-    context "#is_follower" do
+    context "#is_follower?" do
       should "return true" do
         assert_true @follower.is_follower?
+      end
+    end
+
+    context "#follower?" do
+      should "return true" do
+        assert_true @follower.follower?
       end
     end
 

@@ -7,9 +7,15 @@ class MentionableTest < Test::Unit::TestCase
       @mentionable = ImAMentionable.create
     end
 
-    context "#is_mentionable" do
+    context "#is_mentionable?" do
       should "return true" do
         assert_true @mentionable.is_mentionable?
+      end
+    end
+
+    context "#mentionable?" do
+      should "return true" do
+        assert_true @mentionable.mentionable?
       end
     end
 

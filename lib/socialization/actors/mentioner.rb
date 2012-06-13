@@ -3,6 +3,7 @@ module ActiveRecord
     def is_mentioner?
       false
     end
+    alias mentioner? is_mentioner?
   end
 end
 
@@ -17,6 +18,7 @@ module Socialization
       def is_mentioner?
         true
       end
+      alias mentioner? is_mentioner?
 
       # Create a new {Mention mention} relationship.
       #

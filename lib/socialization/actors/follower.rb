@@ -3,6 +3,7 @@ module ActiveRecord
     def is_follower?
       false
     end
+    alias follower? is_follower?
   end
 end
 
@@ -17,6 +18,7 @@ module Socialization
       def is_follower?
         true
       end
+      alias follower? is_follower?
 
       # Create a new {Follow follow} relationship.
       #

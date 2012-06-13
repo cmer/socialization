@@ -3,6 +3,7 @@ module ActiveRecord
     def is_likeable?
       false
     end
+    alias likeable? is_likeable?
   end
 end
 
@@ -17,6 +18,7 @@ module Socialization
       def is_likeable?
         true
       end
+      alias likeable? is_likeable?
 
       # Specifies if self is liked by a {Liker} object.
       #

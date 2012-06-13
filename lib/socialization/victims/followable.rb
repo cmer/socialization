@@ -3,6 +3,7 @@ module ActiveRecord
     def is_followable?
       false
     end
+    alias followable? is_followable?
   end
 end
 
@@ -17,6 +18,7 @@ module Socialization
       def is_followable?
         true
       end
+      alias followable? is_followable?
 
       # Specifies if self is followed by a {Follower} object.
       #

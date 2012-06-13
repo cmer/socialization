@@ -3,6 +3,7 @@ module ActiveRecord
     def is_liker?
       false
     end
+    alias liker? is_liker?
   end
 end
 
@@ -17,6 +18,7 @@ module Socialization
       def is_liker?
         true
       end
+      alias liker? is_liker?
 
       # Create a new {Like like} relationship.
       #
