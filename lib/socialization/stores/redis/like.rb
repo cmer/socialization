@@ -3,8 +3,9 @@
 module Socialization
   module RedisStores
     class Like < Socialization::RedisStores::Base
-      include Socialization::RedisStores::Mixins::Base
-      include Socialization::Stores::Mixins::Follow
+      extend Socialization::Stores::Mixins::Base
+      extend Socialization::Stores::Mixins::Like
+      extend Socialization::RedisStores::Mixins::Base
 
       class << self
         def like!(liker, likeable)
@@ -12,7 +13,7 @@ module Socialization
             Socialization.redis.sadd generate_likers_key(liker, likeable), liker.id
             Socialization.redis.sadd generate_likeables_key(liker, likeable), likeable.id
 
-            call_after_create_hook(liker, likeable)
+            call_after_create_hooks(liker, likeable)
             liker.touch if [:all, :liker].include?(touch) && liker.respond_to?(:touch)
             likeable.touch if [:all, :likeable].include?(touch) && likeable.respond_to?(:touch)
             true
@@ -26,7 +27,7 @@ module Socialization
             Socialization.redis.srem generate_likers_key(liker, likeable), liker.id
             Socialization.redis.srem generate_likeables_key(liker, likeable), likeable.id
 
-            call_after_destroy_hook(liker, likeable)
+            call_after_destroy_hooks(liker, likeable)
             liker.touch if [:all, :liker].include?(touch) && liker.respond_to?(:touch)
             likeable.touch if [:all, :likeable].include?(touch) && likeable.respond_to?(:touch)
             true
@@ -93,11 +94,11 @@ module Socialization
         end
 
       private
-        def call_after_create_hook(liker, likeable)
+        def call_after_create_hooks(liker, likeable)
           self.send(@after_create_hook, liker, likeable) if @after_create_hook
         end
 
-        def call_after_destroy_hook(liker, likeable)
+        def call_after_destroy_hooks(liker, likeable)
           self.send(@after_destroy_hook, liker, likeable) if @after_destroy_hook
         end
 

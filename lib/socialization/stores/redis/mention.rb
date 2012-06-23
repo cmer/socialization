@@ -3,8 +3,9 @@
 module Socialization
   module RedisStores
     class Mention < Socialization::RedisStores::Base
-      include Socialization::RedisStores::Mixins::Base
-      include Socialization::Stores::Mixins::Mention
+      extend Socialization::Stores::Mixins::Base
+      extend Socialization::Stores::Mixins::Mention
+      extend Socialization::RedisStores::Mixins::Base
 
       class << self
         def mention!(mentioner, mentionable)
@@ -12,9 +13,7 @@ module Socialization
             Socialization.redis.sadd generate_mentioners_key(mentioner, mentionable), mentioner.id
             Socialization.redis.sadd generate_mentionables_key(mentioner, mentionable), mentionable.id
 
-            call_after_create_hook(mentioner, mentionable)
-            mentioner.touch if [:all, :mentioner].include?(touch) && mentioner.respond_to?(:touch)
-            mentionable.touch if [:all, :mentionable].include?(touch) && mentionable.respond_to?(:touch)
+            call_after_create_hooks(mentioner, mentionable)
             true
           else
             false
@@ -26,9 +25,7 @@ module Socialization
             Socialization.redis.srem generate_mentioners_key(mentioner, mentionable), mentioner.id
             Socialization.redis.srem generate_mentionables_key(mentioner, mentionable), mentionable.id
 
-            call_after_destroy_hook(mentioner, mentionable)
-            mentioner.touch if [:all, :mentioner].include?(touch) && mentioner.respond_to?(:touch)
-            mentionable.touch if [:all, :mentionable].include?(touch) && mentionable.respond_to?(:touch)
+            call_after_destroy_hooks(mentioner, mentionable)
             true
           else
             false
@@ -73,34 +70,7 @@ module Socialization
           end
         end
 
-        def touch(what = nil)
-          if what.nil?
-            @touch || false
-          else
-            raise ArgumentError unless [:all, :mentioner, :mentionable, false, nil].include?(what)
-            @touch = what
-          end
-        end
-
-        def after_mention(method)
-          raise ArgumentError unless method.is_a?(Symbol) || method.nil?
-          @after_create_hook = method
-        end
-
-        def after_unmention(method)
-          raise ArgumentError unless method.is_a?(Symbol) || method.nil?
-          @after_destroy_hook = method
-        end
-
       private
-        def call_after_create_hook(mentioner, mentionable)
-          self.send(@after_create_hook, mentioner, mentionable) if @after_create_hook
-        end
-
-        def call_after_destroy_hook(mentioner, mentionable)
-          self.send(@after_destroy_hook, mentioner, mentionable) if @after_destroy_hook
-        end
-
         def generate_mentioners_key(mentioner, mentionable)
           raise ArgumentError.new("`mentionable` needs to be an acts_as_mentionable objecs, not a class.") if mentionable.class == Class
           mentioner_class = if mentioner.class == Class

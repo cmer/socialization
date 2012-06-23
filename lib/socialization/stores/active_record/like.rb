@@ -1,8 +1,9 @@
 module Socialization
   module ActiveRecordStores
     class Like < ActiveRecord::Base
-      include Socialization::ActiveRecordStores::Mixins::Base
-      include Socialization::Stores::Mixins::Like
+      extend Socialization::Stores::Mixins::Base
+      extend Socialization::Stores::Mixins::Like
+      extend Socialization::ActiveRecordStores::Mixins::Base
 
       belongs_to :liker,    :polymorphic => true
       belongs_to :likeable, :polymorphic => true
@@ -24,9 +25,7 @@ module Socialization
               like.liker = liker
               like.likeable = likeable
             end
-            call_after_create_hook(liker, likeable)
-            liker.touch if [:all, :liker].include?(touch) && liker.respond_to?(:touch)
-            likeable.touch if [:all, :likeable].include?(touch) && likeable.respond_to?(:touch)
+            call_after_create_hooks(liker, likeable)
             true
           else
             false
@@ -36,9 +35,7 @@ module Socialization
         def unlike!(liker, likeable)
           if likes?(liker, likeable)
             like_for(liker, likeable).destroy_all
-            call_after_destroy_hook(liker, likeable)
-            liker.touch if [:all, :liker].include?(touch) && liker.respond_to?(:touch)
-            likeable.touch if [:all, :likeable].include?(touch) && likeable.respond_to?(:touch)
+            call_after_destroy_hooks(liker, likeable)
             true
           else
             false
@@ -101,34 +98,7 @@ module Socialization
           end
         end
 
-        def touch(what = nil)
-          if what.nil?
-            @touch || false
-          else
-            raise ArgumentError unless [:all, :liker, :likeable, false, nil].include?(what)
-            @touch = what
-          end
-        end
-
-        def after_like(method)
-          raise ArgumentError unless method.is_a?(Symbol) || method.nil?
-          @after_create_hook = method
-        end
-
-        def after_unlike(method)
-          raise ArgumentError unless method.is_a?(Symbol) || method.nil?
-          @after_destroy_hook = method
-        end
-
       private
-        def call_after_create_hook(liker, likeable)
-          self.send(@after_create_hook, liker, likeable) if @after_create_hook
-        end
-
-        def call_after_destroy_hook(liker, likeable)
-          self.send(@after_destroy_hook, liker, likeable) if @after_destroy_hook
-        end
-
         def like_for(liker, likeable)
           liked_by(liker).liking( likeable)
         end

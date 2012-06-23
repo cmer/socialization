@@ -3,8 +3,9 @@
 module Socialization
   module RedisStores
     class Follow < Socialization::RedisStores::Base
-      include Socialization::RedisStores::Mixins::Base
-      include Socialization::Stores::Mixins::Follow
+      extend Socialization::Stores::Mixins::Base
+      extend Socialization::Stores::Mixins::Follow
+      extend Socialization::RedisStores::Mixins::Base
 
       class << self
         def follow!(follower, followable)
@@ -12,9 +13,7 @@ module Socialization
             Socialization.redis.sadd generate_followers_key(follower, followable), follower.id
             Socialization.redis.sadd generate_followables_key(follower, followable), followable.id
 
-            call_after_create_hook(follower, followable)
-            follower.touch if [:all, :follower].include?(touch) && follower.respond_to?(:touch)
-            followable.touch if [:all, :followable].include?(touch) && followable.respond_to?(:touch)
+            call_after_create_hooks(follower, followable)
             true
           else
             false
@@ -26,9 +25,7 @@ module Socialization
             Socialization.redis.srem generate_followers_key(follower, followable), follower.id
             Socialization.redis.srem generate_followables_key(follower, followable), followable.id
 
-            call_after_destroy_hook(follower, followable)
-            follower.touch if [:all, :follower].include?(touch) && follower.respond_to?(:touch)
-            followable.touch if [:all, :followable].include?(touch) && followable.respond_to?(:touch)
+            call_after_destroy_hooks(follower, followable)
             true
           else
             false
@@ -73,34 +70,7 @@ module Socialization
           end
         end
 
-        def touch(what = nil)
-          if what.nil?
-            @touch || false
-          else
-            raise ArgumentError unless [:all, :follower, :followable, false, nil].include?(what)
-            @touch = what
-          end
-        end
-
-        def after_follow(method)
-          raise ArgumentError unless method.is_a?(Symbol) || method.nil?
-          @after_create_hook = method
-        end
-
-        def after_unfollow(method)
-          raise ArgumentError unless method.is_a?(Symbol) || method.nil?
-          @after_destroy_hook = method
-        end
-
       private
-        def call_after_create_hook(follower, followable)
-          self.send(@after_create_hook, follower, followable) if @after_create_hook
-        end
-
-        def call_after_destroy_hook(follower, followable)
-          self.send(@after_destroy_hook, follower, followable) if @after_destroy_hook
-        end
-
         def generate_followers_key(follower, followable)
           raise ArgumentError.new("`followable` needs to be an acts_as_followable objecs, not a class.") if followable.class == Class
           follower_class = if follower.class == Class

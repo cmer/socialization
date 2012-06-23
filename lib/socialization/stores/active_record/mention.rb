@@ -1,8 +1,9 @@
 module Socialization
   module ActiveRecordStores
     class Mention < ActiveRecord::Base
-      include Socialization::ActiveRecordStores::Mixins::Base
-      include Socialization::Stores::Mixins::Mention
+      extend Socialization::Stores::Mixins::Base
+      extend Socialization::Stores::Mixins::Mention
+      extend Socialization::ActiveRecordStores::Mixins::Base
 
       belongs_to :mentioner,   :polymorphic => true
       belongs_to :mentionable, :polymorphic => true
@@ -24,9 +25,7 @@ module Socialization
               mention.mentioner = mentioner
               mention.mentionable = mentionable
             end
-            call_after_create_hook(mentioner, mentionable)
-            mentioner.touch if [:all, :mentioner].include?(touch) && mentioner.respond_to?(:touch)
-            mentionable.touch if [:all, :mentionable].include?(touch) && mentionable.respond_to?(:touch)
+            call_after_create_hooks(mentioner, mentionable)
             true
           else
             false
@@ -36,9 +35,7 @@ module Socialization
         def unmention!(mentioner, mentionable)
           if mentions?(mentioner, mentionable)
             mention_for(mentioner, mentionable).destroy_all
-            call_after_destroy_hook(mentioner, mentionable)
-            mentioner.touch if [:all, :mentioner].include?(touch) && mentioner.respond_to?(:touch)
-            mentionable.touch if [:all, :mentionable].include?(touch) && mentionable.respond_to?(:touch)
+            call_after_destroy_hooks(mentioner, mentionable)
             true
           else
             false
@@ -101,34 +98,7 @@ module Socialization
           end
         end
 
-        def touch(what = nil)
-          if what.nil?
-            @touch || false
-          else
-            raise ArgumentError unless [:all, :mentioner, :mentionable, false, nil].include?(what)
-            @touch = what
-          end
-        end
-
-        def after_mention(method)
-          raise ArgumentError unless method.is_a?(Symbol) || method.nil?
-          @after_create_hook = method
-        end
-
-        def after_unmention(method)
-          raise ArgumentError unless method.is_a?(Symbol) || method.nil?
-          @after_destroy_hook = method
-        end
-
       private
-        def call_after_create_hook(mentioner, mentionable)
-          self.send(@after_create_hook, mentioner, mentionable) if @after_create_hook
-        end
-
-        def call_after_destroy_hook(mentioner, mentionable)
-          self.send(@after_destroy_hook, mentioner, mentionable) if @after_destroy_hook
-        end
-
         def mention_for(mentioner, mentionable)
           mentioned_by(mentioner).mentioning(mentionable)
         end

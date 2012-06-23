@@ -1,8 +1,9 @@
 module Socialization
   module ActiveRecordStores
     class Follow < ActiveRecord::Base
-      include Socialization::ActiveRecordStores::Mixins::Base
-      include Socialization::Stores::Mixins::Follow
+      extend Socialization::Stores::Mixins::Base
+      extend Socialization::Stores::Mixins::Follow
+      extend Socialization::ActiveRecordStores::Mixins::Base
 
       belongs_to :follower,   :polymorphic => true
       belongs_to :followable, :polymorphic => true
@@ -24,9 +25,7 @@ module Socialization
               follow.follower = follower
               follow.followable = followable
             end
-            call_after_create_hook(follower, followable)
-            follower.touch if [:all, :follower].include?(touch) && follower.respond_to?(:touch)
-            followable.touch if [:all, :followable].include?(touch) && followable.respond_to?(:touch)
+            call_after_create_hooks(follower, followable)
             true
           else
             false
@@ -36,9 +35,7 @@ module Socialization
         def unfollow!(follower, followable)
           if follows?(follower, followable)
             follow_for(follower, followable).destroy_all
-            call_after_destroy_hook(follower, followable)
-            follower.touch if [:all, :follower].include?(touch) && follower.respond_to?(:touch)
-            followable.touch if [:all, :followable].include?(touch) && followable.respond_to?(:touch)
+            call_after_destroy_hooks(follower, followable)
             true
           else
             false
@@ -101,34 +98,7 @@ module Socialization
           end
         end
 
-        def touch(what = nil)
-          if what.nil?
-            @touch || false
-          else
-            raise ArgumentError unless [:all, :follower, :followable, false, nil].include?(what)
-            @touch = what
-          end
-        end
-
-        def after_follow(method)
-          raise ArgumentError unless method.is_a?(Symbol) || method.nil?
-          @after_create_hook = method
-        end
-
-        def after_unfollow(method)
-          raise ArgumentError unless method.is_a?(Symbol) || method.nil?
-          @after_destroy_hook = method
-        end
-
       private
-        def call_after_create_hook(follower, followable)
-          self.send(@after_create_hook, follower, followable) if @after_create_hook
-        end
-
-        def call_after_destroy_hook(follower, followable)
-          self.send(@after_destroy_hook, follower, followable) if @after_destroy_hook
-        end
-
         def follow_for(follower, followable)
           followed_by(follower).following(followable)
         end
