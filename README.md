@@ -186,7 +186,10 @@ Toggle
 Mentions?
 
     comment.mentions?(user)
+    
+All mentionees
 
+    comment.mentionees(User)
 
 ***
 
