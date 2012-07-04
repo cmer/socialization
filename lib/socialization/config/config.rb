@@ -1,20 +1,10 @@
 module Socialization
   class << self
-    if defined?(Rails)
-      %w{follow mention like}.each do |model|
-        Dir[Rails.root + "app/models/**/#{model}.rb"].each do |path|
-          require path
-        end
-      end
-    end
-
     def follow_model
       if @follow_model
         @follow_model
-      elsif defined?(::Follow)
-        ::Follow
       else
-        raise RuntimeError.new("No Follow model has been defined.")
+        ::Follow
       end
     end
 
@@ -25,10 +15,8 @@ module Socialization
     def like_model
       if @like_model
         @like_model
-      elsif defined?(::Like)
-        ::Like
       else
-        raise RuntimeError.new("No Like model has been defined.")
+        ::Like
       end
     end
 
@@ -39,10 +27,8 @@ module Socialization
     def mention_model
       if @mention_model
         @mention_model
-      elsif defined?(::Mention)
-        ::Mention
       else
-        raise RuntimeError.new("No Mention model has been defined.")
+        ::Mention
       end
     end
 
