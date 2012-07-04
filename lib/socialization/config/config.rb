@@ -1,9 +1,12 @@
 module Socialization
   class << self
-    # Force loading of classes if they're not already loaded
-    begin; Follow; end
-    begin; Mention; end
-    begin; Like; end
+    if defined?(Rails)
+      %w{follow mention like}.each do |model|
+        Dir[Rails.root + "app/models/**/#{model}.rb"].each do |path|
+          require path
+        end
+      end
+    end
 
     def follow_model
       if @follow_model
