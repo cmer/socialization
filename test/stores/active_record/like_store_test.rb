@@ -108,6 +108,24 @@ class ActiveRecordLikeStoreTest < Test::Unit::TestCase
       end
     end
 
+    context "#destroy_likers" do
+      should "delete all likers relationships for a likeable" do
+        @liker.like!(@likeable)
+        assert_equal 1, @likeable.likers(@liker.class).count
+        @klass.destroy_likers(@likeable)
+        assert_equal 0, @likeable.likers(@liker.class).count
+      end
+    end
+
+    context "#destroy_likeables" do
+      should "delete all likeables relationships for a liker" do
+        @liker.like!(@likeable)
+        assert_equal 1, @liker.likeables(@likeable.class).count
+        @klass.destroy_likeables(@liker)
+        assert_equal 0, @liker.likeables(@likeable.class).count
+      end
+    end
+
   end
 
   # Helpers

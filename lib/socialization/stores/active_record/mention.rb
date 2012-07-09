@@ -98,6 +98,18 @@ module Socialization
           end
         end
 
+        # Destroy all the mentioners for mentionable
+        def destroy_mentioners(mentionable)
+          self.where(:mentionable_type => mentionable.class.name.classify).
+               where(:mentionable_id => mentionable.id).destroy_all
+        end
+
+        # Destroy all the mentionables for mentioner
+        def destroy_mentionables(mentioner)
+          self.where(:mentioner_type => mentioner.class.name.classify).
+               where(:mentioner_id => mentioner.id).destroy_all
+        end
+
       private
         def mention_for(mentioner, mentionable)
           mentioned_by(mentioner).mentioning(mentionable)

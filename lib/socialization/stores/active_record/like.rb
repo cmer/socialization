@@ -98,6 +98,18 @@ module Socialization
           end
         end
 
+        # Destroy all the likers for likeable
+        def destroy_likers(likeable)
+          self.where(:likeable_type => likeable.class.name.classify).
+               where(:likeable_id => likeable.id).destroy_all
+        end
+
+        # Destroy all the likeables for liker
+        def destroy_likeables(liker)
+          self.where(:liker_type => liker.class.name.classify).
+               where(:liker_id => liker.id).destroy_all
+        end
+
       private
         def like_for(liker, likeable)
           liked_by(liker).liking( likeable)
