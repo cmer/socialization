@@ -21,8 +21,8 @@ class RedisLikeStoreTest < Test::Unit::TestCase
     context "#like!" do
       should "create a Like record" do
         @klass.like!(@liker, @likeable)
-        assert_equal ["#{@liker.id}"], Socialization.redis.smembers(likers_key)
-        assert_equal ["#{@likeable.id}"], Socialization.redis.smembers(likeables_key)
+        assert_equal ["#{@liker.id}"], Socialization.redis.smembers(likers_key(@liker, @likeable))
+        assert_equal ["#{@likeable.id}"], Socialization.redis.smembers(likeables_key(@liker, @likeable))
       end
 
       should "touch liker when instructed" do
@@ -61,8 +61,8 @@ class RedisLikeStoreTest < Test::Unit::TestCase
 
     context "#likes?" do
       should "return true when like exists" do
-        Socialization.redis.sadd likers_key, @liker.id
-        Socialization.redis.sadd likeables_key, @likeable.id
+        Socialization.redis.sadd likers_key(@liker, @likeable), @liker.id
+        Socialization.redis.sadd likeables_key(@liker, @likeable), @likeable.id
         assert_true @klass.likes?(@liker, @likeable)
       end
 
@@ -116,6 +116,10 @@ class RedisLikeStoreTest < Test::Unit::TestCase
       should "return valid key when liker is a class" do
         assert_equal "Likers:ImALikeable:#{@likeable.id}:ImALiker", likers_key(@liker.class, @likeable)
       end
+
+      should "return valid key when liker is nil" do
+        assert_equal "Likers:ImALikeable:#{@likeable.id}", likers_key(nil, @likeable)
+      end
     end
 
     context "#generate_likeables_key" do
@@ -125,6 +129,10 @@ class RedisLikeStoreTest < Test::Unit::TestCase
 
       should "return valid key when likeable is a class" do
         assert_equal "Likeables:ImALiker:#{@liker.id}:ImALikeable", likeables_key(@liker, @likeable.class)
+      end
+
+      should "return valid key when likeable is nil" do
+        assert_equal "Likeables:ImALiker:#{@liker.id}", likeables_key(@liker, nil)
       end
     end
 
@@ -140,14 +148,10 @@ class RedisLikeStoreTest < Test::Unit::TestCase
   end
 
   def likers_key(liker = nil, likeable = nil)
-    liker ||= @liker
-    likeable ||= @likeable
     @klass.send(:generate_likers_key, liker, likeable)
   end
 
   def likeables_key(liker = nil, likeable = nil)
-    liker ||= @liker
-    likeable ||= @likeable
     @klass.send(:generate_likeables_key, liker, likeable)
   end
 end

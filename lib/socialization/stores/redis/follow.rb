@@ -72,25 +72,11 @@ module Socialization
 
       private
         def generate_followers_key(follower, followable)
-          raise ArgumentError.new("`followable` needs to be an acts_as_followable objecs, not a class.") if followable.class == Class
-          follower_class = if follower.class == Class
-            follower
-          else
-            follower.class
-          end
-
-          "Followers:#{followable.class}:#{followable.id}:#{follower_class}"
+          generate_actor_key(follower, followable, :follow)
         end
 
         def generate_followables_key(follower, followable)
-          raise ArgumentError.new("`follower` needs to be an acts_as_follower object, not a class.") if follower.class == Class
-          followable_class = if followable.class == Class
-            followable
-          else
-            followable.class
-          end
-
-          "Followables:#{follower.class}:#{follower.id}:#{followable_class}"
+          generate_victim_key(follower, followable, :follow)
         end
       end # class << self
 

@@ -103,25 +103,11 @@ module Socialization
         end
 
         def generate_likers_key(liker, likeable)
-          raise ArgumentError.new("`likeable` needs to be an acts_as_likeable objecs, not a class.") if likeable.class == Class
-          liker_class = if liker.class == Class
-            liker
-          else
-            liker.class
-          end
-
-          "Likers:#{likeable.class}:#{likeable.id}:#{liker_class}"
+          generate_actor_key(liker, likeable, :like)
         end
 
         def generate_likeables_key(liker, likeable)
-          raise ArgumentError.new("`liker` needs to be an acts_as_liker object, not a class.") if liker.class == Class
-          likeable_class = if likeable.class == Class
-            likeable
-          else
-            likeable.class
-          end
-
-          "Likeables:#{liker.class}:#{liker.id}:#{likeable_class}"
+          generate_victim_key(liker, likeable, :like)
         end
       end # class << self
 

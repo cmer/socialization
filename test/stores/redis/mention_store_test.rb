@@ -21,8 +21,8 @@ class RedisMentionStoreTest < Test::Unit::TestCase
     context "#mention!" do
       should "create a Mention record" do
         @klass.mention!(@mentioner, @mentionable)
-        assert_equal ["#{@mentioner.id}"], Socialization.redis.smembers(mentioners_key)
-        assert_equal ["#{@mentionable.id}"], Socialization.redis.smembers(mentionables_key)
+        assert_equal ["#{@mentioner.id}"], Socialization.redis.smembers(mentioners_key(@mentioner, @mentionable))
+        assert_equal ["#{@mentionable.id}"], Socialization.redis.smembers(mentionables_key(@mentioner, @mentionable))
       end
 
       should "touch mentioner when instructed" do
@@ -61,8 +61,8 @@ class RedisMentionStoreTest < Test::Unit::TestCase
 
     context "#mentions?" do
       should "return true when mention exists" do
-        Socialization.redis.sadd mentioners_key, @mentioner.id
-        Socialization.redis.sadd mentionables_key, @mentionable.id
+        Socialization.redis.sadd mentioners_key(@mentioner, @mentionable), @mentioner.id
+        Socialization.redis.sadd mentionables_key(@mentioner, @mentionable), @mentionable.id
         assert_true @klass.mentions?(@mentioner, @mentionable)
       end
 
@@ -116,6 +116,10 @@ class RedisMentionStoreTest < Test::Unit::TestCase
       should "return valid key when mentioner is a class" do
         assert_equal "Mentioners:ImAMentionable:#{@mentionable.id}:ImAMentioner", mentioners_key(@mentioner.class, @mentionable)
       end
+
+      should "return valid key when mentioner is nil" do
+        assert_equal "Mentioners:ImAMentionable:#{@mentionable.id}", mentioners_key(nil, @mentionable)
+      end
     end
 
     context "#generate_mentionables_key" do
@@ -125,6 +129,10 @@ class RedisMentionStoreTest < Test::Unit::TestCase
 
       should "return valid key when mentionable is a class" do
         assert_equal "Mentionables:ImAMentioner:#{@mentioner.id}:ImAMentionable", mentionables_key(@mentioner, @mentionable.class)
+      end
+
+      should "return valid key when mentionable is nil" do
+        assert_equal "Mentionables:ImAMentioner:#{@mentioner.id}", mentionables_key(@mentioner, nil)
       end
     end
 
@@ -140,14 +148,10 @@ class RedisMentionStoreTest < Test::Unit::TestCase
   end
 
   def mentioners_key(mentioner = nil, mentionable = nil)
-    mentioner ||= @mentioner
-    mentionable ||= @mentionable
     @klass.send(:generate_mentioners_key, mentioner, mentionable)
   end
 
   def mentionables_key(mentioner = nil, mentionable = nil)
-    mentioner ||= @mentioner
-    mentionable ||= @mentionable
     @klass.send(:generate_mentionables_key, mentioner, mentionable)
   end
 end

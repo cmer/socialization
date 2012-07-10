@@ -21,8 +21,8 @@ class RedisFollowStoreTest < Test::Unit::TestCase
     context "#follow!" do
       should "create a Follow record" do
         @klass.follow!(@follower, @followable)
-        assert_equal ["#{@follower.id}"], Socialization.redis.smembers(followers_key)
-        assert_equal ["#{@followable.id}"], Socialization.redis.smembers(followables_key)
+        assert_equal ["#{@follower.id}"], Socialization.redis.smembers(followers_key(@follower, @followable))
+        assert_equal ["#{@followable.id}"], Socialization.redis.smembers(followables_key(@follower, @followable))
       end
 
       should "touch follower when instructed" do
@@ -61,8 +61,8 @@ class RedisFollowStoreTest < Test::Unit::TestCase
 
     context "#follows?" do
       should "return true when follow exists" do
-        Socialization.redis.sadd followers_key, @follower.id
-        Socialization.redis.sadd followables_key, @followable.id
+        Socialization.redis.sadd followers_key(@follower, @followable), @follower.id
+        Socialization.redis.sadd followables_key(@follower, @followable), @followable.id
         assert_true @klass.follows?(@follower, @followable)
       end
 
@@ -116,6 +116,10 @@ class RedisFollowStoreTest < Test::Unit::TestCase
       should "return valid key when follower is a class" do
         assert_equal "Followers:ImAFollowable:#{@followable.id}:ImAFollower", followers_key(@follower.class, @followable)
       end
+
+      should "return valid key when follower is nil" do
+        assert_equal "Followers:ImAFollowable:#{@followable.id}", followers_key(nil, @followable)
+      end
     end
 
     context "#generate_followables_key" do
@@ -126,8 +130,11 @@ class RedisFollowStoreTest < Test::Unit::TestCase
       should "return valid key when followable is a class" do
         assert_equal "Followables:ImAFollower:#{@follower.id}:ImAFollowable", followables_key(@follower, @followable.class)
       end
-    end
 
+      should "return valid key when followable is nil" do
+        assert_equal "Followables:ImAFollower:#{@follower.id}", followables_key(@follower, nil)
+      end
+    end
   end
 
   # Helpers
@@ -140,14 +147,10 @@ class RedisFollowStoreTest < Test::Unit::TestCase
   end
 
   def followers_key(follower = nil, followable = nil)
-    follower ||= @follower
-    followable ||= @followable
     @klass.send(:generate_followers_key, follower, followable)
   end
 
   def followables_key(follower = nil, followable = nil)
-    follower ||= @follower
-    followable ||= @followable
     @klass.send(:generate_followables_key, follower, followable)
   end
 end

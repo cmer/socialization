@@ -72,25 +72,11 @@ module Socialization
 
       private
         def generate_mentioners_key(mentioner, mentionable)
-          raise ArgumentError.new("`mentionable` needs to be an acts_as_mentionable objecs, not a class.") if mentionable.class == Class
-          mentioner_class = if mentioner.class == Class
-            mentioner
-          else
-            mentioner.class
-          end
-
-          "Mentioners:#{mentionable.class}:#{mentionable.id}:#{mentioner_class}"
+          generate_actor_key(mentioner, mentionable, :mention)
         end
 
         def generate_mentionables_key(mentioner, mentionable)
-          raise ArgumentError.new("`mentioner` needs to be an acts_as_mentioner object, not a class.") if mentioner.class == Class
-          mentionable_class = if mentionable.class == Class
-            mentionable
-          else
-            mentionable.class
-          end
-
-          "Mentionables:#{mentioner.class}:#{mentioner.id}:#{mentionable_class}"
+          generate_victim_key(mentioner, mentionable, :mention)
         end
       end # class << self
 
