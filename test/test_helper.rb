@@ -8,6 +8,7 @@ require 'logger'
 require 'mock_redis' if $MOCK_REDIS
 require 'redis' unless $MOCK_REDIS
 require 'mocha' # mocha always needs to be loaded last! http://stackoverflow.com/questions/3118866/mocha-mock-carries-to-another-test/4375296#4375296
+# require 'pry'
 
 $:.push File.expand_path("../lib", __FILE__)
 require "socialization"
@@ -28,6 +29,23 @@ module Test::Unit::Assertions
   def assert_array_similarity(expected, actual, message=nil)
     full_message = build_message(message, "<?> expected but was\n<?>.\n", expected, actual)
     assert_block(full_message) { (expected.size ==  actual.size) && (expected - actual == []) }
+  end
+
+  def assert_empty(obj, msg = nil)
+    msg = "Expected #{obj.inspect} to be empty" unless msg
+    assert_respond_to obj, :empty?
+    assert obj.empty?, msg
+  end
+
+  def assert_method_public(obj, method, msg = nil)
+    msg = "Expected method #{obj}.#{method} to be public."
+    method = if RUBY_VERSION.match(/^1\.8/)
+      method.to_s
+    else
+      method.to_s.to_sym
+    end
+
+    assert obj.public_methods.include?(method), msg
   end
 end
 

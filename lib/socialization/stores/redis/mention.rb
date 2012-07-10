@@ -1,5 +1,3 @@
-# require File.expand_path(File.dirname(__FILE__)) + '/base'
-
 module Socialization
   module RedisStores
     class Mention < Socialization::RedisStores::Base
@@ -8,77 +6,16 @@ module Socialization
       extend Socialization::RedisStores::Mixins::Base
 
       class << self
-        def mention!(mentioner, mentionable)
-          unless mentions?(mentioner, mentionable)
-            Socialization.redis.sadd generate_mentioners_key(mentioner, mentionable), mentioner.id
-            Socialization.redis.sadd generate_mentionables_key(mentioner, mentionable), mentionable.id
-
-            call_after_create_hooks(mentioner, mentionable)
-            true
-          else
-            false
-          end
-        end
-
-        def unmention!(mentioner, mentionable)
-          if mentions?(mentioner, mentionable)
-            Socialization.redis.srem generate_mentioners_key(mentioner, mentionable), mentioner.id
-            Socialization.redis.srem generate_mentionables_key(mentioner, mentionable), mentionable.id
-
-            call_after_destroy_hooks(mentioner, mentionable)
-            true
-          else
-            false
-          end
-        end
-
-        def mentions?(mentioner, mentionable)
-          Socialization.redis.sismember generate_mentioners_key(mentioner, mentionable), mentioner.id
-        end
-
-        # Returns an ActiveRecord::Relation of all the mentioners of a certain type that are mentioning mentionable
-        def mentioners_relation(mentionable, klass, opts = {})
-          ids = mentioners(mentionable, klass, :pluck => :id)
-          klass.where('id IN (?)', ids)
-        end
-
-        # Returns all the mentioners of a certain type that are mentioning mentionable
-        def mentioners(mentionable, klass, opts = {})
-          if opts[:pluck]
-            Socialization.redis.smembers(generate_mentioners_key(klass, mentionable)).map { |id|
-              id.to_i if id.is_integer?
-            }
-          else
-            mentioners_relation(mentionable, klass, opts).all
-          end
-        end
-
-        # Returns an ActiveRecord::Relation of all the mentionables of a certain type that are mentioned by mentioner
-        def mentionables_relation(mentioner, klass, opts = {})
-          ids = mentionables(mentioner, klass, :pluck => :id)
-          klass.where('id IN (?)', ids)
-        end
-
-        # Returns all the mentionables of a certain type that are mentioned by mentioner
-        def mentionables(mentioner, klass, opts = {})
-          if opts[:pluck]
-            Socialization.redis.smembers(generate_mentionables_key(mentioner, klass)).map { |id|
-              id.to_i if id.is_integer?
-            }
-          else
-            mentionables_relation(mentioner, klass, opts).all
-          end
-        end
-
-      private
-        def generate_mentioners_key(mentioner, mentionable)
-          generate_actor_key(mentioner, mentionable, :mention)
-        end
-
-        def generate_mentionables_key(mentioner, mentionable)
-          generate_victim_key(mentioner, mentionable, :mention)
-        end
-      end # class << self
+        alias_method :mention!, :relation!;                          public :mention!
+        alias_method :unmention!, :unrelation!;                      public :unmention!
+        alias_method :mentions?, :relation?;                         public :mentions?
+        alias_method :mentioners_relation, :actors_relation;         public :mentioners_relation
+        alias_method :mentioners, :actors;                           public :mentioners
+        alias_method :mentionables_relation, :victims_relation;      public :mentionables_relation
+        alias_method :mentionables, :victims;                        public :mentionables
+        alias_method :remove_mentioners, :remove_actor_relations;    public :remove_mentioners
+        alias_method :remove_mentionables, :remove_victim_relations; public :remove_mentionables
+      end
 
     end
   end
