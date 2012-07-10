@@ -98,14 +98,14 @@ module Socialization
           end
         end
 
-        # Destroy all the followers for followable
-        def destroy_followers(followable)
+        # Remove all the followers for followable
+        def remove_followers(followable)
           self.where(:followable_type => followable.class.name.classify).
                where(:followable_id => followable.id).destroy_all
         end
 
-        # Destroy all the followables for follower
-        def destroy_followables(follower)
+        # Remove all the followables for follower
+        def remove_followables(follower)
           self.where(:follower_type => follower.class.name.classify).
                where(:follower_id => follower.id).destroy_all
         end

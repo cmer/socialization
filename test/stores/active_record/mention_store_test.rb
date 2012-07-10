@@ -108,20 +108,20 @@ class ActiveRecordMentionStoreTest < Test::Unit::TestCase
       end
     end
 
-    context "#destroy_mentioners" do
+    context "#remove_mentioners" do
       should "delete all mentioners relationships for a mentionable" do
         @mentioner.mention!(@mentionable)
         assert_equal 1, @mentionable.mentioners(@mentioner.class).count
-        @klass.destroy_mentioners(@mentionable)
+        @klass.remove_mentioners(@mentionable)
         assert_equal 0, @mentionable.mentioners(@mentioner.class).count
       end
     end
 
-    context "#destroy_mentionables" do
+    context "#remove_mentionables" do
       should "delete all mentionables relationships for a mentioner" do
         @mentioner.mention!(@mentionable)
         assert_equal 1, @mentioner.mentionables(@mentionable.class).count
-        @klass.destroy_mentionables(@mentioner)
+        @klass.remove_mentionables(@mentioner)
         assert_equal 0, @mentioner.mentionables(@mentionable.class).count
       end
     end

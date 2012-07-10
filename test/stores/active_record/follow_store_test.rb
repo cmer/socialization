@@ -108,20 +108,20 @@ class ActiveRecordFollowStoreTest < Test::Unit::TestCase
       end
     end
 
-    context "#destroy_followers" do
+    context "#remove_followers" do
       should "delete all followers relationships for a followable" do
         @follower.follow!(@followable)
         assert_equal 1, @followable.followers(@follower.class).count
-        @klass.destroy_followers(@followable)
+        @klass.remove_followers(@followable)
         assert_equal 0, @followable.followers(@follower.class).count
       end
     end
 
-    context "#destroy_followables" do
+    context "#remove_followables" do
       should "delete all followables relationships for a follower" do
         @follower.follow!(@followable)
         assert_equal 1, @follower.followables(@followable.class).count
-        @klass.destroy_followables(@follower)
+        @klass.remove_followables(@follower)
         assert_equal 0, @follower.followables(@followable.class).count
       end
     end
