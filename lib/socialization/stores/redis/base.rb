@@ -83,12 +83,11 @@ module Socialization
 
       private
         def key_type_to_type_names(klass)
-          case klass.name
-          when "Socialization::RedisStores::Follow"
+          if klass.name.match(/Follow$/)
             ['follower', 'followable']
-          when "Socialization::RedisStores::Like"
+          elsif klass.name.match(/Like$/)
             ['liker', 'likeable']
-          when "Socialization::RedisStores::Mention"
+          elsif klass.name.match(/Mention$/)
             ['mentioner', 'mentionable']
           else
             raise ArgumentError.new("Can't find matching type for #{klass}.")
