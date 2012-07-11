@@ -12,6 +12,8 @@ module Socialization
     extend ActiveSupport::Concern
 
     included do
+      after_destroy { Socialization.like_model.remove_likeables(self) }
+
       # Specifies if self can like {Likeable} objects.
       #
       # @return [Boolean]

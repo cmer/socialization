@@ -12,6 +12,8 @@ module Socialization
     extend ActiveSupport::Concern
 
     included do
+      after_destroy { Socialization.follow_model.remove_followables(self) }
+
       # Specifies if self can follow {Followable} objects.
       #
       # @return [Boolean]

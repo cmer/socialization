@@ -12,6 +12,8 @@ module Socialization
     extend ActiveSupport::Concern
 
     included do
+      after_destroy { Socialization.mention_model.remove_mentioners(self) }
+
       # Specifies if self can be mentioned.
       #
       # @return [Boolean]

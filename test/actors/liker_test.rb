@@ -98,5 +98,9 @@ class LikerTest < Test::Unit::TestCase
       end
     end
 
+    should "remove like relationships" do
+      Socialization.like_model.expects(:remove_likeables).with(@liker)
+      @liker.destroy
+    end
   end
 end

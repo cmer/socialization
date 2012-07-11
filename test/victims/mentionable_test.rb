@@ -43,5 +43,18 @@ class MentionableTest < Test::Unit::TestCase
         @mentionable.mentioners_relation(@mentioner.class, { :foo => :bar })
       end
     end
+
+    context "deleting a mentionable" do
+      setup do
+        @mentioner = ImAMentioner.create
+        @mentioner.mention!(@mentionable)
+      end
+
+      should "remove mention relationships" do
+        Socialization.mention_model.expects(:remove_mentioners).with(@mentionable)
+        @mentionable.destroy
+      end
+    end
+
   end
 end

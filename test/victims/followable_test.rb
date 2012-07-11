@@ -44,5 +44,17 @@ class FollowableTest < Test::Unit::TestCase
       end
     end
 
+    context "deleting a followable" do
+      setup do
+        @follower = ImAFollower.create
+        @follower.follow!(@followable)
+      end
+
+      should "remove follow relationships" do
+        Socialization.follow_model.expects(:remove_followers).with(@followable)
+        @followable.destroy
+      end
+    end
+
   end
 end

@@ -43,5 +43,18 @@ class LikeableTest < Test::Unit::TestCase
         @likeable.likers_relation(@liker.class, { :foo => :bar })
       end
     end
+
+    context "deleting a likeable" do
+      setup do
+        @liker = ImALiker.create
+        @liker.like!(@likeable)
+      end
+
+      should "remove like relationships" do
+        Socialization.like_model.expects(:remove_likers).with(@likeable)
+        @likeable.destroy
+      end
+    end
+
   end
 end

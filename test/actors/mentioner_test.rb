@@ -97,5 +97,10 @@ class MentionerTest < Test::Unit::TestCase
         @mentioner.mentionees_relation(@mentionable.class, { :foo => :bar })
       end
     end
+
+    should "remove mention relationships" do
+      Socialization.mention_model.expects(:remove_mentionables).with(@mentioner)
+      @mentioner.destroy
+    end
   end
 end
