@@ -77,7 +77,7 @@ module Socialization
           rel = klass.where(:id =>
             self.select(:likeable_id).
               where(:likeable_type => klass.table_name.classify).
-              where(:liker_type => liker.class.to_s).
+              where(:liker_type => liker.class.base_class.to_s).
               where(:liker_id => liker.id)
           )
 
