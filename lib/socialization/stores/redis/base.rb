@@ -16,12 +16,12 @@ module Socialization
 
         def actors_relation(victim, klass, options = {})
           ids = actors(victim, klass, :pluck => :id)
-          klass.where('id IN (?)', ids)
+          klass.where("#{klass.table_name}.id IN (?)", ids)
         end
 
         def victims_relation(actor, klass, options = {})
           ids = victims(actor, klass, :pluck => :id)
-          klass.where('id IN (?)', ids)
+          klass.where("#{klass.table_name}.id IN (?)", ids)
         end
 
         def victims(actor, klass, options = {})
