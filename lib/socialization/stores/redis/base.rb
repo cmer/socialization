@@ -8,6 +8,7 @@ module Socialization
           if options[:pluck]
             Socialization.redis.smembers(generate_forward_key(victim)).inject([]) do |result, element|
               result << element.match(/\:(\d+)$/)[1] if element.match(/^#{klass}\:/)
+              result
             end
           else
             actors_relation(victim, klass, options).all
@@ -28,6 +29,7 @@ module Socialization
           if options[:pluck]
             Socialization.redis.smembers(generate_backward_key(actor)).inject([]) do |result, element|
               result << element.match(/\:(\d+)$/)[1] if element.match(/^#{klass}\:/)
+              result
             end
           else
             victims_relation(actor, klass, options).all
