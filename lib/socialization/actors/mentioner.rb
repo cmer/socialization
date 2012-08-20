@@ -27,7 +27,7 @@ module Socialization
       # @param [Mentionable] mentionable the object to be mentioned.
       # @return [Boolean]
       def mention!(mentionable)
-        raise ArgumentError, "#{mentionable} is not mentionable!"  unless mentionable.respond_to?(:is_mentionable?) && mentionable.is_mentionable?
+        raise Socialization::ArgumentError, "#{mentionable} is not mentionable!"  unless mentionable.respond_to?(:is_mentionable?) && mentionable.is_mentionable?
         Socialization.mention_model.mention!(self, mentionable)
       end
 
@@ -36,7 +36,7 @@ module Socialization
       # @param [Mentionable] mentionable the object to unmention.
       # @return [Boolean]
       def unmention!(mentionable)
-        raise ArgumentError, "#{mentionable} is not mentionable!" unless mentionable.respond_to?(:is_mentionable?) && mentionable.is_mentionable?
+        raise Socialization::ArgumentError, "#{mentionable} is not mentionable!" unless mentionable.respond_to?(:is_mentionable?) && mentionable.is_mentionable?
         Socialization.mention_model.unmention!(self, mentionable)
       end
 
@@ -45,7 +45,7 @@ module Socialization
       # @param [Mentionable] mentionable the object to mention/unmention.
       # @return [Boolean]
       def toggle_mention!(mentionable)
-        raise ArgumentError, "#{mentionable} is not mentionable!" unless mentionable.respond_to?(:is_mentionable?) && mentionable.is_mentionable?
+        raise Socialization::ArgumentError, "#{mentionable} is not mentionable!" unless mentionable.respond_to?(:is_mentionable?) && mentionable.is_mentionable?
         if mentions?(mentionable)
           unmention!(mentionable)
           false
@@ -60,7 +60,7 @@ module Socialization
       # @param [Mentionable] mentionable the {Mentionable} object to test against.
       # @return [Boolean]
       def mentions?(mentionable)
-        raise ArgumentError, "#{mentionable} is not mentionable!" unless mentionable.respond_to?(:is_mentionable?) && mentionable.is_mentionable?
+        raise Socialization::ArgumentError, "#{mentionable} is not mentionable!" unless mentionable.respond_to?(:is_mentionable?) && mentionable.is_mentionable?
         Socialization.mention_model.mentions?(self, mentionable)
       end
 

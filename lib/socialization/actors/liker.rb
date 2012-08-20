@@ -27,7 +27,7 @@ module Socialization
       # @param [Likeable] likeable the object to be liked.
       # @return [Boolean]
       def like!(likeable)
-        raise ArgumentError, "#{likeable} is not likeable!"  unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
+        raise Socialization::ArgumentError, "#{likeable} is not likeable!"  unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
         Socialization.like_model.like!(self, likeable)
       end
 
@@ -36,7 +36,7 @@ module Socialization
       # @param [Likeable] likeable the object to unlike.
       # @return [Boolean]
       def unlike!(likeable)
-        raise ArgumentError, "#{likeable} is not likeable!" unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
+        raise Socialization::ArgumentError, "#{likeable} is not likeable!" unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
         Socialization.like_model.unlike!(self, likeable)
       end
 
@@ -45,7 +45,7 @@ module Socialization
       # @param [Likeable] likeable the object to like/unlike.
       # @return [Boolean]
       def toggle_like!(likeable)
-        raise ArgumentError, "#{likeable} is not likeable!" unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
+        raise Socialization::ArgumentError, "#{likeable} is not likeable!" unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
         if likes?(likeable)
           unlike!(likeable)
           false
@@ -60,7 +60,7 @@ module Socialization
       # @param [Likeable] likeable the {Likeable} object to test against.
       # @return [Boolean]
       def likes?(likeable)
-        raise ArgumentError, "#{likeable} is not likeable!" unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
+        raise Socialization::ArgumentError, "#{likeable} is not likeable!" unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
         Socialization.like_model.likes?(self, likeable)
       end
 

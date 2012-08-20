@@ -21,7 +21,7 @@ class MentionableTest < Test::Unit::TestCase
 
     context "#mentioned_by?" do
       should "not accept non-mentioners" do
-        assert_raise(ArgumentError) { @mentionable.mentioned_by?(:foo) }
+        assert_raise(Socialization::ArgumentError) { @mentionable.mentioned_by?(:foo) }
       end
 
       should "call $Mention.mentions?" do

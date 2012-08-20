@@ -8,18 +8,18 @@ module Socialization
           if what.nil?
             @touch || false
           else
-            raise ArgumentError unless [:all, :liker, :likeable, false, nil].include?(what)
+            raise Socialization::ArgumentError unless [:all, :liker, :likeable, false, nil].include?(what)
             @touch = what
           end
         end
 
         def after_like(method)
-          raise ArgumentError unless method.is_a?(Symbol) || method.nil?
+          raise Socialization::ArgumentError unless method.is_a?(Symbol) || method.nil?
           @after_create_hook = method
         end
 
         def after_unlike(method)
-          raise ArgumentError unless method.is_a?(Symbol) || method.nil?
+          raise Socialization::ArgumentError unless method.is_a?(Symbol) || method.nil?
           @after_destroy_hook = method
         end
 

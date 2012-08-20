@@ -21,7 +21,7 @@ class LikerTest < Test::Unit::TestCase
 
     context "#like!" do
       should "not accept non-likeables" do
-        assert_raise(ArgumentError) { @liker.like!(:foo) }
+        assert_raise(Socialization::ArgumentError) { @liker.like!(:foo) }
       end
 
       should "call $Like.like!" do
@@ -32,7 +32,7 @@ class LikerTest < Test::Unit::TestCase
 
     context "#unlike!" do
       should "not accept non-likeables" do
-        assert_raise(ArgumentError) { @liker.unlike!(:foo) }
+        assert_raise(Socialization::ArgumentError) { @liker.unlike!(:foo) }
       end
 
       should "call $Like.like!" do
@@ -43,7 +43,7 @@ class LikerTest < Test::Unit::TestCase
 
     context "#toggle_like!" do
       should "not accept non-likeables" do
-        assert_raise(ArgumentError) { @liker.unlike!(:foo) }
+        assert_raise(Socialization::ArgumentError) { @liker.unlike!(:foo) }
       end
 
       should "unlike when likeing" do
@@ -61,7 +61,7 @@ class LikerTest < Test::Unit::TestCase
 
     context "#likes?" do
       should "not accept non-likeables" do
-        assert_raise(ArgumentError) { @liker.unlike!(:foo) }
+        assert_raise(Socialization::ArgumentError) { @liker.unlike!(:foo) }
       end
 
       should "call $Like.likes?" do

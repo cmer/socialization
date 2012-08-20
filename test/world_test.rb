@@ -56,11 +56,11 @@ class WorldTest < Test::Unit::TestCase
     assert camilo.follows?(carl)
     assert !carl.follows?(camilo)
 
-    assert_raise ArgumentError do
+    assert_raise Socialization::ArgumentError do
       john.like!(travolta) # Can't like a Celeb
     end
 
-    assert_raise ArgumentError do
+    assert_raise Socialization::ArgumentError do
       john.follow!(kill_bill) # Can't follow a movie
     end
 

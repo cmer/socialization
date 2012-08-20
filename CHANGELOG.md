@@ -12,6 +12,7 @@
 * Added: Data can now be stored in Redis.
 * Added: `toggle_like!`, `toggle_follow!` and `toggle_mention!` methods. Thanks to [@balvig](https://github.com/balvig).
 * Added: support for single table inheritance. Thanks to [@balvig](https://github.com/balvig).
+* Changed: raises Socialization::ArgumentError instead of ::ArgumentError
 
 ## v0.4.0 (February 25, 2012)
 

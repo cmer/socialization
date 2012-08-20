@@ -26,7 +26,7 @@ module Socialization
       #
       # @return [Boolean]
       def liked_by?(liker)
-        raise ArgumentError, "#{liker} is not liker!"  unless liker.respond_to?(:is_liker?) && liker.is_liker?
+        raise Socialization::ArgumentError, "#{liker} is not liker!"  unless liker.respond_to?(:is_liker?) && liker.is_liker?
         Socialization.like_model.likes?(liker, self)
       end
 

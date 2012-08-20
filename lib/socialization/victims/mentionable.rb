@@ -26,7 +26,7 @@ module Socialization
       #
       # @return [Boolean]
       def mentioned_by?(mentioner)
-        raise ArgumentError, "#{mentioner} is not mentioner!"  unless mentioner.respond_to?(:is_mentioner?) && mentioner.is_mentioner?
+        raise Socialization::ArgumentError, "#{mentioner} is not mentioner!"  unless mentioner.respond_to?(:is_mentioner?) && mentioner.is_mentioner?
         Socialization.mention_model.mentions?(mentioner, self)
       end
 

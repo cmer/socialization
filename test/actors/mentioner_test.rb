@@ -21,7 +21,7 @@ class MentionerTest < Test::Unit::TestCase
 
     context "#mention!" do
       should "not accept non-mentionables" do
-        assert_raise(ArgumentError) { @mentioner.mention!(:foo) }
+        assert_raise(Socialization::ArgumentError) { @mentioner.mention!(:foo) }
       end
 
       should "call $Mention.mention!" do
@@ -32,7 +32,7 @@ class MentionerTest < Test::Unit::TestCase
 
     context "#unmention!" do
       should "not accept non-mentionables" do
-        assert_raise(ArgumentError) { @mentioner.unmention!(:foo) }
+        assert_raise(Socialization::ArgumentError) { @mentioner.unmention!(:foo) }
       end
 
       should "call $Mention.mention!" do
@@ -43,7 +43,7 @@ class MentionerTest < Test::Unit::TestCase
 
     context "#toggle_mention!" do
       should "not accept non-mentionables" do
-        assert_raise(ArgumentError) { @mentioner.unmention!(:foo) }
+        assert_raise(Socialization::ArgumentError) { @mentioner.unmention!(:foo) }
       end
 
       should "unmention when mentioning" do
@@ -61,7 +61,7 @@ class MentionerTest < Test::Unit::TestCase
 
     context "#mentions?" do
       should "not accept non-mentionables" do
-        assert_raise(ArgumentError) { @mentioner.unmention!(:foo) }
+        assert_raise(Socialization::ArgumentError) { @mentioner.unmention!(:foo) }
       end
 
       should "call $Mention.mentions?" do

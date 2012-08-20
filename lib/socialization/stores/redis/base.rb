@@ -90,7 +90,7 @@ module Socialization
           elsif klass.name.match(/Mention$/)
             ['mentioner', 'mentionable']
           else
-            raise ArgumentError.new("Can't find matching type for #{klass}.")
+            raise Socialization::ArgumentError.new("Can't find matching type for #{klass}.")
           end
         end
 

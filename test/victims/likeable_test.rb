@@ -21,7 +21,7 @@ class LikeableTest < Test::Unit::TestCase
 
     context "#liked_by?" do
       should "not accept non-likers" do
-        assert_raise(ArgumentError) { @likeable.liked_by?(:foo) }
+        assert_raise(Socialization::ArgumentError) { @likeable.liked_by?(:foo) }
       end
 
       should "call $Like.likes?" do

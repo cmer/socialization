@@ -1,4 +1,5 @@
 %w(
+  lib/*.rb
   stores/mixins/base.rb
   stores/mixins/**/*.rb
   stores/active_record/mixins/base.rb

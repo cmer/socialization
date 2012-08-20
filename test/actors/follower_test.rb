@@ -21,7 +21,7 @@ class FollowerTest < Test::Unit::TestCase
 
     context "#follow!" do
       should "not accept non-followables" do
-        assert_raise(ArgumentError) { @follower.follow!(:foo) }
+        assert_raise(Socialization::ArgumentError) { @follower.follow!(:foo) }
       end
 
       should "call $Follow.follow!" do
@@ -32,7 +32,7 @@ class FollowerTest < Test::Unit::TestCase
 
     context "#unfollow!" do
       should "not accept non-followables" do
-        assert_raise(ArgumentError) { @follower.unfollow!(:foo) }
+        assert_raise(Socialization::ArgumentError) { @follower.unfollow!(:foo) }
       end
 
       should "call $Follow.follow!" do
@@ -43,7 +43,7 @@ class FollowerTest < Test::Unit::TestCase
 
     context "#toggle_follow!" do
       should "not accept non-followables" do
-        assert_raise(ArgumentError) { @follower.unfollow!(:foo) }
+        assert_raise(Socialization::ArgumentError) { @follower.unfollow!(:foo) }
       end
 
       should "unfollow when following" do
@@ -61,7 +61,7 @@ class FollowerTest < Test::Unit::TestCase
 
     context "#follows?" do
       should "not accept non-followables" do
-        assert_raise(ArgumentError) { @follower.unfollow!(:foo) }
+        assert_raise(Socialization::ArgumentError) { @follower.unfollow!(:foo) }
       end
 
       should "call $Follow.follows?" do

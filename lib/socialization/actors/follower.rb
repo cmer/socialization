@@ -27,7 +27,7 @@ module Socialization
       # @param [Followable] followable the object to be followed.
       # @return [Boolean]
       def follow!(followable)
-        raise ArgumentError, "#{followable} is not followable!"  unless followable.respond_to?(:is_followable?) && followable.is_followable?
+        raise Socialization::ArgumentError, "#{followable} is not followable!"  unless followable.respond_to?(:is_followable?) && followable.is_followable?
         Socialization.follow_model.follow!(self, followable)
       end
 
@@ -36,7 +36,7 @@ module Socialization
       # @param [Followable] followable the object to unfollow.
       # @return [Boolean]
       def unfollow!(followable)
-        raise ArgumentError, "#{followable} is not followable!" unless followable.respond_to?(:is_followable?) && followable.is_followable?
+        raise Socialization::ArgumentError, "#{followable} is not followable!" unless followable.respond_to?(:is_followable?) && followable.is_followable?
         Socialization.follow_model.unfollow!(self, followable)
       end
 
@@ -45,7 +45,7 @@ module Socialization
       # @param [Followable] followable the object to follow/unfollow.
       # @return [Boolean]
       def toggle_follow!(followable)
-        raise ArgumentError, "#{followable} is not followable!" unless followable.respond_to?(:is_followable?) && followable.is_followable?
+        raise Socialization::ArgumentError, "#{followable} is not followable!" unless followable.respond_to?(:is_followable?) && followable.is_followable?
         if follows?(followable)
           unfollow!(followable)
           false
@@ -60,7 +60,7 @@ module Socialization
       # @param [Followable] followable the {Followable} object to test against.
       # @return [Boolean]
       def follows?(followable)
-        raise ArgumentError, "#{followable} is not followable!" unless followable.respond_to?(:is_followable?) && followable.is_followable?
+        raise Socialization::ArgumentError, "#{followable} is not followable!" unless followable.respond_to?(:is_followable?) && followable.is_followable?
         Socialization.follow_model.follows?(self, followable)
       end
 

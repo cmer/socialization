@@ -26,7 +26,7 @@ module Socialization
       #
       # @return [Boolean]
       def followed_by?(follower)
-        raise ArgumentError, "#{follower} is not follower!"  unless follower.respond_to?(:is_follower?) && follower.is_follower?
+        raise Socialization::ArgumentError, "#{follower} is not follower!"  unless follower.respond_to?(:is_follower?) && follower.is_follower?
         Socialization.follow_model.follows?(follower, self)
       end
 

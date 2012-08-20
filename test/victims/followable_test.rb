@@ -21,7 +21,7 @@ class FollowableTest < Test::Unit::TestCase
 
     context "#followed_by?" do
       should "not accept non-followers" do
-        assert_raise(ArgumentError) { @followable.followed_by?(:foo) }
+        assert_raise(Socialization::ArgumentError) { @followable.followed_by?(:foo) }
       end
 
       should "call $Follow.follows?" do
