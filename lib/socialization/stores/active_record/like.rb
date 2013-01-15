@@ -18,6 +18,36 @@ module Socialization
         :likeable_id   => likeable.id)
       }
 
+      after_create { |record|
+        likeableClass = record.likeable_type.capitalize.constantize
+        likerClass = record.liker_type.capitalize.constantize
+        
+        # Increment likes count of likeable (The movie is liked by 20 people)
+        if likeableClass.column_names.include?("likers_count")
+          likeableClass.increment_counter(:likers_count, record.likeable_id)
+        end
+
+        # Increment likes count of liker (The User likes 20 things)
+        if likerClass.column_names.include?("likeables_count")
+          likerClass.increment_counter(:likeables_count, record.liker_id)
+        end
+      }
+
+      after_destroy { |record|
+        likeableClass = record.likeable_type.capitalize.constantize
+        likerClass = record.liker_type.capitalize.constantize
+        
+        # Decrement likes count of likeable (The movie is liked by 20 people)
+        if likeableClass.column_names.include?("likers_count")
+          likeableClass.decrement_counter(:likers_count, record.likeable_id)
+        end
+
+        # Decrement likes count of liker (The User likes 20 things)
+        if likerClass.column_names.include?("likeables_count")
+          likerClass.decrement_counter(:likeables_count, record.liker_id)
+        end
+      }
+
       class << self
         def like!(liker, likeable)
           unless likes?(liker, likeable)
@@ -88,13 +118,10 @@ module Socialization
           end
         end
 
-        # Returns all the likeables of a certain type that are liked by liker
-        def likeables(liker, klass, opts = {})
-          rel = likeables_relation(liker, klass, opts)
-          if rel.is_a?(ActiveRecord::Relation)
-            rel.all
-          else
-            rel
+        # Return 
+        def likeables_count(liker)
+          if liker.has_attribute("likings_count")
+            liker.likings_count
           end
         end
 

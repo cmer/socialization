@@ -18,6 +18,36 @@ module Socialization
         :followable_id   => followable.id)
       }
 
+      after_create { |record|
+        followableClass = record.followable_type.capitalize.constantize
+        followerClass = record.follower_type.capitalize.constantize
+        
+        # Increment likes count of followables (The movie is liked by 20 people)
+        if followableClass.column_names.include?("followers_count")
+          followableClass.increment_counter(:followers_count, record.followable_id)
+        end
+
+        # Increment likes count of follower (The User likes 20 things)
+        if followerClass.column_names.include?("followables_count")
+          followerClass.increment_counter(:followables_count, record.follower_id)
+        end
+      }
+
+      after_destroy { |record|
+        followableClass = record.followable_type.capitalize.constantize
+        followerClass = record.follower_type.capitalize.constantize
+        
+        # Decrement likes count of likeable (The movie is liked by 20 people)
+        if followableClass.column_names.include?("followers_count")
+          followableClass.decrement_counter(:followers_count, record.followable_id)
+        end
+
+        # Decrement likes count of follower (The User likes 20 things)
+        if followerClass.column_names.include?("followables_count")
+          followerClass.decrement_counter(:followables_count, record.follower_id)
+        end
+      }
+
       class << self
         def follow!(follower, followable)
           unless follows?(follower, followable)

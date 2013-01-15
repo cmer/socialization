@@ -18,6 +18,36 @@ module Socialization
         :mentionable_id   => mentionable.id)
       }
 
+      after_create { |record|
+        mentionableClass = record.mentionable_type.capitalize.constantize
+        mentionerClass = record.mentioner_type.capitalize.constantize
+        
+        # Increment likes count of mentionable (The movie is liked by 20 people)
+        if mentionableClass.column_names.include?("mentioners_count")
+          mentionableClass.increment_counter(:mentioners_count, record.mentionable_id)
+        end
+
+        # Increment likes count of mentioner (The User likes 20 things)
+        if mentionerClass.column_names.include?("mentionables_count")
+          mentionerClass.increment_counter(:mentionables_count, record.mentioner_id)
+        end
+      }
+
+      after_destroy { |record|
+        mentionableClass = record.mentionable_type.capitalize.constantize
+        mentionerClass = record.mentioner_type.capitalize.constantize
+        
+        # Decrement likes count of mentionable (The movie is liked by 20 people)
+        if mentionableClass.column_names.include?("mentioners_count")
+          mentionableClass.decrement_counter(:mentioners_count, record.mentionable_id)
+        end
+
+        # Decrement likes count of mentioner (The User likes 20 things)
+        if mentionerClass.column_names.include?("mentionables_count")
+          mentionerClass.decrement_counter(:mentionables_count, record.mentioner_id)
+        end
+      }
+
       class << self
         def mention!(mentioner, mentionable)
           unless mentions?(mentioner, mentionable)
