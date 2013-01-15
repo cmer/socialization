@@ -46,25 +46,14 @@ module Socialization
         Socialization.mention_model.mentioners_relation(self, klass, opts)
       end
 
-      # Returns the total count of all followers of an object, does not differentiate between types of followers.
+      # Returns the total count of all mentioners of an object, does not differentiate between types of mentioners.
       #
       # @return Integer
-      def followers_count
-        if self.has_attribute?(:followers_count)
-          read_attribute(:followers_count)
+      def mentioners_count
+        if self.has_attribute?(:mentioners_count)
+          read_attribute(:mentioners_count)
         else
-          raise "No liker_count column error"
-        end
-      end
-
-      # Returns the total count of objects liked by liker, does not differentiate between types of followers.
-      #
-      # @return Integer
-      def followables_count
-        if self.has_attribute?(:followables_count)
-          read_attribute(:followables_count)
-        else
-          raise "No followables_count column error"
+          raise "No mentioners_count column error"
         end
       end
 

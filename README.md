@@ -115,6 +115,13 @@ Is following?
 
     user.follows?(celebrity)
 
+Number of followables (Requires followables_count column in db).
+
+    def change
+      add_column :#{Table_name}, :followables_count, :integer, :default => 0
+    end
+
+    user.followables_count
 
 ***
 
@@ -129,6 +136,13 @@ All followers
 
     celebrity.followers(User)
 
+Number of followers (Requires followers_count column in db).
+
+    def change
+      add_column :#{Table_name}, :followers_count, :integer, :default => 0
+    end
+
+    celebrity.followers_count
 
 ***
 
@@ -151,6 +165,14 @@ Likes?
 
     user.likes?(movie)
 
+Number of likeables (Requires likeables_count column in db).
+
+    def change
+      add_column :#{Table_name}, :likeables_count, :integer, :default => 0
+    end
+
+    user.likeable_count
+    
 ***
 
 
@@ -163,6 +185,14 @@ Find out if an objects likes
 All likers
 
     movie.likers(User)
+    
+Number of likers (Requires likers_count column in db).
+
+    def change
+      add_column :#{Table_name}, :likers_count, :integer, :default => 0
+    end
+
+  movie.likers_count
 
 ***
 
@@ -187,9 +217,17 @@ Mentions?
 
     comment.mentions?(user)
     
-All mentionees
+All mentionees 
 
     comment.mentionees(User)
+    
+Number of mentionees (Requires mentionables_count column in db).
+
+    def change
+      add_column :#{Table_name}, :mentionables_count, :integer, :default => 0
+    end
+
+    comment.mentionees_count
 
 ***
 
@@ -203,6 +241,14 @@ Find out if an objects mentions
 All mentioners
 
     user.mentioners(Comment)
+    
+Number of mentioners (Requires mentioners_count column in db).
+
+    def change
+      add_column :#{Table_name}, :mentioners_count, :integer, :default => 0
+    end
+
+    user.mentioners_count
 
 
 ***

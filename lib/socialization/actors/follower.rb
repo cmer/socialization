@@ -83,6 +83,19 @@ module Socialization
         Socialization.follow_model.followables_relation(self, klass, opts)
       end
       alias :followees_relation :followables_relation
+
+      # Returns the total count of objects liked by follower, does not differentiate between types of followers.
+      #
+      # @return Integer
+      def followables_count
+        if self.has_attribute?(:followables_count)
+          read_attribute(:followables_count)
+        else
+          raise "No followables_count column error"
+        end
+      end
+      alias :followees_count :followables_count
+      
     end
   end
 end

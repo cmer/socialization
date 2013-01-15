@@ -53,18 +53,7 @@ module Socialization
         if self.has_attribute?(:likers_count)
           read_attribute(:likers_count)
         else
-          raise "No liker_count column error"
-        end
-      end
-
-      # Returns the total count of objects liked by liker, does not differentiate between types of likers.
-      #
-      # @return Integer
-      def likeables_count
-        if self.has_attribute?(:likeables_count)
-          read_attribute(:likeables_count)
-        else
-          raise "No likeables_count column error"
+          raise "No likers_count column error"
         end
       end
 

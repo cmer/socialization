@@ -83,6 +83,19 @@ module Socialization
         Socialization.like_model.likeables_relation(self, klass, opts)
       end
       alias :likees_relation :likeables_relation
+
+      # Returns the total count of objects liked by liker, does not differentiate between types of likers.
+      #
+      # @return Integer
+      def likeables_count
+        if self.has_attribute?(:likeables_count)
+          read_attribute(:likeables_count)
+        else
+          raise "No likeables_count column error"
+        end
+      end
+      alias :likees_count :likeables_count
+
     end
   end
 end

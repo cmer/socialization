@@ -49,22 +49,11 @@ module Socialization
       # Returns the total count of all followers of an object, does not differentiate between types of followers.
       #
       # @return Integer
-      def follower_count
+      def followers_count
         if self.has_attribute?(:followers_count)
           read_attribute(:followers_count)
         else
           raise "No follower_count column error"
-        end
-      end
-
-      # Returns the total count of objects liked by follower, does not differentiate between types of followers.
-      #
-      # @return Integer
-      def followables_count
-        if self.has_attribute?(:followables_count)
-          read_attribute(:followables_count)
-        else
-          raise "No followables_count column error"
         end
       end
 

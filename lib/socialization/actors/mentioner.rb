@@ -83,6 +83,20 @@ module Socialization
         Socialization.mention_model.mentionables_relation(self, klass, opts)
       end
       alias :mentionees_relation :mentionables_relation
+
+
+      # Returns the total count of objects liked by liker, does not differentiate between types of followers.
+      #
+      # @return Integer
+      def mentionables_count
+        if self.has_attribute?(:mentionables_count)
+          read_attribute(:mentionables_count)
+        else
+          raise "No mentionables_count column error"
+        end
+      end
+      alias :mentionees_count :mentionables_count
+
     end
   end
 end
