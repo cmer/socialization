@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0 (May 29, 2013)
+
+* Same as 0.5.0.beta4. Been using it in a very high traffic production environment for over a year and it works.
+
 ## 0.5.0.beta (June 6, 2012)
 
 * **IMPORTANT:** This release includes many changes, some breaking. Make sure to test your code carefully after upgrading.
