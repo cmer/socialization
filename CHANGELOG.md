@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 (...)
+
+* Dropping official support for Ruby 1.8.x.
+
 ## 1.0.0 (May 29, 2013)
 
 * Same as 0.5.0.beta4. Been using it in a very high traffic production environment for over a year and it works.
