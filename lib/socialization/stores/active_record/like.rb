@@ -66,7 +66,7 @@ module Socialization
         def likers(likeable, klass, opts = {})
           rel = likers_relation(likeable, klass, opts)
           if rel.is_a?(ActiveRecord::Relation)
-            rel.all
+            rel.to_a
           else
             rel
           end
@@ -92,7 +92,7 @@ module Socialization
         def likeables(liker, klass, opts = {})
           rel = likeables_relation(liker, klass, opts)
           if rel.is_a?(ActiveRecord::Relation)
-            rel.all
+            rel.to_a
           else
             rel
           end

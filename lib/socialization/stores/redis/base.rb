@@ -11,7 +11,7 @@ module Socialization
               result
             end
           else
-            actors_relation(victim, klass, options).all
+            actors_relation(victim, klass, options).to_a
           end
         end
 
@@ -32,7 +32,7 @@ module Socialization
               result
             end
           else
-            victims_relation(actor, klass, options).all
+            victims_relation(actor, klass, options).to_a
           end
         end
 
