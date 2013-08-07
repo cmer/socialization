@@ -66,7 +66,7 @@ module Socialization
         def mentioners(mentionable, klass, opts = {})
           rel = mentioners_relation(mentionable, klass, opts)
           if rel.is_a?(ActiveRecord::Relation)
-            rel.all
+            rel.to_a
           else
             rel
           end
@@ -92,7 +92,7 @@ module Socialization
         def mentionables(mentioner, klass, opts = {})
           rel = mentionables_relation(mentioner, klass, opts)
           if rel.is_a?(ActiveRecord::Relation)
-            rel.all
+            rel.to_a
           else
             rel
           end
