@@ -66,7 +66,7 @@ module Socialization
         def followers(followable, klass, opts = {})
           rel = followers_relation(followable, klass, opts)
           if rel.is_a?(ActiveRecord::Relation)
-            rel.all
+            rel.to_a
           else
             rel
           end
@@ -92,7 +92,7 @@ module Socialization
         def followables(follower, klass, opts = {})
           rel = followables_relation(follower, klass, opts)
           if rel.is_a?(ActiveRecord::Relation)
-            rel.all
+            rel.to_a
           else
             rel
           end
