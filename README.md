@@ -115,6 +115,10 @@ Is following?
 
     user.follows?(celebrity)
 
+What items are you following (given that an Item model is followed)?
+
+    user.followees(Item)
+
 
 ***
 
@@ -186,7 +190,7 @@ Toggle
 Mentions?
 
     comment.mentions?(user)
-    
+
 All mentionees
 
     comment.mentionees(User)
