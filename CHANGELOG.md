@@ -2,7 +2,7 @@
 
 ## 1.0.1 (January 8, 2014)
 
-* Supports Rails 4
+* Supports Rails 4 (thanks @thomas88)
 * Dropping official support for Ruby 1.8.x, 1.9.2.
 
 
