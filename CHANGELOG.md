@@ -1,8 +1,10 @@
 # Changelog
 
-## 1.0.1 (...)
+## 1.0.1 (January 8, 2014)
 
-* Dropping official support for Ruby 1.8.x.
+* Supports Rails 4
+* Dropping official support for Ruby 1.8.x, 1.9.2.
+
 
 ## 1.0.0 (May 29, 2013)
 
