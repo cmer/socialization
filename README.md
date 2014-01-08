@@ -12,7 +12,7 @@ The Mention feature was written with Facebook mentions in mind. For example, Joh
 
 ## Installation
 
-### Rails 3
+### Rails 3/4
 
 Add the gem to the gemfile:
 `gem "socialization"`
@@ -250,4 +250,4 @@ To use the demo app:
 
 ## Copyright
 
-Copyright (c) 2012 Carl Mercier --  Released under the MIT license.
+Copyright (c) 2012-2014 Carl Mercier --  Released under the MIT license.
