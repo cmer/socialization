@@ -25,6 +25,7 @@ module Socialization
               like.liker = liker
               like.likeable = likeable
             end
+            likeable.class.increment_counter(:likers_count, likeable.id) if likeable.respond_to?(:likers_count)
             call_after_create_hooks(liker, likeable)
             true
           else
@@ -35,6 +36,7 @@ module Socialization
         def unlike!(liker, likeable)
           if likes?(liker, likeable)
             like_for(liker, likeable).destroy_all
+            likeable.class.decrement_counter(:likers_count, likeable.id) if likeable.respond_to?(:likers_count)
             call_after_destroy_hooks(liker, likeable)
             true
           else

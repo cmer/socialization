@@ -24,6 +24,16 @@ class ActiveRecordLikeStoreTest < Test::Unit::TestCase
         assert_match_likeable @klass.last, @likeable
       end
 
+      should "increase counter cache if column exists" do
+        assert_nothing_raised do
+          @klass.like!(@liker, @likeable)
+        end
+
+        likeable_with_counter_cache = ImALikeableWithCounterCache.create
+        @klass.like!(@liker, likeable_with_counter_cache)
+        assert_equal 1, likeable_with_counter_cache.reload.likers_count
+      end
+
       should "touch liker when instructed" do
         @klass.touch :liker
         @liker.expects(:touch).once

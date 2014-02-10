@@ -143,11 +143,21 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
 
+  create_table :im_a_followable_with_counter_caches do |t|
+    t.integer :followers_count, default: 0
+    t.timestamps
+  end
+
   create_table :im_a_likers do |t|
     t.timestamps
   end
 
   create_table :im_a_likeables do |t|
+    t.timestamps
+  end
+
+  create_table :im_a_likeable_with_counter_caches do |t|
+    t.integer :likers_count, default: 0
     t.timestamps
   end
 
@@ -206,6 +216,9 @@ class ImAFollowerChild < ImAFollower; end
 class ImAFollowable < ActiveRecord::Base
   acts_as_followable
 end
+class ImAFollowableWithCounterCache < ActiveRecord::Base
+  acts_as_followable
+end
 class ImAFollowableChild < ImAFollowable; end
 
 class ImALiker < ActiveRecord::Base
@@ -214,6 +227,9 @@ end
 class ImALikerChild < ImALiker; end
 
 class ImALikeable < ActiveRecord::Base
+  acts_as_likeable
+end
+class ImALikeableWithCounterCache < ActiveRecord::Base
   acts_as_likeable
 end
 class ImALikeableChild < ImALikeable; end

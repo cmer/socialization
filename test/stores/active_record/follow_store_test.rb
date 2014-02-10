@@ -24,6 +24,16 @@ class ActiveRecordFollowStoreTest < Test::Unit::TestCase
         assert_match_followable @klass.last, @followable
       end
 
+      should "increase counter cache if column exists" do
+        assert_nothing_raised do
+          @klass.follow!(@follower, @followable)
+        end
+
+        followable_with_counter_cache = ImAFollowableWithCounterCache.create
+        @klass.follow!(@follower, followable_with_counter_cache)
+        assert_equal 1, followable_with_counter_cache.reload.followers_count
+      end
+
       should "touch follower when instructed" do
         @klass.touch :follower
         @follower.expects(:touch).once

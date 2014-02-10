@@ -133,6 +133,13 @@ All followers
 
     celebrity.followers(User)
 
+Number of followers (Requires followers_count column in db)
+
+    def change
+      add_column :#{Table_name}, :followers_count, :integer, :default => 0
+    end
+
+    celebrity.followers_count
 
 ***
 
@@ -167,6 +174,14 @@ Find out if an objects likes
 All likers
 
     movie.likers(User)
+
+Number of likers (Requires likers_count column in db)
+
+    def change
+      add_column :#{Table_name}, :likers_count, :integer, :default => 0
+    end
+
+    movie.likers_count
 
 ***
 
