@@ -24,6 +24,14 @@ class ActiveRecordMentionStoreTest < Test::Unit::TestCase
         assert_match_mentionable @klass.last, @mentionable
       end
 
+      should "increment counter caches" do
+        mentioner   = ImAMentionerWithCounterCache.create
+        mentionable = ImAMentionableWithCounterCache.create
+        @klass.mention!(mentioner, mentionable)
+        assert_equal 1, mentioner.reload.mentionees_count
+        assert_equal 1, mentionable.reload.mentioners_count
+      end
+
       should "touch mentioner when instructed" do
         @klass.touch :mentioner
         @mentioner.expects(:touch).once
@@ -57,6 +65,18 @@ class ActiveRecordMentionStoreTest < Test::Unit::TestCase
         @klass.mention!(@mentioner, @mentionable)
       end
     end
+
+    context "#unmention!" do
+      should "decrement counter caches" do
+        mentioner   = ImAMentionerWithCounterCache.create
+        mentionable = ImAMentionableWithCounterCache.create
+        @klass.mention!(mentioner, mentionable)
+        @klass.unmention!(mentioner, mentionable)
+        assert_equal 0, mentioner.reload.mentionees_count
+        assert_equal 0, mentionable.reload.mentioners_count
+      end
+    end
+
 
     context "#mentions?" do
       should "return true when mention exists" do
