@@ -119,6 +119,13 @@ What items are you following (given that an Item model is followed)?
 
     user.followees(Item)
 
+Number of followees (Requires followees_count column in db)
+
+    def change
+      add_column :#{Table_name}, :followees_count, :integer, :default => 0
+    end
+
+    user.followees_count
 
 ***
 
@@ -161,6 +168,14 @@ Toggle
 Likes?
 
     user.likes?(movie)
+
+Number of likees (Requires likees_count column in db)
+
+    def change
+      add_column :#{Table_name}, :likees_count, :integer, :default => 0
+    end
+
+    user.likees_count
 
 ***
 
@@ -210,6 +225,14 @@ All mentionees
 
     comment.mentionees(User)
 
+Number of mentionees (Requires mentionees column in db)
+
+    def change
+      add_column :#{Table_name}, : mentionees, :integer, :default => 0
+    end
+
+    user. mentionees_count
+
 ***
 
 
@@ -223,6 +246,13 @@ All mentioners
 
     user.mentioners(Comment)
 
+Number of mentioners (Requires mentioners_count column in db)
+
+    def change
+      add_column :#{Table_name}, :mentioners_count, :integer, :default => 0
+    end
+
+    movie.mentioners_count
 
 ***
 
