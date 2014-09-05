@@ -52,7 +52,7 @@ module Socialization
             self.select(:follower_id).
               where(:follower_type => klass.table_name.classify).
               where(:followable_type => followable.class.to_s).
-              where(:followable_id => followable.id)
+              where(:followable_id => followable.id).order("created_at desc")
           )
 
           if opts[:pluck]
@@ -79,7 +79,7 @@ module Socialization
             self.select(:followable_id).
               where(:followable_type => klass.table_name.classify).
               where(:follower_type => follower.class.to_s).
-              where(:follower_id => follower.id)
+              where(:follower_id => follower.id).order("created_at desc")
           )
 
           if opts[:pluck]
