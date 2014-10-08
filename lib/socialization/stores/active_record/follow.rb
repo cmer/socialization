@@ -48,7 +48,7 @@ module Socialization
 
         # Returns an ActiveRecord::Relation of all the followers of a certain type that are following followable
         def followers_relation(followable, klass, opts = {})
-          rel = klass.where(:id =>
+          rel = klass.where(klass.primary_key =>
             self.select(:follower_id).
               where(:follower_type => klass.table_name.classify).
               where(:followable_type => followable.class.to_s).
@@ -74,7 +74,7 @@ module Socialization
 
         # Returns an ActiveRecord::Relation of all the followables of a certain type that are followed by follower
         def followables_relation(follower, klass, opts = {})
-          rel = klass.where(:id =>
+          rel = klass.where(klass.primary_key =>
             self.select(:followable_id).
               where(:followable_type => klass.table_name.classify).
               where(:follower_type => follower.class.to_s).

@@ -48,7 +48,7 @@ module Socialization
 
         # Returns an ActiveRecord::Relation of all the mentioners of a certain type that are mentioning mentionable
         def mentioners_relation(mentionable, klass, opts = {})
-          rel = klass.where(:id =>
+          rel = klass.where(klass.primary_key =>
             self.select(:mentioner_id).
               where(:mentioner_type => klass.table_name.classify).
               where(:mentionable_type => mentionable.class.to_s).
@@ -74,7 +74,7 @@ module Socialization
 
         # Returns an ActiveRecord::Relation of all the mentionables of a certain type that are mentioned by mentioner
         def mentionables_relation(mentioner, klass, opts = {})
-          rel = klass.where(:id =>
+          rel = klass.where(klass.primary_key =>
             self.select(:mentionable_id).
               where(:mentionable_type => klass.table_name.classify).
               where(:mentioner_type => mentioner.class.to_s).
