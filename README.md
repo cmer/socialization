@@ -154,6 +154,10 @@ Toggle
 Likes?
 
     user.likes?(movie)
+    
+Likees
+
+    user.likees(Movie) or user.likeables(Movie)
 
 ***
 
