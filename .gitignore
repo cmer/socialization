@@ -11,3 +11,5 @@ doc
 .yardoc
 .rbenv-version
 gemfiles
+
+.idea/
