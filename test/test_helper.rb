@@ -60,21 +60,21 @@ class Test::Unit::TestCase
 end
 
 def use_redis_store
-  Socialization.follow_model = Socialization::RedisStores::Follow
+  #Socialization.follow_model = Socialization::RedisStores::Follow
   Socialization.mention_model = Socialization::RedisStores::Mention
   Socialization.like_model = Socialization::RedisStores::Like
   setup_model_shortcuts
 end
 
 def use_ar_store
-  Socialization.follow_model = Socialization::ActiveRecordStores::Follow
+  #Socialization.follow_model = Socialization::ActiveRecordStores::Follow
   Socialization.mention_model = Socialization::ActiveRecordStores::Mention
   Socialization.like_model = Socialization::ActiveRecordStores::Like
   setup_model_shortcuts
 end
 
 def setup_model_shortcuts
-  $Follow = Socialization.follow_model
+  #$Follow = Socialization.follow_model
   $Mention = Socialization.mention_model
   $Like = Socialization.like_model
 end
