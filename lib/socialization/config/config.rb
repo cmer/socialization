@@ -1,16 +1,16 @@
 module Socialization
   class << self
-    def follow_model
-      if @follow_model
-        @follow_model
-      else
-        ::Follow
-      end
-    end
-
-    def follow_model=(klass)
-      @follow_model = klass
-    end
+    # def follow_model
+    #   if @follow_model
+    #     @follow_model
+    #   else
+    #     ::Follow
+    #   end
+    # end
+    #
+    # def follow_model=(klass)
+    #   @follow_model = klass
+    # end
 
     def like_model
       if @like_model
