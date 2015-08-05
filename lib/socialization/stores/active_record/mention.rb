@@ -25,6 +25,8 @@ module Socialization
               mention.mentioner = mentioner
               mention.mentionable = mentionable
             end
+            update_counter(mentioner, mentionees_count: +1)
+            update_counter(mentionable, mentioners_count: +1)
             call_after_create_hooks(mentioner, mentionable)
             true
           else
@@ -35,6 +37,8 @@ module Socialization
         def unmention!(mentioner, mentionable)
           if mentions?(mentioner, mentionable)
             mention_for(mentioner, mentionable).destroy_all
+            update_counter(mentioner, mentionees_count: -1)
+            update_counter(mentionable, mentioners_count: -1)
             call_after_destroy_hooks(mentioner, mentionable)
             true
           else

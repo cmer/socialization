@@ -24,6 +24,14 @@ class ActiveRecordLikeStoreTest < Test::Unit::TestCase
         assert_match_likeable @klass.last, @likeable
       end
 
+      should "increment counter caches" do
+        liker    = ImALikerWithCounterCache.create
+        likeable = ImALikeableWithCounterCache.create
+        @klass.like!(liker, likeable)
+        assert_equal 1, liker.reload.likees_count
+        assert_equal 1, likeable.reload.likers_count
+      end
+
       should "touch liker when instructed" do
         @klass.touch :liker
         @liker.expects(:touch).once
@@ -55,6 +63,17 @@ class ActiveRecordLikeStoreTest < Test::Unit::TestCase
         @klass.after_like :after_unlike
         @klass.expects(:after_unlike).once
         @klass.like!(@liker, @likeable)
+      end
+    end
+
+    context "#unlike!" do
+      should "decrement counter caches" do
+        liker    = ImALikerWithCounterCache.create
+        likeable = ImALikeableWithCounterCache.create
+        @klass.like!(liker, likeable)
+        @klass.unlike!(liker, likeable)
+        assert_equal 0, liker.reload.likees_count
+        assert_equal 0, likeable.reload.likers_count
       end
     end
 

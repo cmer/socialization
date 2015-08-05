@@ -25,6 +25,8 @@ module Socialization
               follow.follower = follower
               follow.followable = followable
             end
+            update_counter(follower, followees_count: +1)
+            update_counter(followable, followers_count: +1)
             call_after_create_hooks(follower, followable)
             true
           else
@@ -35,6 +37,8 @@ module Socialization
         def unfollow!(follower, followable)
           if follows?(follower, followable)
             follow_for(follower, followable).destroy_all
+            update_counter(follower, followees_count: -1)
+            update_counter(followable, followers_count: -1)
             call_after_destroy_hooks(follower, followable)
             true
           else

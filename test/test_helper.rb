@@ -8,13 +8,16 @@ require 'logger'
 require 'mock_redis' if $MOCK_REDIS
 require 'redis' unless $MOCK_REDIS
 require 'mocha' # mocha always needs to be loaded last! http://stackoverflow.com/questions/3118866/mocha-mock-carries-to-another-test/4375296#4375296
-# require 'pry'
 
 $:.push File.expand_path("../lib", __FILE__)
 require "socialization"
 
 silence_warnings do
   Redis = MockRedis if $MOCK_REDIS # Magic!
+end
+
+ActiveSupport::Inflector.inflections do |inflect|
+  inflect.irregular 'cache', 'caches'
 end
 
 module Test::Unit::Assertions
@@ -139,7 +142,17 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
 
+  create_table :im_a_follower_with_counter_caches do |t|
+    t.integer :followees_count, default: 0
+    t.timestamps
+  end
+
   create_table :im_a_followables do |t|
+    t.timestamps
+  end
+
+  create_table :im_a_followable_with_counter_caches do |t|
+    t.integer :followers_count, default: 0
     t.timestamps
   end
 
@@ -147,7 +160,17 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
 
+  create_table :im_a_liker_with_counter_caches do |t|
+    t.integer :likees_count, default: 0
+    t.timestamps
+  end
+
   create_table :im_a_likeables do |t|
+    t.timestamps
+  end
+
+  create_table :im_a_likeable_with_counter_caches do |t|
+    t.integer :likers_count, default: 0
     t.timestamps
   end
 
@@ -155,7 +178,17 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
 
+  create_table :im_a_mentioner_with_counter_caches do |t|
+    t.integer :mentionees_count, default: 0
+    t.timestamps
+  end
+
   create_table :im_a_mentionables do |t|
+    t.timestamps
+  end
+
+  create_table :im_a_mentionable_with_counter_caches do |t|
+    t.integer :mentioners_count, default: 0
     t.timestamps
   end
 
@@ -201,9 +234,15 @@ end
 class ImAFollower < ActiveRecord::Base
   acts_as_follower
 end
+class ImAFollowerWithCounterCache < ActiveRecord::Base
+  acts_as_follower
+end
 class ImAFollowerChild < ImAFollower; end
 
 class ImAFollowable < ActiveRecord::Base
+  acts_as_followable
+end
+class ImAFollowableWithCounterCache < ActiveRecord::Base
   acts_as_followable
 end
 class ImAFollowableChild < ImAFollowable; end
@@ -211,9 +250,15 @@ class ImAFollowableChild < ImAFollowable; end
 class ImALiker < ActiveRecord::Base
   acts_as_liker
 end
+class ImALikerWithCounterCache < ActiveRecord::Base
+  acts_as_liker
+end
 class ImALikerChild < ImALiker; end
 
 class ImALikeable < ActiveRecord::Base
+  acts_as_likeable
+end
+class ImALikeableWithCounterCache < ActiveRecord::Base
   acts_as_likeable
 end
 class ImALikeableChild < ImALikeable; end
@@ -221,9 +266,15 @@ class ImALikeableChild < ImALikeable; end
 class ImAMentioner < ActiveRecord::Base
   acts_as_mentioner
 end
+class ImAMentionerWithCounterCache < ActiveRecord::Base
+  acts_as_mentioner
+end
 class ImAMentionerChild < ImAMentioner; end
 
 class ImAMentionable < ActiveRecord::Base
+  acts_as_mentionable
+end
+class ImAMentionableWithCounterCache < ActiveRecord::Base
   acts_as_mentionable
 end
 class ImAMentionableChild < ImAMentionable; end

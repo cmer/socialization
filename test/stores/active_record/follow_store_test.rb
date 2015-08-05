@@ -24,6 +24,14 @@ class ActiveRecordFollowStoreTest < Test::Unit::TestCase
         assert_match_followable @klass.last, @followable
       end
 
+      should "increment counter caches" do
+        follower   = ImAFollowerWithCounterCache.create
+        followable = ImAFollowableWithCounterCache.create
+        @klass.follow!(follower, followable)
+        assert_equal 1, follower.reload.followees_count
+        assert_equal 1, followable.reload.followers_count
+      end
+
       should "touch follower when instructed" do
         @klass.touch :follower
         @follower.expects(:touch).once
@@ -55,6 +63,17 @@ class ActiveRecordFollowStoreTest < Test::Unit::TestCase
         @klass.after_follow :after_unfollow
         @klass.expects(:after_unfollow).once
         @klass.follow!(@follower, @followable)
+      end
+    end
+
+    context "#unfollow!" do
+      should "decrement counter caches" do
+        follower   = ImAFollowerWithCounterCache.create
+        followable = ImAFollowableWithCounterCache.create
+        @klass.follow!(follower, followable)
+        @klass.unfollow!(follower, followable)
+        assert_equal 0, follower.reload.followees_count
+        assert_equal 0, followable.reload.followers_count
       end
     end
 
