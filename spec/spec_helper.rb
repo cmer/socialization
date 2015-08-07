@@ -10,7 +10,7 @@ end
 $:.push File.expand_path("../lib", __FILE__)
 require 'active_record'
 require "socialization"
-require 'spec_helpers/data_stores'
+require 'spec_support/data_stores'
 require 'logger'
 
 ActiveSupport::Inflector.inflections do |inflect|
