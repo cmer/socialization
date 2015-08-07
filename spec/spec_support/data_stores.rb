@@ -144,12 +144,12 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 end
 
-class Celebrity < ActiveRecord::Base
+class ::Celebrity < ActiveRecord::Base
   acts_as_followable
   acts_as_mentionable
 end
 
-class User < ActiveRecord::Base
+class ::User < ActiveRecord::Base
   acts_as_follower
   acts_as_followable
   acts_as_liker
@@ -159,13 +159,13 @@ class User < ActiveRecord::Base
   has_many :comments
 end
 
-class Comment < ActiveRecord::Base
+class ::Comment < ActiveRecord::Base
   acts_as_mentioner
   belongs_to :user
   belongs_to :movie
 end
 
-class Movie < ActiveRecord::Base
+class ::Movie < ActiveRecord::Base
   acts_as_likeable
   has_many :comments
 end
@@ -174,59 +174,59 @@ end
 # class Like < Socialization::ActiveRecordStores::Like; end
 # class Mention < Socialization::ActiveRecordStores::Mention; end
 
-class ImAFollower < ActiveRecord::Base
+class ::ImAFollower < ActiveRecord::Base
   acts_as_follower
 end
-class ImAFollowerWithCounterCache < ActiveRecord::Base
+class ::ImAFollowerWithCounterCache < ActiveRecord::Base
   acts_as_follower
 end
-class ImAFollowerChild < ImAFollower; end
+class ::ImAFollowerChild < ImAFollower; end
 
-class ImAFollowable < ActiveRecord::Base
+class ::ImAFollowable < ActiveRecord::Base
   acts_as_followable
 end
-class ImAFollowableWithCounterCache < ActiveRecord::Base
+class ::ImAFollowableWithCounterCache < ActiveRecord::Base
   acts_as_followable
 end
-class ImAFollowableChild < ImAFollowable; end
+class ::ImAFollowableChild < ImAFollowable; end
 
-class ImALiker < ActiveRecord::Base
+class ::ImALiker < ActiveRecord::Base
   acts_as_liker
 end
-class ImALikerWithCounterCache < ActiveRecord::Base
+class ::ImALikerWithCounterCache < ActiveRecord::Base
   acts_as_liker
 end
-class ImALikerChild < ImALiker; end
+class ::ImALikerChild < ImALiker; end
 
-class ImALikeable < ActiveRecord::Base
+class ::ImALikeable < ActiveRecord::Base
   acts_as_likeable
 end
-class ImALikeableWithCounterCache < ActiveRecord::Base
+class ::ImALikeableWithCounterCache < ActiveRecord::Base
   acts_as_likeable
 end
-class ImALikeableChild < ImALikeable; end
+class ::ImALikeableChild < ImALikeable; end
 
-class ImAMentioner < ActiveRecord::Base
+class ::ImAMentioner < ActiveRecord::Base
   acts_as_mentioner
 end
-class ImAMentionerWithCounterCache < ActiveRecord::Base
+class ::ImAMentionerWithCounterCache < ActiveRecord::Base
   acts_as_mentioner
 end
-class ImAMentionerChild < ImAMentioner; end
+class ::ImAMentionerChild < ImAMentioner; end
 
-class ImAMentionable < ActiveRecord::Base
+class ::ImAMentionable < ActiveRecord::Base
   acts_as_mentionable
 end
-class ImAMentionableWithCounterCache < ActiveRecord::Base
+class ::ImAMentionableWithCounterCache < ActiveRecord::Base
   acts_as_mentionable
 end
-class ImAMentionableChild < ImAMentionable; end
+class ::ImAMentionableChild < ImAMentionable; end
 
-class ImAMentionerAndMentionable < ActiveRecord::Base
+class ::ImAMentionerAndMentionable < ActiveRecord::Base
   acts_as_mentioner
   acts_as_mentionable
 end
 
-class Vanilla < ActiveRecord::Base
+class ::Vanilla < ActiveRecord::Base
 end
 
