@@ -295,4 +295,4 @@ To use the demo app:
 
 ## Copyright
 
-Copyright (c) 2012-2014 Carl Mercier --  Released under the MIT license.
+Copyright (c) 2012-2015 Carl Mercier --  Released under the MIT license.

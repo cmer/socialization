@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2 (August 8, 2015)
+
+* Support for ActiveRecord counter caches (thanks @samnang)
+* Moved entire test suite to RSpec
+
+
 ## 1.0.1 (January 8, 2014)
 
 * Supports Rails 4 (thanks @thomas88)
@@ -9,6 +15,7 @@
 ## 1.0.0 (May 29, 2013)
 
 * Same as 0.5.0.beta4. Been using it in a very high traffic production environment for over a year and it works.
+
 
 ## 0.5.0.beta (June 6, 2012)
 
@@ -24,10 +31,12 @@
 * Added: support for single table inheritance. Thanks to [@balvig](https://github.com/balvig).
 * Changed: raises Socialization::ArgumentError instead of ::ArgumentError
 
+
 ## v0.4.0 (February 25, 2012)
 
 * **BREAKING CHANGE:** Renamed `mentionner` to `mentioner`. This is proper English.
 * Added: `followees`, `likees` and `mentionees` methods to `Follower`, `Liker` and `Mentioner`. Thanks to [@ihara2525](https://github.com/ihara2525).
+
 
 ## v0.3.0 (February 22, 2012)
 
@@ -41,14 +50,17 @@
 * Improved tests.
 * Changed: Can no longer like or follow yourself.
 
+
 ## 0.2.1 (January 15, 2012)
 
 * Bug fixes
+
 
 ## 0.2.0 (January 15, 2012)
 
 * Bug fixes
 * Made Ruby 1.8.7 compatible
+
 
 ## 0.1.0 (January 14, 2012)
 
