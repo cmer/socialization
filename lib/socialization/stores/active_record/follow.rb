@@ -9,12 +9,12 @@ module Socialization
       belongs_to :followable, :polymorphic => true
 
       scope :followed_by, lambda { |follower| where(
-        :follower_type   => follower.class.table_name.classify,
+        :follower_type   => follower.class.name.classify,
         :follower_id     => follower.id)
       }
 
       scope :following,   lambda { |followable| where(
-        :followable_type => followable.class.table_name.classify,
+        :followable_type => followable.class.name.classify,
         :followable_id   => followable.id)
       }
 
@@ -54,7 +54,7 @@ module Socialization
         def followers_relation(followable, klass, opts = {})
           rel = klass.where(:id =>
             self.select(:follower_id).
-              where(:follower_type => klass.table_name.classify).
+              where(:follower_type => klass.name.classify).
               where(:followable_type => followable.class.to_s).
               where(:followable_id => followable.id)
           )
@@ -80,7 +80,7 @@ module Socialization
         def followables_relation(follower, klass, opts = {})
           rel = klass.where(:id =>
             self.select(:followable_id).
-              where(:followable_type => klass.table_name.classify).
+              where(:followable_type => klass.name.classify).
               where(:follower_type => follower.class.to_s).
               where(:follower_id => follower.id)
           )

@@ -9,12 +9,12 @@ module Socialization
       belongs_to :mentionable, :polymorphic => true
 
       scope :mentioned_by, lambda { |mentioner| where(
-        :mentioner_type   => mentioner.class.table_name.classify,
+        :mentioner_type   => mentioner.class.name.classify,
         :mentioner_id     => mentioner.id)
       }
 
       scope :mentioning,   lambda { |mentionable| where(
-        :mentionable_type => mentionable.class.table_name.classify,
+        :mentionable_type => mentionable.class.name.classify,
         :mentionable_id   => mentionable.id)
       }
 
@@ -54,7 +54,7 @@ module Socialization
         def mentioners_relation(mentionable, klass, opts = {})
           rel = klass.where(:id =>
             self.select(:mentioner_id).
-              where(:mentioner_type => klass.table_name.classify).
+              where(:mentioner_type => klass.name.classify).
               where(:mentionable_type => mentionable.class.to_s).
               where(:mentionable_id => mentionable.id)
           )
@@ -80,7 +80,7 @@ module Socialization
         def mentionables_relation(mentioner, klass, opts = {})
           rel = klass.where(:id =>
             self.select(:mentionable_id).
-              where(:mentionable_type => klass.table_name.classify).
+              where(:mentionable_type => klass.name.classify).
               where(:mentioner_type => mentioner.class.to_s).
               where(:mentioner_id => mentioner.id)
           )
