@@ -228,10 +228,10 @@ All mentionees
 Number of mentionees (Requires mentionees column in db)
 
     def change
-      add_column :#{Table_name}, : mentionees, :integer, :default => 0
+      add_column :#{Table_name}, :mentionees, :integer, :default => 0
     end
 
-    user. mentionees_count
+    user.mentionees_count
 
 ***
 
