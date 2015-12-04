@@ -10,7 +10,7 @@
   stores/redis/base.rb
   stores/redis/**/*.rb
   actors/**/*.rb
-  victims/**/*.rb
+  subjects/**/*.rb
   helpers/**/*.rb
   config/**/*.rb
 ).each do |path|

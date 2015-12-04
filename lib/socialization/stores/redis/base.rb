@@ -4,80 +4,80 @@ module Socialization
 
       class << self
       protected
-        def actors(victim, klass, options = {})
+        def actors(subject, klass, options = {})
           if options[:pluck]
-            Socialization.redis.smembers(generate_forward_key(victim)).inject([]) do |result, element|
+            Socialization.redis.smembers(generate_forward_key(subject)).inject([]) do |result, element|
               result << element.match(/\:(\d+)$/)[1] if element.match(/^#{klass}\:/)
               result
             end
           else
-            actors_relation(victim, klass, options).to_a
+            actors_relation(subject, klass, options).to_a
           end
         end
 
-        def actors_relation(victim, klass, options = {})
-          ids = actors(victim, klass, :pluck => :id)
+        def actors_relation(subject, klass, options = {})
+          ids = actors(subject, klass, :pluck => :id)
           klass.where("#{klass.table_name}.id IN (?)", ids)
         end
 
-        def victims_relation(actor, klass, options = {})
-          ids = victims(actor, klass, :pluck => :id)
+        def subjects_relation(actor, klass, options = {})
+          ids = subjects(actor, klass, :pluck => :id)
           klass.where("#{klass.table_name}.id IN (?)", ids)
         end
 
-        def victims(actor, klass, options = {})
+        def subjects(actor, klass, options = {})
           if options[:pluck]
             Socialization.redis.smembers(generate_backward_key(actor)).inject([]) do |result, element|
               result << element.match(/\:(\d+)$/)[1] if element.match(/^#{klass}\:/)
               result
             end
           else
-            victims_relation(actor, klass, options).to_a
+            subjects_relation(actor, klass, options).to_a
           end
         end
 
-        def relation!(actor, victim, options = {})
-          unless options[:skip_check] || relation?(actor, victim)
-            Socialization.redis.sadd generate_forward_key(victim), generate_redis_value(actor)
-            Socialization.redis.sadd generate_backward_key(actor), generate_redis_value(victim)
-            call_after_create_hooks(actor, victim)
+        def relation!(actor, subject, options = {})
+          unless options[:skip_check] || relation?(actor, subject)
+            Socialization.redis.sadd generate_forward_key(subject), generate_redis_value(actor)
+            Socialization.redis.sadd generate_backward_key(actor), generate_redis_value(subject)
+            call_after_create_hooks(actor, subject)
             true
           else
             false
           end
         end
 
-        def unrelation!(actor, victim, options = {})
-          if options[:skip_check] || relation?(actor, victim)
-            Socialization.redis.srem generate_forward_key(victim), generate_redis_value(actor)
-            Socialization.redis.srem generate_backward_key(actor), generate_redis_value(victim)
-            call_after_destroy_hooks(actor, victim)
+        def unrelation!(actor, subject, options = {})
+          if options[:skip_check] || relation?(actor, subject)
+            Socialization.redis.srem generate_forward_key(subject), generate_redis_value(actor)
+            Socialization.redis.srem generate_backward_key(actor), generate_redis_value(subject)
+            call_after_destroy_hooks(actor, subject)
             true
           else
             false
           end
         end
 
-        def relation?(actor, victim)
-          Socialization.redis.sismember generate_forward_key(victim), generate_redis_value(actor)
+        def relation?(actor, subject)
+          Socialization.redis.sismember generate_forward_key(subject), generate_redis_value(actor)
         end
 
-        def remove_actor_relations(victim)
-          forward_key = generate_forward_key(victim)
+        def remove_actor_relations(subject)
+          forward_key = generate_forward_key(subject)
           actors = Socialization.redis.smembers forward_key
           Socialization.redis.del forward_key
           actors.each do |actor|
-            Socialization.redis.srem generate_backward_key(actor), generate_redis_value(victim)
+            Socialization.redis.srem generate_backward_key(actor), generate_redis_value(subject)
           end
           true
         end
 
-        def remove_victim_relations(actor)
+        def remove_subject_relations(actor)
           backward_key = generate_backward_key(actor)
-          victims = Socialization.redis.smembers backward_key
+          subjects = Socialization.redis.smembers backward_key
           Socialization.redis.del backward_key
-          victims.each do |victim|
-            Socialization.redis.srem generate_forward_key(victim), generate_redis_value(actor)
+          subjects.each do |subject|
+            Socialization.redis.srem generate_forward_key(subject), generate_redis_value(actor)
           end
           true
         end
@@ -96,12 +96,12 @@ module Socialization
           end
         end
 
-        def generate_forward_key(victim)
+        def generate_forward_key(subject)
           keys = key_type_to_type_names(self)
-          if victim.is_a?(String)
-            "#{keys[0].pluralize.capitalize}:#{victim}"
+          if subject.is_a?(String)
+            "#{keys[0].pluralize.capitalize}:#{subject}"
           else
-            "#{keys[0].pluralize.capitalize}:#{victim.class}:#{victim.id}"
+            "#{keys[0].pluralize.capitalize}:#{subject.class}:#{subject.id}"
           end
         end
 

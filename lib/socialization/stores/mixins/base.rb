@@ -2,9 +2,9 @@ module Socialization
   module Stores
     module Mixins
       module Base
-        def touch_dependents(actor, victim)
+        def touch_dependents(actor, subject)
           actor.touch if touch_actor?(actor)
-          victim.touch if touch_victim?(victim)
+          subject.touch if touch_subject?(subject)
         end
 
         def touch_actor?(actor)
@@ -12,8 +12,8 @@ module Socialization
           touch == :all || touch.to_s =~ /er$/i
         end
 
-        def touch_victim?(victim)
-          return false unless victim.respond_to?(:touch)
+        def touch_subject?(subject)
+          return false unless subject.respond_to?(:touch)
           touch == :all || touch.to_s =~ /able$/i
         end
       end
