@@ -63,6 +63,19 @@ describe Socialization::ActiveRecordStores::Mention do
       expect(@klass).to receive(:after_unmention).once
       @klass.mention!(@mentioner, @mentionable)
     end
+
+    context "with STI child classes" do
+      before do
+        @mentioner = ImAMentionerChild.create
+        @mentionable = ImAMentionableChild.create
+      end
+
+      it "creates a Mention record" do
+        @klass.mention!(@mentioner, @mentionable)
+        expect(@mentioner).to match_mentioner(@klass.last)
+        expect(@mentionable).to match_mentionable(@klass.last)
+      end
+    end
   end
 
   describe "#unmention!" do
@@ -73,6 +86,17 @@ describe Socialization::ActiveRecordStores::Mention do
       @klass.unmention!(mentioner, mentionable)
       expect(mentioner.reload.mentionees_count).to eq 0
       expect(mentionable.reload.mentioners_count).to eq 0
+    end
+
+    context "with STI child classes" do
+      it "decrements counter caches" do
+        mentioner   = ImAMentionerChildWithCounterCache.create
+        mentionable = ImAMentionableChildWithCounterCache.create
+        @klass.mention!(mentioner, mentionable)
+        @klass.unmention!(mentioner, mentionable)
+        expect(mentioner.reload.mentionees_count).to eq 0
+        expect(mentionable.reload.mentioners_count).to eq 0
+      end
     end
   end
 
@@ -88,6 +112,21 @@ describe Socialization::ActiveRecordStores::Mention do
 
     it "returns false when mention doesn't exist" do
       expect(@klass.mentions?(@mentioner, @mentionable)).to be false
+    end
+
+    context "with STI child classes" do
+      before do
+        @mentioner = ImAMentionerChild.create
+        @mentionable = ImAMentionableChild.create
+      end
+
+      it "returns true when mention exists" do
+        @klass.create! do |f|
+          f.mentioner = @mentioner
+          f.mentionable = @mentionable
+        end
+        expect(@klass.mentions?(@mentioner, @mentionable)).to be true
+      end
     end
   end
 
@@ -107,6 +146,20 @@ describe Socialization::ActiveRecordStores::Mention do
       mentioner2.mention!(@mentionable)
       expect(@klass.mentioners(@mentionable, mentioner1.class, :pluck => :id)).to eq [mentioner1.id, mentioner2.id]
     end
+
+    context "with STI child classes" do
+      before do
+        @mentionable = ImAMentionableChild.create
+      end
+
+      it "returns an array of mentioners" do
+        mentioner1 = ImAMentionerChild.create
+        mentioner2 = ImAMentionerChild.create
+        mentioner1.mention!(@mentionable)
+        mentioner2.mention!(@mentionable)
+        expect(@klass.mentioners(@mentionable, mentioner1.class)).to eq [mentioner1, mentioner2]
+      end
+    end
   end
 
   describe "#mentionables" do
@@ -125,6 +178,20 @@ describe Socialization::ActiveRecordStores::Mention do
       @mentioner.mention!(mentionable2)
       expect(@klass.mentionables(@mentioner, mentionable1.class, :pluck => :id)).to eq [mentionable1.id, mentionable2.id]
     end
+
+    context "with STI child classes" do
+      before do
+        @mentioner = ImAMentionerChild.create
+      end
+
+      it "returns an array of mentioners" do
+        mentionable1 = ImAMentionableChild.create
+        mentionable2 = ImAMentionableChild.create
+        @mentioner.mention!(mentionable1)
+        @mentioner.mention!(mentionable2)
+        expect(@klass.mentionables(@mentioner, mentionable1.class)).to eq [mentionable1, mentionable2]
+      end
+    end
   end
 
   describe "#remove_mentioners" do
@@ -134,6 +201,20 @@ describe Socialization::ActiveRecordStores::Mention do
       @klass.remove_mentioners(@mentionable)
       expect(@mentionable.mentioners(@mentioner.class).count).to eq 0
     end
+
+    context "with STI child classes" do
+      before do
+        @mentioner = ImAMentionerChild.create
+        @mentionable = ImAMentionableChild.create
+      end
+
+      it "deletes all mentioners relationships for a mentionable" do
+        @mentioner.mention!(@mentionable)
+        expect(@mentionable.mentioners(@mentioner.class).count).to eq 1
+        @klass.remove_mentioners(@mentionable)
+        expect(@mentionable.mentioners(@mentioner.class).count).to eq 0
+      end
+    end
   end
 
   describe "#remove_mentionables" do
@@ -142,6 +223,20 @@ describe Socialization::ActiveRecordStores::Mention do
       expect(@mentioner.mentionables(@mentionable.class).count).to eq 1
       @klass.remove_mentionables(@mentioner)
       expect(@mentioner.mentionables(@mentionable.class).count).to eq 0
+    end
+
+    context "with STI child classes" do
+      before do
+        @mentioner = ImAMentionerChild.create
+        @mentionable = ImAMentionableChild.create
+      end
+
+      it "deletes all mentionables relationships for a mentioner" do
+        @mentioner.mention!(@mentionable)
+        expect(@mentioner.mentionables(@mentionable.class).count).to eq 1
+        @klass.remove_mentionables(@mentioner)
+        expect(@mentioner.mentionables(@mentionable.class).count).to eq 0
+      end
     end
   end
 end

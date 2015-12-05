@@ -181,6 +181,7 @@ class ::ImAFollowerWithCounterCache < ActiveRecord::Base
   acts_as_follower
 end
 class ::ImAFollowerChild < ImAFollower; end
+class ::ImAFollowerChildWithCounterCache < ImAFollowerWithCounterCache; end
 
 class ::ImAFollowable < ActiveRecord::Base
   acts_as_followable
@@ -189,6 +190,7 @@ class ::ImAFollowableWithCounterCache < ActiveRecord::Base
   acts_as_followable
 end
 class ::ImAFollowableChild < ImAFollowable; end
+class ::ImAFollowableChildWithCounterCache < ImAFollowableWithCounterCache; end
 
 class ::ImALiker < ActiveRecord::Base
   acts_as_liker
@@ -197,6 +199,7 @@ class ::ImALikerWithCounterCache < ActiveRecord::Base
   acts_as_liker
 end
 class ::ImALikerChild < ImALiker; end
+class ::ImALikerChildWithCounterCache < ImALikerWithCounterCache; end
 
 class ::ImALikeable < ActiveRecord::Base
   acts_as_likeable
@@ -205,6 +208,7 @@ class ::ImALikeableWithCounterCache < ActiveRecord::Base
   acts_as_likeable
 end
 class ::ImALikeableChild < ImALikeable; end
+class ::ImALikeableChildWithCounterCache < ImALikeableWithCounterCache; end
 
 class ::ImAMentioner < ActiveRecord::Base
   acts_as_mentioner
@@ -213,6 +217,7 @@ class ::ImAMentionerWithCounterCache < ActiveRecord::Base
   acts_as_mentioner
 end
 class ::ImAMentionerChild < ImAMentioner; end
+class ::ImAMentionerChildWithCounterCache < ImAMentionerWithCounterCache; end
 
 class ::ImAMentionable < ActiveRecord::Base
   acts_as_mentionable
@@ -221,6 +226,7 @@ class ::ImAMentionableWithCounterCache < ActiveRecord::Base
   acts_as_mentionable
 end
 class ::ImAMentionableChild < ImAMentionable; end
+class ::ImAMentionableChildWithCounterCache < ImAMentionableWithCounterCache; end
 
 class ::ImAMentionerAndMentionable < ActiveRecord::Base
   acts_as_mentioner

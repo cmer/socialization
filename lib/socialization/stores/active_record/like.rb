@@ -55,7 +55,7 @@ module Socialization
           rel = klass.where(:id =>
             self.select(:liker_id).
               where(:liker_type => klass.table_name.classify).
-              where(:likeable_type => likeable.class.to_s).
+              where(:likeable_type => likeable.class.table_name.classify).
               where(:likeable_id => likeable.id)
           )
 
@@ -81,7 +81,7 @@ module Socialization
           rel = klass.where(:id =>
             self.select(:likeable_id).
               where(:likeable_type => klass.table_name.classify).
-              where(:liker_type => liker.class.to_s).
+              where(:liker_type => liker.class.table_name.classify).
               where(:liker_id => liker.id)
           )
 
@@ -104,13 +104,13 @@ module Socialization
 
         # Remove all the likers for likeable
         def remove_likers(likeable)
-          self.where(:likeable_type => likeable.class.name.classify).
+          self.where(:likeable_type => likeable.class.table_name.classify).
                where(:likeable_id => likeable.id).destroy_all
         end
 
         # Remove all the likeables for liker
         def remove_likeables(liker)
-          self.where(:liker_type => liker.class.name.classify).
+          self.where(:liker_type => liker.class.table_name.classify).
                where(:liker_id => liker.id).destroy_all
         end
 

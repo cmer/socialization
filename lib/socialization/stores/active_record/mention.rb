@@ -55,7 +55,7 @@ module Socialization
           rel = klass.where(:id =>
             self.select(:mentioner_id).
               where(:mentioner_type => klass.table_name.classify).
-              where(:mentionable_type => mentionable.class.to_s).
+              where(:mentionable_type => mentionable.class.table_name.classify).
               where(:mentionable_id => mentionable.id)
           )
 
@@ -81,7 +81,7 @@ module Socialization
           rel = klass.where(:id =>
             self.select(:mentionable_id).
               where(:mentionable_type => klass.table_name.classify).
-              where(:mentioner_type => mentioner.class.to_s).
+              where(:mentioner_type => mentioner.class.table_name.classify).
               where(:mentioner_id => mentioner.id)
           )
 
@@ -104,13 +104,13 @@ module Socialization
 
         # Remove all the mentioners for mentionable
         def remove_mentioners(mentionable)
-          self.where(:mentionable_type => mentionable.class.name.classify).
+          self.where(:mentionable_type => mentionable.class.table_name.classify).
                where(:mentionable_id => mentionable.id).destroy_all
         end
 
         # Remove all the mentionables for mentioner
         def remove_mentionables(mentioner)
-          self.where(:mentioner_type => mentioner.class.name.classify).
+          self.where(:mentioner_type => mentioner.class.table_name.classify).
                where(:mentioner_id => mentioner.id).destroy_all
         end
 
