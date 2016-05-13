@@ -9,12 +9,12 @@ module Socialization
       belongs_to :followable, :polymorphic => true
 
       scope :followed_by, lambda { |follower| where(
-        :follower_type   => follower.class.table_name.classify,
+        :follower_type   => follower.class.name.classify,
         :follower_id     => follower.id)
       }
 
       scope :following,   lambda { |followable| where(
-        :followable_type => followable.class.table_name.classify,
+        :followable_type => followable.class.name.classify,
         :followable_id   => followable.id)
       }
 

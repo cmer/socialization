@@ -9,12 +9,12 @@ module Socialization
       belongs_to :mentionable, :polymorphic => true
 
       scope :mentioned_by, lambda { |mentioner| where(
-        :mentioner_type   => mentioner.class.table_name.classify,
+        :mentioner_type   => mentioner.class.name.classify,
         :mentioner_id     => mentioner.id)
       }
 
       scope :mentioning,   lambda { |mentionable| where(
-        :mentionable_type => mentionable.class.table_name.classify,
+        :mentionable_type => mentionable.class.name.classify,
         :mentionable_id   => mentionable.id)
       }
 
