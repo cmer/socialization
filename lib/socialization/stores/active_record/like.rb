@@ -9,13 +9,11 @@ module Socialization
       belongs_to :likeable, :polymorphic => true
 
       scope :liked_by, lambda { |liker| where(
-        :liker_type    => liker.class.name.classify,
-        :liker_id      => liker.id)
+        :liker    => liker)
       }
 
       scope :liking,   lambda { |likeable| where(
-        :likeable_type => likeable.class.name.classify,
-        :likeable_id   => likeable.id)
+        :likeable => likeable)
       }
 
       class << self
