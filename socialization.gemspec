@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/cmer/socialization"
   s.summary = "Easily socialize your app with Likes and Follows"
   s.description = "Socialization allows any model to Follow and/or Like any other model. This is accomplished through a double polymorphic relationship on the Follow and Like models. But you don't need to know that since all the complexity is hidden from you."
+  s.license = "MIT"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
