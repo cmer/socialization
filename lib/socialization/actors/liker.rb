@@ -10,7 +10,8 @@ end
 module Socialization
   module Liker
     extend ActiveSupport::Concern
-
+    attr_accessor :options
+    
     included do
       after_destroy { Socialization.like_model.remove_likeables(self) }
 
@@ -26,9 +27,9 @@ module Socialization
       #
       # @param [Likeable] likeable the object to be liked.
       # @return [Boolean]
-      def like!(likeable)
+      def like!(likeable, options = {})
         raise Socialization::ArgumentError, "#{likeable} is not likeable!"  unless likeable.respond_to?(:is_likeable?) && likeable.is_likeable?
-        Socialization.like_model.like!(self, likeable)
+        Socialization.like_model.like!(self, likeable, options)
       end
 
       # Delete a {Like like} relationship.

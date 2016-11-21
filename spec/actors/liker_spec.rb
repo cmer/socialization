@@ -25,7 +25,7 @@ describe Socialization::Liker do
     end
 
     it "calls $Like.like!" do
-      expect($Like).to receive(:like!).with(@liker, @likeable).once
+      expect($Like).to receive(:like!).with(@liker, @likeable, {}).once
       @liker.like!(@likeable)
     end
   end
