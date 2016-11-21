@@ -23,7 +23,7 @@ module Socialization
             self.create! do |like|
               like.liker = liker
               like.likeable = likeable
-              like.options = options
+              like.like_options = options
             end
             update_counter(liker, likees_count: +1)
             update_counter(likeable, likers_count: +1)

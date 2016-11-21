@@ -6,7 +6,7 @@ class CreateLikes < ActiveRecord::Migration
       t.string   :likeable_type
       t.integer  :likeable_id
       t.datetime :created_at
-      t.json     :options
+      t.json     :like_options
     end
 
     add_index :likes, ["liker_id", "liker_type"],       :name => "fk_likes"
