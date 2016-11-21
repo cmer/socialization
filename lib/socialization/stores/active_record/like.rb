@@ -7,6 +7,7 @@ module Socialization
 
       belongs_to :liker,    :polymorphic => true
       belongs_to :likeable, :polymorphic => true
+      attr_accessor :options
 
       scope :liked_by, lambda { |liker| where(
         :liker    => liker)
@@ -17,11 +18,12 @@ module Socialization
       }
 
       class << self
-        def like!(liker, likeable)
+        def like!(liker, likeable, options= {})
           unless likes?(liker, likeable)
             self.create! do |like|
               like.liker = liker
               like.likeable = likeable
+              like.options = options
             end
             update_counter(liker, likees_count: +1)
             update_counter(likeable, likers_count: +1)
