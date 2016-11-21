@@ -10,7 +10,8 @@ end
 module Socialization
   module Liker
     extend ActiveSupport::Concern
-
+    attr_accessor :options
+    
     included do
       after_destroy { Socialization.like_model.remove_likeables(self) }
 
