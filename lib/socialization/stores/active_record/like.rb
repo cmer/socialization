@@ -46,7 +46,7 @@ module Socialization
           end
         end
 
-        def likes?(liker, likeable)
+        def likes?(liker, likeable, options = {})
           !like_for(liker, likeable).empty?
         end
 
