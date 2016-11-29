@@ -8,6 +8,7 @@ describe Socialization::ActiveRecordStores::Like do
     @klass.after_unlike nil
     @liker = ImALiker.create
     @likeable = ImALikeable.create
+    @options = {message: 'Hello world', social_media: 'facebook'}
   end
 
   describe "data store" do
@@ -21,6 +22,13 @@ describe Socialization::ActiveRecordStores::Like do
       @klass.like!(@liker, @likeable)
       expect(@liker).to match_liker @klass.last
       expect(@likeable).to match_likeable @klass.last
+    end
+
+    it 'create a Like record with options' do
+      @klass.like!(@liker, @likeable, @options)
+      expect(@liker).to match_liker @klass.last
+      expect(@likeable).to match_likeable @klass.last
+      expect(@klass.last.options).to eql(@options)
     end
 
     it "increments counter caches" do

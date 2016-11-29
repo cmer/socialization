@@ -229,4 +229,3 @@ end
 
 class ::Vanilla < ActiveRecord::Base
 end
-
