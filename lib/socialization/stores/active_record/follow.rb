@@ -55,7 +55,7 @@ module Socialization
           rel = klass.where(:id =>
             self.select(:follower_id).
               where(:follower_type => klass.table_name.classify).
-              where(:followable_type => followable.class.to_s).
+              where(:followable_type => followable.class.base_class.to_s).
               where(:followable_id => followable.id)
           )
 
