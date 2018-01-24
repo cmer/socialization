@@ -65,12 +65,6 @@ module Socialization
         # Returns all the mentioners of a certain type that are mentioning mentionable
         def mentioners(mentionable, klass, opts = {})
           mentioners_relation(mentionable, klass, opts)
-          # rel = mentioners_relation(mentionable, klass, opts)
-          # if rel.is_a?(ActiveRecord::Relation)
-          #   rel.to_a
-          # else
-          #   rel
-          # end
         end
 
         # Returns an ActiveRecord::Relation of all the mentionables of a certain type that are mentioned by mentioner
@@ -92,12 +86,6 @@ module Socialization
         # Returns all the mentionables of a certain type that are mentioned by mentioner
         def mentionables(mentioner, klass, opts = {})
           mentionables_relation(mentioner, klass, opts)
-          # rel = mentionables_relation(mentioner, klass, opts)
-          # if rel.is_a?(ActiveRecord::Relation)
-          #   rel.to_a
-          # else
-          #   rel
-          # end
         end
 
         # Remove all the mentioners for mentionable
