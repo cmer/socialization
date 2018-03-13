@@ -119,6 +119,10 @@ What items are you following (given that an Item model is followed)?
 
     user.followees(Item)
 
+whats items are you following with offset and limit options for organic pagination
+  
+    user.followees(Item, {offset:0, limit:1})
+
 Number of followees (Requires followees_count column in db)
 
     def change
@@ -139,6 +143,10 @@ Find out if an objects follows
 All followers
 
     celebrity.followers(User)
+
+All followers with offset and limit options for organic pagination
+    
+    celebrity.followers(User, {offset: 0, limit: 1})
 
 Number of followers (Requires followers_count column in db)
 
@@ -190,6 +198,10 @@ All likers
 
     movie.likers(User)
 
+All likers with offset and limit options for organic pagination
+    
+    movie.likers(User, { offset: 0, limit: 1})
+
 Number of likers (Requires likers_count column in db)
 
     def change
@@ -225,6 +237,10 @@ All mentionees
 
     comment.mentionees(User)
 
+All mentionees with offset and limit options for organic pagination
+
+    comment.mentionees(User, {offset: 0, limit: 1})
+
 Number of mentionees (Requires mentionees column in db)
 
     def change
@@ -245,6 +261,10 @@ Find out if an objects mentions
 All mentioners
 
     user.mentioners(Comment)
+
+All mentioners with limit and offset options for orgnic pagination
+
+    user.mentioners(Comment, {offset: 0, limit: 1})
 
 Number of mentioners (Requires mentioners_count column in db)
 

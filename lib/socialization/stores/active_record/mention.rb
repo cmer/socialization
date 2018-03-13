@@ -59,11 +59,14 @@ module Socialization
               where(:mentionable_id => mentionable.id)
           )
 
-          if opts[:pluck]
-            rel.pluck(opts[:pluck])
-          else
-            rel
+          if opts[:offset]
+            raise 'options is missing limit' if opts[:limit].nil?
+            rel = rel.offset(opts[:offset]).limit(opts[:limit])
           end
+          if opts[:pluck]
+            rel = rel.pluck(opts[:pluck])
+          end
+          rel
         end
 
         # Returns all the mentioners of a certain type that are mentioning mentionable
@@ -85,11 +88,14 @@ module Socialization
               where(:mentioner_id => mentioner.id)
           )
 
-          if opts[:pluck]
-            rel.pluck(opts[:pluck])
-          else
-            rel
+          if opts[:offset]
+            raise 'options is missing limit' if opts[:limit].nil?
+            rel = rel.offset(opts[:offset]).limit(opts[:limit])
           end
+          if opts[:pluck]
+            rel = rel.pluck(opts[:pluck])
+          end
+          rel
         end
 
         # Returns all the mentionables of a certain type that are mentioned by mentioner

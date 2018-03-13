@@ -107,6 +107,14 @@ describe Socialization::ActiveRecordStores::Mention do
       mentioner2.mention!(@mentionable)
       expect(@klass.mentioners(@mentionable, mentioner1.class, :pluck => :id)).to eq [mentioner1.id, mentioner2.id]
     end
+
+    it "returns an array of mentioners with limt and offset options" do
+      mentioner1 = ImAMentioner.create
+      mentioner2 = ImAMentioner.create
+      mentioner1.mention!(@mentionable)
+      mentioner2.mention!(@mentionable)
+      expect(@klass.mentioners(@mentionable, mentioner1.class, {offset: 0, limit: 1}).count).to eq 1
+    end
   end
 
   describe "#mentionables" do
@@ -124,6 +132,14 @@ describe Socialization::ActiveRecordStores::Mention do
       @mentioner.mention!(mentionable1)
       @mentioner.mention!(mentionable2)
       expect(@klass.mentionables(@mentioner, mentionable1.class, :pluck => :id)).to eq [mentionable1.id, mentionable2.id]
+    end
+
+    it "returns an array of mentioners" do
+      mentionable1 = ImAMentionable.create
+      mentionable2 = ImAMentionable.create
+      @mentioner.mention!(mentionable1)
+      @mentioner.mention!(mentionable2)
+      expect(@klass.mentionables(@mentioner, mentionable1.class, {offset: 0, limit: 1}).count).to eq 1
     end
   end
 

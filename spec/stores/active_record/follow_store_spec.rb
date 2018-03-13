@@ -106,6 +106,15 @@ describe Socialization::ActiveRecordStores::Follow do
       follower2.follow!(@followable)
       expect(@klass.followers(@followable, follower1.class, :pluck => :id)).to eq([follower1.id, follower2.id])
     end
+
+    it "returns an array of follower ids along with pagination with offset and limit options" do
+      follower1 = ImAFollower.create
+      follower2 = ImAFollower.create
+      follower1.follow!(@followable)
+      follower2.follow!(@followable)
+      expect(@klass.followers(@followable, follower1.class, {:pluck => :id, :offset => 0, limit: 1}).count).to eq(1)
+    end
+
   end
 
   describe "#followables" do
@@ -123,6 +132,14 @@ describe Socialization::ActiveRecordStores::Follow do
       @follower.follow!(followable1)
       @follower.follow!(followable2)
       expect(@klass.followables(@follower, followable1.class, :pluck => :id)).to eq([followable1.id, followable2.id])
+    end
+
+    it "returns an array of follower ids along with pagination with offset and limit options" do
+      followable1 = ImAFollowable.create
+      followable2 = ImAFollowable.create
+      @follower.follow!(followable1)
+      @follower.follow!(followable2)
+      expect(@klass.followables(@follower, followable1.class, {:pluck => :id, :offset => 0, :limit => 1}).count).to eq(1)
     end
   end
 
