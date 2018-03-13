@@ -59,11 +59,14 @@ module Socialization
               where(:likeable_id => likeable.id)
           )
 
-          if opts[:pluck]
-            rel.pluck(opts[:pluck])
-          else
-            rel
+          if opts[:offset]
+            raise 'options is missing limit' if opts[:limit].nil?
+            rel = rel.offset(opts[:offset]).limit(opts[:limit])
           end
+          if opts[:pluck]
+            rel = rel.pluck(opts[:pluck])
+          end
+          rel
         end
 
         # Returns all the likers of a certain type that are liking  likeable
@@ -84,12 +87,14 @@ module Socialization
               where(:liker_type => liker.class.to_s).
               where(:liker_id => liker.id)
           )
-
-          if opts[:pluck]
-            rel.pluck(opts[:pluck])
-          else
-            rel
+          if opts[:offset]
+            raise 'options is missing limit' if opts[:limit].nil?
+            rel = rel.offset(opts[:offset]).limit(opts[:limit])
           end
+          if opts[:pluck]
+            rel = rel.pluck(opts[:pluck])
+          end
+          rel
         end
 
         # Returns all the likeables of a certain type that are liked by liker
