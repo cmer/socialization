@@ -138,7 +138,7 @@ describe Socialization::ActiveRecordStores::Like do
       likeable2 = ImALikeable.create
       @liker.like!(likeable1)
       @liker.like!(likeable2)
-      expect(@klass.likeables(@liker, likeable1.class, { offset: 0, limit: 1})).to eq 1
+      expect(@klass.likeables(@liker, likeable1.class, { offset: 0, limit: 1}).count).to eq 1
     end
   end
 
