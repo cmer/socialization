@@ -59,11 +59,14 @@ module Socialization
               where(:followable_id => followable.id)
           )
 
-          if opts[:pluck]
-            rel.pluck(opts[:pluck])
-          else
-            rel
+          if opts[:offset]
+            raise 'options is missing limit' if opts[:limit].nil?
+            rel = rel.offset(opts[:offset]).limit(opts[:limit])
           end
+          if opts[:pluck]
+            rel = rel.pluck(opts[:pluck])
+          end
+          rel
         end
 
         # Returns all the followers of a certain type that are following followable
@@ -85,11 +88,14 @@ module Socialization
               where(:follower_id => follower.id)
           )
 
-          if opts[:pluck]
-            rel.pluck(opts[:pluck])
-          else
-            rel
+          if opts[:offset]
+            raise 'options is missing limit' if opts[:limit].nil?
+            rel = rel.offset(opts[:offset]).limit(opts[:limit])
           end
+          if opts[:pluck]
+            rel = rel.pluck(opts[:pluck])
+          end
+          rel
         end
 
         # Returns all the followables of a certain type that are followed by follower
