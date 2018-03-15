@@ -106,6 +106,14 @@ describe Socialization::ActiveRecordStores::Like do
       liker2.like!(@likeable)
       expect(@klass.likers(@likeable, liker1.class, :pluck => :id)).to eq [liker1.id, liker2.id]
     end
+
+    it "returns an array of likers with offset and limit as options" do
+      liker1 = ImALiker.create
+      liker2 = ImALiker.create
+      liker1.like!(@likeable)
+      liker2.like!(@likeable)
+      expect(@klass.likers(@likeable, liker1.class, { offset: 0, limit: 1 }).count).to eq 1
+    end
   end
 
   describe "#likeables" do
@@ -123,6 +131,14 @@ describe Socialization::ActiveRecordStores::Like do
       @liker.like!(likeable1)
       @liker.like!(likeable2)
       expect(@klass.likeables(@liker, likeable1.class, :pluck => :id)).to eq [likeable1.id, likeable2.id]
+    end
+
+    it "returns an array of likers with offset and limit as options" do
+      likeable1 = ImALikeable.create
+      likeable2 = ImALikeable.create
+      @liker.like!(likeable1)
+      @liker.like!(likeable2)
+      expect(@klass.likeables(@liker, likeable1.class, { offset: 0, limit: 1}).count).to eq 1
     end
   end
 
