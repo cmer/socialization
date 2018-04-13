@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.1 (April 13, 2018)
+
+* You thought this project was dead huh!?
+* Dropped support for old Rubies
+* Can now use column other than `id` as primary key (thanks @joshuairl)
+* Added license to `gemspec` (thanks @reiz)
+* Going forward, only Rails 4+ will officially be supported
+
 ## 1.2 (August 8, 2015)
 
 * Support for ActiveRecord counter caches (thanks @samnang)
