@@ -52,7 +52,7 @@ module Socialization
 
         # Returns an ActiveRecord::Relation of all the likers of a certain type that are liking  likeable
         def likers_relation(likeable, klass, opts = {})
-          rel = klass.where(:id =>
+          rel = klass.where(klass.primary_key =>
             self.select(:liker_id).
               where(:liker_type => klass.table_name.classify).
               where(:likeable_type => likeable.class.to_s).
@@ -78,7 +78,7 @@ module Socialization
 
         # Returns an ActiveRecord::Relation of all the likeables of a certain type that are liked by liker
         def likeables_relation(liker, klass, opts = {})
-          rel = klass.where(:id =>
+          rel = klass.where(klass.primary_key =>
             self.select(:likeable_id).
               where(:likeable_type => klass.table_name.classify).
               where(:liker_type => liker.class.to_s).
