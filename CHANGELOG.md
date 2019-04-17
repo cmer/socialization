@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.2 (April 17, 2019)
+
+* Drop support for some old Ruby versions
+
 ## 1.2.1 (April 13, 2018)
 
 * You thought this project was dead huh!?

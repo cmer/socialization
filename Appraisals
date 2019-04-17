@@ -21,3 +21,7 @@ end
 appraise "activerecord42" do
   gem "activerecord", "~> 4.2.3"
 end
+
+appraise "activerecord523" do
+  gem "activerecord", "~> 5.2.3"
+end
