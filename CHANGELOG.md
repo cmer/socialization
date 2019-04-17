@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.3 (April 17, 2019)
+
+* Rename "victim" methods to "subject" internally. Thanks to @jdugarte for the suggestion.
+
 ## 1.2.2 (April 17, 2019)
 
 * Drop support for some old Ruby versions
