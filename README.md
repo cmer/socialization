@@ -168,6 +168,10 @@ Toggle
 Likes?
 
     user.likes?(movie)
+    
+Likees
+
+    user.likees(Movie) or user.likeables(Movie)
 
 Number of likees (Requires likees_count column in db)
 
