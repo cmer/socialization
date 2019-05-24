@@ -189,6 +189,8 @@ Find out if an objects likes
 All likers
 
     movie.likers(User)
+    
+    this return active record insted of array
 
 Number of likers (Requires likers_count column in db)
 
@@ -224,6 +226,8 @@ Mentions?
 All mentionees
 
     comment.mentionees(User)
+    
+    this return active record insted of array
 
 Number of mentionees (Requires mentionees column in db)
 
