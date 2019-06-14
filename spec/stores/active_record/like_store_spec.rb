@@ -63,6 +63,19 @@ describe Socialization::ActiveRecordStores::Like do
       expect(@klass).to receive(:after_unlike).once
       @klass.like!(@liker, @likeable)
     end
+
+    context "with STI child classes" do
+      before do
+        @liker = ImALikerChild.create
+        @likeable = ImALikeableChild.create
+      end
+
+      it "creates a Like record" do
+        @klass.like!(@liker, @likeable)
+        expect(@liker).to match_liker @klass.last
+        expect(@likeable).to match_likeable @klass.last
+      end
+    end
   end
 
   describe "#unlike!" do
@@ -73,6 +86,17 @@ describe Socialization::ActiveRecordStores::Like do
       @klass.unlike!(liker, likeable)
       expect(liker.reload.likees_count).to eq 0
       expect(likeable.reload.likers_count).to eq 0
+    end
+
+    context "with STI child classes" do
+      it "decrements counter caches" do
+        liker    = ImALikerChildWithCounterCache.create
+        likeable = ImALikeableChildWithCounterCache.create
+        @klass.like!(liker, likeable)
+        @klass.unlike!(liker, likeable)
+        expect(liker.reload.likees_count).to eq 0
+        expect(likeable.reload.likers_count).to eq 0
+      end
     end
   end
 
@@ -87,6 +111,21 @@ describe Socialization::ActiveRecordStores::Like do
 
     it "returns false when like doesn't exist" do
       expect(@klass.likes?(@liker, @likeable)).to be false
+    end
+
+    context "with STI child classes" do
+      before do
+        @liker = ImALikerChild.create
+        @likeable = ImALikeableChild.create
+      end
+
+      it "returns true when like exists" do
+        @klass.create! do |f|
+          f.liker = @liker
+          f.likeable = @likeable
+        end
+        expect(@klass.likes?(@liker, @likeable)).to be true
+      end
     end
   end
 
@@ -106,6 +145,20 @@ describe Socialization::ActiveRecordStores::Like do
       liker2.like!(@likeable)
       expect(@klass.likers(@likeable, liker1.class, :pluck => :id)).to eq [liker1.id, liker2.id]
     end
+
+    context "with STI child classes" do
+      before do
+        @likeable = ImALikeableChild.create
+      end
+
+      it "returns an array of likers" do
+        liker1 = ImALikerChild.create
+        liker2 = ImALikerChild.create
+        liker1.like!(@likeable)
+        liker2.like!(@likeable)
+        expect(@klass.likers(@likeable, liker1.class)).to eq [liker1, liker2]
+      end
+    end
   end
 
   describe "#likeables" do
@@ -124,6 +177,20 @@ describe Socialization::ActiveRecordStores::Like do
       @liker.like!(likeable2)
       expect(@klass.likeables(@liker, likeable1.class, :pluck => :id)).to eq [likeable1.id, likeable2.id]
     end
+
+    context "with STI child classes" do
+      before do
+        @liker = ImALikerChild.create
+      end
+
+      it "returns an array of likers" do
+        likeable1 = ImALikeableChild.create
+        likeable2 = ImALikeableChild.create
+        @liker.like!(likeable1)
+        @liker.like!(likeable2)
+        expect(@klass.likeables(@liker, likeable1.class)).to eq [likeable1, likeable2]
+      end
+    end
   end
 
   describe "#remove_likers" do
@@ -133,6 +200,20 @@ describe Socialization::ActiveRecordStores::Like do
       @klass.remove_likers(@likeable)
       expect(@likeable.likers(@liker.class).count).to eq 0
     end
+
+    context "with STI child classes" do
+      before do
+        @liker = ImALikerChild.create
+        @likeable = ImALikeableChild.create
+      end
+
+      it "deletes all likers relationships for a likeable" do
+        @liker.like!(@likeable)
+        expect(@likeable.likers(@liker.class).count).to eq 1
+        @klass.remove_likers(@likeable)
+        expect(@likeable.likers(@liker.class).count).to eq 0
+      end
+    end
   end
 
   describe "#remove_likeables" do
@@ -141,6 +222,20 @@ describe Socialization::ActiveRecordStores::Like do
       expect(@liker.likeables(@likeable.class).count).to eq 1
       @klass.remove_likeables(@liker)
       expect(@liker.likeables(@likeable.class).count).to eq 0
+    end
+
+    context "with STI child classes" do
+      before do
+        @liker = ImALikerChild.create
+        @likeable = ImALikeableChild.create
+      end
+
+      it "deletes all likeables relationships for a liker" do
+        @liker.like!(@likeable)
+        expect(@liker.likeables(@likeable.class).count).to eq 1
+        @klass.remove_likeables(@liker)
+        expect(@liker.likeables(@likeable.class).count).to eq 0
+      end
     end
   end
 end

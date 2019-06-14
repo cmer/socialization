@@ -63,6 +63,19 @@ describe Socialization::ActiveRecordStores::Follow do
       expect(@klass).to receive(:after_unfollow).once
       @klass.follow!(@follower, @followable)
     end
+
+    context "with STI child classes" do
+      before do
+        @follower = ImAFollowerChild.create
+        @followable = ImAFollowableChild.create
+      end
+
+      it "creates a Follow record" do
+        @klass.follow!(@follower, @followable)
+        expect(@follower).to match_follower(@klass.last)
+        expect(@followable).to match_followable(@klass.last)
+      end
+    end
   end
 
   describe "#unfollow!" do
@@ -73,6 +86,17 @@ describe Socialization::ActiveRecordStores::Follow do
       @klass.unfollow!(follower, followable)
       expect(follower.reload.followees_count).to eq(0)
       expect(followable.reload.followers_count).to eq(0)
+    end
+
+    context "with STI child classes" do
+      it "decrements counter caches" do
+        follower   = ImAFollowerChildWithCounterCache.create
+        followable = ImAFollowableChildWithCounterCache.create
+        @klass.follow!(follower, followable)
+        @klass.unfollow!(follower, followable)
+        expect(follower.reload.followees_count).to eq(0)
+        expect(followable.reload.followers_count).to eq(0)
+      end
     end
   end
 
@@ -87,6 +111,21 @@ describe Socialization::ActiveRecordStores::Follow do
 
     it "returns false when follow doesn't exist" do
       expect(@klass.follows?(@follower, @followable)).to be false
+    end
+
+    context "with STI child classes" do
+      before do
+        @follower = ImAFollowerChild.create
+        @followable = ImAFollowableChild.create
+      end
+
+      it "returns true when follow exists" do
+        @klass.create! do |f|
+          f.follower = @follower
+          f.followable = @followable
+        end
+        expect(@klass.follows?(@follower, @followable)).to be true
+      end
     end
   end
 
@@ -106,6 +145,20 @@ describe Socialization::ActiveRecordStores::Follow do
       follower2.follow!(@followable)
       expect(@klass.followers(@followable, follower1.class, :pluck => :id)).to eq([follower1.id, follower2.id])
     end
+
+    context "with STI child classes" do
+      before do
+        @followable = ImAFollowableChild.create
+      end
+
+      it "returns an array of followers" do
+        follower1 = ImAFollowerChild.create
+        follower2 = ImAFollowerChild.create
+        follower1.follow!(@followable)
+        follower2.follow!(@followable)
+        expect(@klass.followers(@followable, follower1.class)).to eq([follower1, follower2])
+      end
+    end
   end
 
   describe "#followables" do
@@ -124,6 +177,20 @@ describe Socialization::ActiveRecordStores::Follow do
       @follower.follow!(followable2)
       expect(@klass.followables(@follower, followable1.class, :pluck => :id)).to eq([followable1.id, followable2.id])
     end
+
+    context "with STI child classes" do
+      before do
+        @follower = ImAFollowerChild.create
+      end
+
+      it "returns an array of followers" do
+        followable1 = ImAFollowableChild.create
+        followable2 = ImAFollowableChild.create
+        @follower.follow!(followable1)
+        @follower.follow!(followable2)
+        expect(@klass.followables(@follower, followable1.class)).to eq([followable1, followable2])
+      end
+    end
   end
 
   describe "#remove_followers" do
@@ -133,6 +200,20 @@ describe Socialization::ActiveRecordStores::Follow do
       @klass.remove_followers(@followable)
       expect(@followable.followers(@follower.class).count).to eq(0)
     end
+
+    context "with STI child classes" do
+      before do
+        @follower = ImAFollowerChild.create
+        @followable = ImAFollowableChild.create
+      end
+
+      it "deletes all followers relationships for a followable" do
+        @follower.follow!(@followable)
+        expect(@followable.followers(@follower.class).count).to eq(1)
+        @klass.remove_followers(@followable)
+        expect(@followable.followers(@follower.class).count).to eq(0)
+      end
+    end
   end
 
   describe "#remove_followables" do
@@ -141,6 +222,20 @@ describe Socialization::ActiveRecordStores::Follow do
       expect(@follower.followables(@followable.class).count).to eq(1)
       @klass.remove_followables(@follower)
       expect(@follower.followables(@followable.class).count).to eq(0)
+    end
+
+    context "with STI child classes" do
+      before do
+        @follower = ImAFollowerChild.create
+        @followable = ImAFollowableChild.create
+      end
+
+      it "deletes all followables relationships for a follower" do
+        @follower.follow!(@followable)
+        expect(@follower.followables(@followable.class).count).to eq(1)
+        @klass.remove_followables(@follower)
+        expect(@follower.followables(@followable.class).count).to eq(0)
+      end
     end
   end
 end
