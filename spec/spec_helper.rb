@@ -15,6 +15,7 @@ require "socialization"
 require 'spec_support/data_stores'
 require 'spec_support/matchers'
 require 'logger'
+require 'byebug' rescue nil
 
 ActiveSupport::Inflector.inflections do |inflect|
   inflect.irregular 'cache', 'caches'
