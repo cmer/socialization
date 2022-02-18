@@ -262,22 +262,6 @@ You can find the compiled YARD documentation at http://rubydoc.info/github/cmer/
 
 ***
 
-## Changelog
-
-Here it is: https://github.com/cmer/socialization/blob/master/CHANGELOG.md
-
-## Demo App
-
-For your convenience, I have added a demo app in demo/demo_app. It does not have a web UI, but you can play with Socialization in the Rails console. It should also help you figure out hown to use Socialization in the Real World.
-
-To use the demo app:
-
-    $ cd demo/demo_app
-    $ bundle
-    $ rake db:migrate
-    $ rake db:seed
-    $ rails console
-
 
 ## Note on Patches/Pull Requests
 
