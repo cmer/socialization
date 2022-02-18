@@ -68,12 +68,7 @@ module Socialization
 
         # Returns all the followers of a certain type that are following followable
         def followers(followable, klass, opts = {})
-          rel = followers_relation(followable, klass, opts)
-          if rel.is_a?(ActiveRecord::Relation)
-            rel.to_a
-          else
-            rel
-          end
+          followers_relation(followable, klass, opts)
         end
 
         # Returns an ActiveRecord::Relation of all the followables of a certain type that are followed by follower
@@ -94,12 +89,7 @@ module Socialization
 
         # Returns all the followables of a certain type that are followed by follower
         def followables(follower, klass, opts = {})
-          rel = followables_relation(follower, klass, opts)
-          if rel.is_a?(ActiveRecord::Relation)
-            rel.to_a
-          else
-            rel
-          end
+          followables_relation(follower, klass, opts)
         end
 
         # Remove all the followers for followable

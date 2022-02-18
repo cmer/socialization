@@ -11,7 +11,7 @@ module Socialization
               result
             end
           else
-            actors_relation(subject, klass, options).to_a
+            actors_relation(subject, klass, options)
           end
         end
 
@@ -33,7 +33,7 @@ module Socialization
               result
             end
           else
-            subjects_relation(actor, klass, options).to_a
+            subjects_relation(actor, klass, options)
           end
         end
         alias victims subjects
