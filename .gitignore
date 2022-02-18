@@ -11,3 +11,4 @@ doc
 .yardoc
 .rbenv-version
 gemfiles
+.byebug_history
