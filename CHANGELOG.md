@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1 (February 18, 2022)
+
+* Added support for namespaced models (thanks @marciotoze, @twrk, @mensfeld)
+
 ## 2.0.0 (February 18, 2022)
 
 * Dropped support for old Rails versions. Updated CI.
