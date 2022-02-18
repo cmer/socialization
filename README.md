@@ -12,8 +12,6 @@ The Mention feature was written with Facebook mentions in mind. For example, Joh
 
 ## Installation
 
-### Rails 3/4
-
 Add the gem to the gemfile:
 `gem "socialization"`
 
@@ -25,9 +23,9 @@ Or if you want to use Redis as your data store:
 
 This will generate three migration files (when using ActiveRecord) and three models named Follow, Like and Mention. You may delete any of the Follow, Like or Mention models and migrations if you don't need that functionality in your application.
 
-### Rails 2.3.x Support
+### Legacy Rails Support
 
-This gem requires Rails 3 or better. Sorry!
+This gem requires Rails 6 or better. Sorry!
 
 ## Usage
 
@@ -295,4 +293,4 @@ To use the demo app:
 
 ## Copyright
 
-Copyright (c) 2012-2015 Carl Mercier --  Released under the MIT license.
+Copyright (c) 2012-2022 Carl Mercier --  Released under the MIT license.

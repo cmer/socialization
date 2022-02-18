@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0 (February 18, 2022)
+
+* Dropped support for old Rails versions. Updated CI.
+
 ## 1.2.3 (April 17, 2019)
 
 * Rename "victim" methods to "subject" internally. Thanks to @jdugarte for the suggestion.
