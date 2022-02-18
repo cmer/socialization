@@ -47,15 +47,14 @@ describe Socialization::Liker do
     end
 
     it "unlikes when likeing" do
-      expect(@liker).to receive(:likes?).with(@likeable).once.and_return(true)
-      expect(@liker).to receive(:unlike!).with(@likeable).once
+      @liker.like!(@likeable)
       @liker.toggle_like!(@likeable)
+      expect(@liker.likes?(@likeable)).to be false
     end
 
     it "likes when not likeing" do
-      expect(@liker).to receive(:likes?).with(@likeable).once.and_return(false)
-      expect(@liker).to receive(:like!).with(@likeable).once
       @liker.toggle_like!(@likeable)
+      expect(@liker.likes?(@likeable)).to be true
     end
   end
 

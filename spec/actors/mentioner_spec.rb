@@ -47,15 +47,14 @@ describe Socialization::Mentioner do
     end
 
     it "unmentions when mentioning" do
-      expect(@mentioner).to receive(:mentions?).with(@mentionable).once.and_return(true)
-      expect(@mentioner).to receive(:unmention!).with(@mentionable).once
+      @mentioner.mention!(@mentionable)
       @mentioner.toggle_mention!(@mentionable)
+      expect(@mentioner.mentions?(@mentionable)).to eq false
     end
 
     it "mentions when not mentioning" do
-      expect(@mentioner).to receive(:mentions?).with(@mentionable).once.and_return(false)
-      expect(@mentioner).to receive(:mention!).with(@mentionable).once
       @mentioner.toggle_mention!(@mentionable)
+      expect(@mentioner.mentions?(@mentionable)).to eq true
     end
   end
 
