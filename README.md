@@ -9,6 +9,7 @@ The Like feature works just like a Facebook Like. For example, John likes Pulp F
 The Mention feature was written with Facebook mentions in mind. For example, John mentions Jane in a comment. Typically, Jane would be highlighted in the comment user interface and possibly notified that John mentioned her. This Facebook feature is occasionally called Tagging, although tagging is generally something [entirely different](http://en.wikipedia.org/wiki/Tag_(metadata).
 
 ![Specs](https://github.com/cmer/socialization/actions/workflows/specs.yml/badge.svg)
+[![Gem Version](https://badge.fury.io/rb/socialization.svg)](https://badge.fury.io/rb/socialization)
 
 ## Installation
 
