@@ -3,10 +3,11 @@
 ## 2.0.0 (February 18, 2022)
 
 * Dropped support for old Rails versions. Updated CI.
+* BREAKING CHANGE (maybe): calling `followers`, `followables`, `likers`, `likeables`, `mentioners`, `mentionables` now returns `ActiveRecord::Relation` instead of an `Array`
 
 ## 1.2.3 (April 17, 2019)
 
-* Rename "victim" methods to "subject" internally. Thanks to @jdugarte for the suggestion.
+* Rename `victim` methods to `subject` internally. Thanks to @jdugarte for the suggestion.
 
 ## 1.2.2 (April 17, 2019)
 
