@@ -1,9 +1,7 @@
 require 'mock_redis' if $MOCK_REDIS
 require 'redis' unless $MOCK_REDIS
 
-silence_warnings do
-  Redis = MockRedis if $MOCK_REDIS # Magic!
-end
+Redis = MockRedis if $MOCK_REDIS # Magic!
 
 def use_redis_store
   Socialization.follow_model = Socialization::RedisStores::Follow

@@ -1,4 +1,4 @@
-class CreateMentions < ActiveRecord::Migration
+class CreateMentions < ActiveRecord::Migration[6.0]
   def change
     create_table :mentions do |t|
       t.string  :mentioner_type
