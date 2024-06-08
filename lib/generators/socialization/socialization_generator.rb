@@ -1,6 +1,8 @@
 require 'rails/generators'
 require 'rails/generators/migration'
 
+# require 'rails/version'
+
 STORES = %w(active_record redis)
 
 class SocializationGenerator < Rails::Generators::Base
@@ -9,7 +11,7 @@ class SocializationGenerator < Rails::Generators::Base
   class_option :store, :type => :string, :default => 'active_record', :description => "Type of datastore"
 
   def self.next_migration_number(dirname)
-    if ActiveRecord::Base.timestamped_migrations
+    if ActiveRecord::Base.try(:timestamped_migrations) || ActiveRecord.timestamped_migrations
       Time.now.utc.strftime("%Y%m%d%H%M%S")
     else
       "%.3d" % (current_migration_number(dirname) + 1)
