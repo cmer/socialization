@@ -1,9 +1,10 @@
 # Changelog
 
-## 2.1.0 (May 31, 2025)
+## 3.0.0 (May 31, 2025)
 
 * Added official support for Rails 8+.
-* Drop support for Ruby < 3
+* BREAKING: Drop support for Rails 6.
+* BREAKING: Drop support for Ruby < 3.2
 
 ## 2.0.1 (February 18, 2022)
 
