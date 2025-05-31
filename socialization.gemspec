@@ -17,10 +17,13 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency "activerecord"
+  s.add_runtime_dependency "activerecord", ">= 6.1"
 
   s.add_development_dependency "appraisal"
+  s.add_development_dependency "base64"
+  s.add_development_dependency "bigdecimal"
   s.add_development_dependency "logger"
+  s.add_development_dependency "mutex_m"
   s.add_development_dependency "rspec"
   s.add_development_dependency "rspec-mocks"
   s.add_development_dependency "sqlite3"

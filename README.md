@@ -26,7 +26,7 @@ This will generate three migration files (when using ActiveRecord) and three mod
 
 ### Legacy Rails Support
 
-This gem requires Rails 6 or better. Sorry!
+This gem requires Rails 6.1 or better. Rails 8 is officially supported.
 
 ## Usage
 
