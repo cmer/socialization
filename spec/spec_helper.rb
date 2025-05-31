@@ -10,11 +10,17 @@ RSpec.configure do |config|
 end
 
 $:.push File.expand_path("../lib", __FILE__)
+require 'logger'
+begin
+  require 'mutex_m'
+rescue LoadError
+  # mutex_m is not available on older Ruby versions
+end
+require 'active_support'
 require 'active_record'
 require "socialization"
 require 'spec_support/data_stores'
 require 'spec_support/matchers'
-require 'logger'
 require 'byebug' rescue nil
 
 ActiveSupport::Inflector.inflections do |inflect|

@@ -2,8 +2,8 @@
 
 ## 2.1.0 (May 31, 2025)
 
-* Added official support for Rails 8.
-* Updated gem dependencies and gem source.
+* Added official support for Rails 8+.
+* Drop support for Ruby < 3
 
 ## 2.0.1 (February 18, 2022)
 
