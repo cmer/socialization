@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.0 (May 31, 2025)
+
+* Added official support for Rails 8.
+* Updated gem dependencies and gem source.
+
 ## 2.0.1 (February 18, 2022)
 
 * Added support for namespaced models (thanks @marciotoze, @twrk, @mensfeld)
